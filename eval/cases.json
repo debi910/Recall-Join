@@ -1,0 +1,656 @@
+{
+ "note": "Stock rows are synthetic variants of real CDSCO rows; labels are known by construction.",
+ "source": "data/nsq/2025-03-central.json",
+ "cases": [
+  {
+   "id": "c01",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "TRANEXACURE INJECTION INJ",
+    "batch": "tc-038",
+    "expiry": "11/26",
+    "mfr": "Pharma Cure",
+    "qty": 10
+   },
+   "nsq_sno": 37
+  },
+  {
+   "id": "c02",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "DV-TELMI-40 TAB",
+    "batch": "GTE-2206",
+    "expiry": "07/26",
+    "mfr": "Digital Vision",
+    "qty": 10
+   },
+   "nsq_sno": 51
+  },
+  {
+   "id": "c03",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "DEXAMETHASONE 0.5MG TAB",
+    "batch": "lg24-29",
+    "expiry": "06/26",
+    "mfr": "Om Biomedic",
+    "qty": 10
+   },
+   "nsq_sno": 53
+  },
+  {
+   "id": "c04",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "CHOLECALCIFEROL 60000 IU TAB",
+    "batch": "tpd24015",
+    "expiry": "06/26",
+    "mfr": "Affy Parenterals",
+    "qty": 10
+   },
+   "nsq_sno": 24
+  },
+  {
+   "id": "c05",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "B-COMPLEX SYRUP SYP",
+    "batch": "bob-2451",
+    "expiry": "11/25",
+    "mfr": "Apple Formulations",
+    "qty": 10
+   },
+   "nsq_sno": 9
+  },
+  {
+   "id": "c06",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "CHOLECALCIFEROL 60000 IU TAB",
+    "batch": "TPD-24018",
+    "expiry": "06/26",
+    "mfr": "Affy Parenterals",
+    "qty": 10
+   },
+   "nsq_sno": 31
+  },
+  {
+   "id": "c07",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "0.45 NS INJ",
+    "batch": "1266688H",
+    "expiry": "05/27",
+    "mfr": "Shree KrishnaKeshav",
+    "qty": 10
+   },
+   "nsq_sno": 66
+  },
+  {
+   "id": "c08",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "PENGIN- DSR CAPSULES CAP",
+    "batch": " NHD24057D/",
+    "expiry": "12/25",
+    "mfr": "Nest Healthcare",
+    "qty": 10
+   },
+   "nsq_sno": 64
+  },
+  {
+   "id": "c09",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "GENTAMICIN INJ",
+    "batch": "GN37",
+    "expiry": "08/26",
+    "mfr": "Amba research",
+    "qty": 10
+   },
+   "nsq_sno": 17
+  },
+  {
+   "id": "c10",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "FEXONA 40 MG INJ",
+    "batch": "324608",
+    "expiry": "04/27",
+    "mfr": "Zee Laboratories",
+    "qty": 10
+   },
+   "nsq_sno": 28
+  },
+  {
+   "id": "c11",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "CALCIUM 500 MG TAB",
+    "batch": "LMT-240449",
+    "expiry": "03/26",
+    "mfr": "Life Max",
+    "qty": 10
+   },
+   "nsq_sno": 48
+  },
+  {
+   "id": "c12",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "B-COMPLEX SYRUP SYP",
+    "batch": "BOB 2440",
+    "expiry": "11/25",
+    "mfr": "Apple formulations",
+    "qty": 10
+   },
+   "nsq_sno": 8
+  },
+  {
+   "id": "c13",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "AMOXYCILLIN INJ",
+    "batch": "AB-193049A",
+    "expiry": "04/25",
+    "mfr": "ANG Lifesciences",
+    "qty": 10
+   },
+   "nsq_sno": 54
+  },
+  {
+   "id": "c14",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "VITAMIN INJ",
+    "batch": "cp-937",
+    "expiry": "05/26",
+    "mfr": "Pharma Cure",
+    "qty": 10
+   },
+   "nsq_sno": 10
+  },
+  {
+   "id": "c15",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "IRON 100 MG INJ",
+    "batch": " 24RS13/",
+    "expiry": "09/26",
+    "mfr": "SAI Parenterals",
+    "qty": 10
+   },
+   "nsq_sno": 44
+  },
+  {
+   "id": "c16",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "BREXETIL-500 500 MG TAB",
+    "batch": "OI4004A",
+    "expiry": "09/26",
+    "mfr": "Sunvij Drugs",
+    "qty": 10
+   },
+   "nsq_sno": 69
+  },
+  {
+   "id": "c17",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CALCIUM 10 ML INJ",
+    "batch": "BIV-020",
+    "expiry": "01/26",
+    "mfr": "Martin and",
+    "qty": 10
+   },
+   "nsq_sno": 56
+  },
+  {
+   "id": "c18",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "PANTOSHANG-40 TAB",
+    "batch": "C4050",
+    "expiry": "05/26",
+    "mfr": "Shangrila Industries",
+    "qty": 10
+   },
+   "nsq_sno": 16
+  },
+  {
+   "id": "c19",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "NITRAVET-10 10 MG TAB",
+    "batch": "GTL1288",
+    "expiry": "02/28",
+    "mfr": "Anglo-French Drugs",
+    "qty": 10
+   },
+   "nsq_sno": 32
+  },
+  {
+   "id": "c20",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CALXIA- 500 500 MG TAB",
+    "batch": "SVA04H24C",
+    "expiry": "11/26",
+    "mfr": "Gidsha Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 65
+  },
+  {
+   "id": "c21",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "DOMPERIDONE TAB",
+    "batch": "INT 115",
+    "expiry": "07/26",
+    "mfr": "Ornate Labs",
+    "qty": 10
+   },
+   "nsq_sno": 35
+  },
+  {
+   "id": "c22",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "AMOXICILLIN TAB",
+    "batch": "MD23H27",
+    "expiry": "08/28",
+    "mfr": "Shandong New",
+    "qty": 10
+   },
+   "nsq_sno": 22
+  },
+  {
+   "id": "c23",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "DV-BEND 400 TAB",
+    "batch": "DC40117",
+    "expiry": "06/26",
+    "mfr": "Digital Vision",
+    "qty": 10
+   },
+   "nsq_sno": 11
+  },
+  {
+   "id": "c24",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "ATORVASTATIN 10 MG TAB",
+    "batch": "T-1261",
+    "expiry": "08/26",
+    "mfr": "Hindustan Antibiotics",
+    "qty": 10
+   },
+   "nsq_sno": 50
+  },
+  {
+   "id": "c25",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "LACTULOSE 200 ML TAB",
+    "batch": "NCP-151",
+    "expiry": "07/26",
+    "mfr": "Apex Formulations",
+    "qty": 10
+   },
+   "nsq_sno": 57
+  },
+  {
+   "id": "c26",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "CHOLECALCIFEROL 60000 IU TAB",
+    "batch": "TPD24O20",
+    "expiry": "06/26",
+    "mfr": "Affy Parenterals",
+    "qty": 10
+   },
+   "nsq_sno": 29
+  },
+  {
+   "id": "c27",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "DEXAGAIN INJECTION INJ",
+    "batch": "VHI27400I",
+    "expiry": "11/26",
+    "mfr": "Vidit Healthcare",
+    "qty": 10
+   },
+   "nsq_sno": 15
+  },
+  {
+   "id": "c28",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "GENTALAB 30 ML INJ",
+    "batch": "0GNI-037",
+    "expiry": "06/26",
+    "mfr": "Laborate Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 46
+  },
+  {
+   "id": "c29",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "TELMISARTAN 40MG TAB",
+    "batch": "251TTFO14",
+    "expiry": "07/26",
+    "mfr": "Swiss Garnier",
+    "qty": 10
+   },
+   "nsq_sno": 52
+  },
+  {
+   "id": "c30",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "BREXETIL-500 500 MG TAB",
+    "batch": "ST-2S345",
+    "expiry": "09/26",
+    "mfr": "Sunvij Drugs",
+    "qty": 10
+   },
+   "nsq_sno": 33
+  },
+  {
+   "id": "c31",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "CALCIUM 10 ML INJ",
+    "batch": "MV24B3S",
+    "expiry": "01/26",
+    "mfr": "Martin and",
+    "qty": 10
+   },
+   "nsq_sno": 36
+  },
+  {
+   "id": "c32",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "PANTOSHANG-40 TAB",
+    "batch": "SP240I65",
+    "expiry": "05/26",
+    "mfr": "Shangrila Industries",
+    "qty": 10
+   },
+   "nsq_sno": 2
+  },
+  {
+   "id": "c33",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "NITRAVET-10 10 MG TAB",
+    "batch": "AXI23O03P",
+    "expiry": "02/28",
+    "mfr": "Anglo-French Drugs",
+    "qty": 10
+   },
+   "nsq_sno": 7
+  },
+  {
+   "id": "c34",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "CALXIA- 500 500 MG TAB",
+    "batch": "GTLI307",
+    "expiry": "11/26",
+    "mfr": "Gidsha Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 39
+  },
+  {
+   "id": "c35",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "DOMPERIDONE TAB",
+    "batch": "DP53-24- 225",
+    "expiry": "07/26",
+    "mfr": "Ornate Labs",
+    "qty": 10
+   },
+   "nsq_sno": 38
+  },
+  {
+   "id": "c36",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "SODIUM 1000 MG TAB",
+    "batch": "T2911017",
+    "expiry": "12/25",
+    "mfr": "Rivpra Formulation",
+    "qty": 10
+   },
+   "nsq_sno": 63
+  },
+  {
+   "id": "c37",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CHOLECALCIFEROL 60000 IU TAB",
+    "batch": "TP939636",
+    "expiry": "06/26",
+    "mfr": "Affy Parenterals",
+    "qty": 10
+   },
+   "nsq_sno": 30
+  },
+  {
+   "id": "c38",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CALXIA-500 500 MG TAB",
+    "batch": "GT958627",
+    "expiry": "11/26",
+    "mfr": "Gidsha Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 40
+  },
+  {
+   "id": "c39",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "SAFISER HAND RUB TAB",
+    "batch": "IJ936037",
+    "expiry": "09/25",
+    "mfr": "SS Enterprises",
+    "qty": 10
+   },
+   "nsq_sno": 14
+  },
+  {
+   "id": "c40",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "DUMONT-L TAB",
+    "batch": "DM998916",
+    "expiry": "11/27",
+    "mfr": "Hygeia Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 6
+  },
+  {
+   "id": "c41",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "REOLINE INJECTION INJ",
+    "batch": "AD984153",
+    "expiry": "04/26",
+    "mfr": "Rathi Laboratories",
+    "qty": 10
+   },
+   "nsq_sno": 4
+  },
+  {
+   "id": "c42",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CALXIA- 500 500 MG TAB",
+    "batch": "GT963619",
+    "expiry": "11/26",
+    "mfr": "Gidsha Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 41
+  },
+  {
+   "id": "c43",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "PANTORYL- DSR CAP",
+    "batch": "MC918866",
+    "expiry": "03/26",
+    "mfr": "Matins Healthcare",
+    "qty": 10
+   },
+   "nsq_sno": 13
+  },
+  {
+   "id": "c44",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "LACTULOSE 100 ML TAB",
+    "batch": "R2995801",
+    "expiry": "10/25",
+    "mfr": "Rhombus Pharma",
+    "qty": 10
+   },
+   "nsq_sno": 59
+  },
+  {
+   "id": "c45",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "BUPIVACAINE INJ",
+    "batch": "AA962642",
+    "expiry": "02/26",
+    "mfr": "Aishwarya Healthcare",
+    "qty": 10
+   },
+   "nsq_sno": 5
+  },
+  {
+   "id": "c46",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CALXIA 500 500 MG TAB",
+    "batch": "GT963581",
+    "expiry": "11/26",
+    "mfr": "Gidsha Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 25
+  },
+  {
+   "id": "c47",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "ALDIGESIC P TAB",
+    "batch": "BH921214",
+    "expiry": "08/25",
+    "mfr": "Sri Ram",
+    "qty": 10
+   },
+   "nsq_sno": 34
+  },
+  {
+   "id": "c48",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "FEXONA 40 MG INJ",
+    "batch": "32918638",
+    "expiry": "04/27",
+    "mfr": "Zee Laboratories",
+    "qty": 10
+   },
+   "nsq_sno": 27
+  },
+  {
+   "id": "c49",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "GATOVAS- 20 TAB",
+    "batch": "CT984819",
+    "expiry": "05/26",
+    "mfr": "CMG Biotech",
+    "qty": 10
+   },
+   "nsq_sno": 61
+  },
+  {
+   "id": "c50",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CALXIA- 500 500 MG TAB",
+    "batch": "GT970257",
+    "expiry": "11/26",
+    "mfr": "Gidsha Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 43
+  }
+ ]
+}
