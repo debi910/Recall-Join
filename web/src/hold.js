@@ -32,6 +32,6 @@ export function holdButton({ label, done, onConfirm, tone = 'red' }) {
       @pointerdown=${start} @pointerup=${cancel} @pointerleave=${cancel} @pointercancel=${cancel}
       @keydown=${key} @keyup=${key} @contextmenu=${(e) => e.preventDefault()}>
     <span class="hold-fill" aria-hidden="true"></span>
-    <span class="hold-label">${label}</span>
+    <span class="hold-label" .textContent=${label}></span>
   </button>`;
 }

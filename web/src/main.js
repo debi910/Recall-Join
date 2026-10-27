@@ -80,6 +80,8 @@ function subscribe() {
       const [[s], [n]] = await Promise.all([rows('stock_items', [Query.equal('$id', r.stock_id)]), rows('nsq_batches', [Query.equal('$id', r.nsq_id)])]);
       if (s) state.stock.set(s.$id, s);
       if (n) state.nsq.set(n.$id, n);
+      // A match from a newly imported month: refresh the list counts too.
+      if (!state.alerts.some((a) => a.period === r.period)) state.alerts = await rows('alerts', [Query.orderDesc('period'), Query.limit(24)]);
       state.matches = [r, ...state.matches.filter((m) => m.$id !== r.$id)];
       state.arrived.add(r.$id);
       if (r.tier === 'flag') toast(`New: ${short(s?.product, 28)} is on the ${month(r.period)} list`, 'red');
@@ -286,7 +288,7 @@ function slides(panels) {
       ${panels.map(([label, count], i) => html`<button role="tab" aria-selected=${String(state.tab === i)} @click=${() => goTab(i)}>${label}${count ? html`<span class="pill">${count}</span>` : nothing}</button>`)}
       <i class="tab-ink" aria-hidden="true"></i>
     </nav>
-    <div class="slides" @scroll=${onSlide} @toggle=${{ handleEvent: syncHeight, capture: true }}>${panels.map(([label, , body]) => html`<section class="slide" role="tabpanel" aria-label=${label}>${body}</section>`)}</div>`;
+    <div class="slides" @scroll=${onSlide}>${panels.map(([label, , body]) => html`<section class="slide" role="tabpanel" aria-label=${label}>${body}</section>`)}</div>`;
 }
 
 function goTab(i) {
@@ -300,10 +302,14 @@ function goTab(i) {
 
 // The track takes the active slide's height, so a short tab doesn't leave the
 // tallest tab's empty space below it.
+// A ResizeObserver keeps it right when the slide grows later (Realtime rows, folds).
+const slideSize = new ResizeObserver(() => syncHeight());
 function syncHeight() {
   const track = document.querySelector('.slides');
   const slide = track?.children[state.tab];
-  if (slide) track.style.height = `${slide.offsetHeight}px`;
+  if (!slide) return;
+  track.style.height = `${slide.offsetHeight}px`;
+  if (slideSize.watching !== slide) { slideSize.disconnect(); slideSize.observe(slide); slideSize.watching = slide; }
 }
 
 let slideFrame;
