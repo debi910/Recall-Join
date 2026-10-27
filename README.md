@@ -73,7 +73,7 @@ npm run import:nsq -- data/nsq/2026-07.json data/nsq/2026-08.json   # Sep 2026 i
 npm run dev                 # web app on http://localhost:5173  (design preview without a backend: /?mock)
 ```
 
-Deploy `functions/recall-join` as an Appwrite Function (Node 22, entry `src/main.js`, execute access: users, scopes: `databases.*`, `users.read`). Run `npm run build:function` first so it carries the current `core/`. Deploy `web/` to Appwrite Sites (build `npm run build`, output `web/dist`).
+Then `npm run deploy` creates and deploys the Function (Node 22, entry `src/main.js`, execute access: users, scopes: databases/tables/rows read+write, `users.read`, with the current `core/` copied in) and builds `web/` and uploads it to Appwrite Sites as static files. The API key also needs `functions.write` and `sites.write` for this step.
 
 ## Real vs mocked
 
