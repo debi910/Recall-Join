@@ -121,20 +121,11 @@ main.distributor .hero { grid-template-columns: 1fr; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes fade { to { opacity: 0.85; } }
 
-/* ---------- shelf scan strip ---------- */
-.strip { margin: 18px 0 8px; padding: 16px 20px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; }
-.strip-ticks { display: grid; grid-template-columns: repeat(auto-fit, minmax(4px, 1fr)); gap: 2px; height: 30px; }
-.strip-ticks i { border-radius: 2px; background: var(--grey-2); animation: tick-in 300ms var(--ease-out) both; animation-delay: var(--d); }
-.strip-ticks i.red { background: var(--red); }
-.strip-ticks i.amber { background: var(--amber); }
-.strip-ticks i.grey { background: var(--ink-3); }
-@keyframes tick-in { from { opacity: 0; transform: scaleY(0.4); } }
-.strip-legend, .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 13px; color: var(--ink-2); }
-.strip-legend b, .legend b { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; background: var(--grey-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+.legend b { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; background: var(--grey-2); }
 b.red { background: var(--red); } b.amber { background: var(--amber); } b.grey { background: var(--ink-3); }
 
 /* ---------- feed ---------- */
-.grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; margin-top: 10px; }
 .group { display: flex; align-items: baseline; gap: 10px; font: 600 15px var(--sans); margin: 24px 0 12px; }
 .group small { font-weight: 400; color: var(--ink-3); font-size: 13px; }
 .pill { font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 99px; background: var(--grey-2); color: var(--ink-2); }
@@ -176,22 +167,6 @@ aside { display: grid; gap: 14px; align-content: start; }
 .panel.demo { background: var(--paper-2); border-style: dashed; }
 .panel select { flex: 1; min-width: 0; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--rule-2); background: var(--card); color: var(--ink); font: inherit; font-size: 14px; }
 
-.bars { display: flex; gap: 14px; align-items: flex-end; height: 140px; }
-.bar { flex: 1; display: grid; grid-template-rows: auto 1fr auto; height: 100%; text-align: center; gap: 4px; }
-.bar b { font: 600 13px var(--mono); }
-.bar small { font-size: 11px; color: var(--ink-3); white-space: nowrap; }
-.bar-stack { align-self: end; height: var(--h); display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; transform-origin: bottom; animation: grow 600ms var(--ease-out) both; animation-delay: calc(var(--i) * 80ms); }
-.seg.state { background: color-mix(in srgb, var(--red) 55%, var(--paper)); }
-.seg.central { background: var(--red); }
-b.state { background: color-mix(in srgb, var(--red) 55%, var(--paper)); } b.central { background: var(--red); }
-@keyframes grow { from { transform: scaleY(0.05); } }
-
-.hbars { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.hbars li { display: grid; grid-template-columns: 1fr auto; gap: 4px; font-size: 13px; }
-.hbars b { font: 500 12px var(--mono); color: var(--ink-2); }
-.hbars i { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--grey-2); position: relative; overflow: hidden; }
-.hbars i::after { content: ''; position: absolute; inset: 0; width: var(--w); border-radius: inherit; background: var(--ink); transform-origin: left; animation: grow-x 700ms var(--ease-out) both; animation-delay: calc(var(--i) * 60ms); }
-.hbars li:first-child i::after { background: var(--red); }
 @keyframes grow-x { from { transform: scaleX(0); } }
 
 .timeline { list-style: none; margin: 0; padding: 0 0 0 14px; border-left: 1px solid var(--rule-2); font-size: 13px; }
@@ -284,9 +259,39 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .demo-accounts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); }
 .demo-accounts p { width: 100%; margin: 0 0 2px; font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
 
+/* ---------- simplified chemist screen ---------- */
+.column { max-width: 720px; margin: 0 auto; }
+main.chemist .hero { display: block; }
+main.chemist .hero .sub { margin-bottom: 20px; }
+.hero .row { margin-top: 4px; }
+.card { grid-template-areas: 'product batch chev' 'meta meta chev'; }
+.card .meta em { font-style: normal; font-weight: 600; }
+.card.amber .meta em { color: var(--amber); }
+.card.done::before { background: var(--green); }
+.fold { margin: 20px 0 0; }
+.fold > summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; cursor: pointer; font: 600 15px var(--sans); color: var(--ink-2); list-style: none; }
+.fold > summary::-webkit-details-marker, .tools > summary::-webkit-details-marker { display: none; }
+.fold > summary::before, .tools > summary::before { content: '›'; display: inline-block; width: 10px; color: var(--ink-3); transition: transform 160ms var(--ease-out); }
+.fold[open] > summary::before, .tools[open] > summary::before { transform: rotate(90deg); }
+.fold > summary small { font-weight: 400; color: var(--ink-3); font-size: 13px; }
+.fold > .cards { margin-top: 12px; }
+.coverage { margin: 28px 0 14px; font-size: 13px; color: var(--ink-3); }
+.tools > summary { cursor: pointer; font: 600 14px var(--sans); list-style: none; display: flex; gap: 10px; }
+.tools[open] > summary { margin-bottom: 14px; }
+.tools h3 { margin: 18px 0 6px; }
+.tools h3:first-of-type { margin-top: 0; }
+.tools .row { margin-top: 10px; }
+.checks { display: flex; flex-wrap: wrap; gap: 6px; }
+.checks li { padding: 6px 10px; border-radius: 99px; grid-template-columns: 14px auto; gap: 6px; }
+.checks svg { width: 14px; height: 14px; }
+.failed { margin: 16px 0 0; padding: 12px 14px; border-radius: 10px; background: var(--red-2); color: var(--red); font-size: 14px; }
+.failed small { display: block; font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); margin-bottom: 4px; }
+.compare-fold { margin: 14px 0 18px; }
+.compare-fold > summary { font-size: 13px; }
+
 /* ---------- responsive + motion safety ---------- */
 @media (max-width: 960px) {
-  .hero, .grid, .login { grid-template-columns: 1fr; }
+  .hero, .login { grid-template-columns: 1fr; }
   .hero-graphic { max-width: 420px; }
 }
 @media (max-width: 640px) {
