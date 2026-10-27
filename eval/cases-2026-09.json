@@ -1,0 +1,656 @@
+{
+ "note": "Stock rows are synthetic variants of real CDSCO rows; labels are known by construction.",
+ "source": "data/nsq/2026-09.json",
+ "cases": [
+  {
+   "id": "c01",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "TICKGO-P TAB",
+    "batch": " BS-022607/",
+    "expiry": "Jan-2028",
+    "mfr": "Biowil Formulation",
+    "qty": 10
+   },
+   "nsq_sno": 37
+  },
+  {
+   "id": "c02",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "NIMCEF TAB",
+    "batch": "MHPL733",
+    "expiry": "Nov-2027",
+    "mfr": "Medinok Healthcare",
+    "qty": 10
+   },
+   "nsq_sno": 220
+  },
+  {
+   "id": "c03",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "MEFNA FORTE TAB",
+    "batch": "T3209",
+    "expiry": "Apr-2027",
+    "mfr": "Jersy Pharma",
+    "qty": 10
+   },
+   "nsq_sno": 232
+  },
+  {
+   "id": "c04",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "NICORUS-5 TAB",
+    "batch": "PT 052509",
+    "expiry": "Apr-2027",
+    "mfr": "Primus Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 168
+  },
+  {
+   "id": "c05",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "MOXIKIND-CV TAB",
+    "batch": "B7AEY043",
+    "expiry": "Mar-2027",
+    "mfr": "Copmed Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 96
+  },
+  {
+   "id": "c06",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "ASCORCAN 500 TABLETS 500 MG TAB",
+    "batch": "T 250530",
+    "expiry": "Aug-2027",
+    "mfr": "Daffohils Laboratories",
+    "qty": 10
+   },
+   "nsq_sno": 51
+  },
+  {
+   "id": "c07",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "BISACODYL 5 MG TAB",
+    "batch": "05528",
+    "expiry": "Nov-2028",
+    "mfr": "Healthy Life",
+    "qty": 10
+   },
+   "nsq_sno": 212
+  },
+  {
+   "id": "c08",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "CAFFTAN 1000 MG INJ",
+    "batch": "rkcxbp003",
+    "expiry": "Dec-2027",
+    "mfr": "RK Life",
+    "qty": 10
+   },
+   "nsq_sno": 84
+  },
+  {
+   "id": "c09",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "MEDIMOX CV 625 LB TAB",
+    "batch": "ABT25838",
+    "expiry": "Aug-2027",
+    "mfr": "Alexa Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 206
+  },
+  {
+   "id": "c10",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "BRUCI-KID TABLETS TAB",
+    "batch": "OT 13158",
+    "expiry": "May-2028",
+    "mfr": "Omnison Pharma",
+    "qty": 10
+   },
+   "nsq_sno": 53
+  },
+  {
+   "id": "c11",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "LOPROMIDE 2 MG TAB",
+    "batch": "LOP 25014",
+    "expiry": "Jan-2029",
+    "mfr": "Okvik Pharma",
+    "qty": 10
+   },
+   "nsq_sno": 74
+  },
+  {
+   "id": "c12",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "RAMIPRIL 2.5 MG TAB",
+    "batch": "TA26151",
+    "expiry": "Mar-2028",
+    "mfr": "Saintlife Pharmaceuticals.",
+    "qty": 10
+   },
+   "nsq_sno": 128
+  },
+  {
+   "id": "c13",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "TOX-O 200 TAB",
+    "batch": "PYITL003",
+    "expiry": "Apr-2027",
+    "mfr": "Laborate Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 156
+  },
+  {
+   "id": "c14",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "LORAZEPAM TAB",
+    "batch": " T-270162/",
+    "expiry": "Mar-2028",
+    "mfr": "Merril Pharma",
+    "qty": 10
+   },
+   "nsq_sno": 199
+  },
+  {
+   "id": "c15",
+   "kind": "format-variant",
+   "expect": "flag",
+   "stock": {
+    "product": "SYSER-D TAB",
+    "batch": " ST-25874/",
+    "expiry": "Nov-2026",
+    "mfr": "Sunvij Drugs",
+    "qty": 10
+   },
+   "nsq_sno": 234
+  },
+  {
+   "id": "c16",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "ROLLED TAB",
+    "batch": "LPT2526188",
+    "expiry": "Sep-2027",
+    "mfr": "Tulip Surgicals",
+    "qty": 10
+   },
+   "nsq_sno": 297
+  },
+  {
+   "id": "c17",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "COMPOUND INJ",
+    "batch": "26LK024",
+    "expiry": "Apr-2027",
+    "mfr": "Haseeb Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 166
+  },
+  {
+   "id": "c18",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "LORAZEPAM TABLETS IP 2 MG 2 MG TAB",
+    "batch": "BGT-2601",
+    "expiry": "Feb-2030",
+    "mfr": "Reliance Formulations",
+    "qty": 10
+   },
+   "nsq_sno": 233
+  },
+  {
+   "id": "c19",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "LACTULOSE 10 G TAB",
+    "batch": "CCE26040A",
+    "expiry": "Feb-2028",
+    "mfr": "Gnosis Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 24
+  },
+  {
+   "id": "c20",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "PARACETAMOL TAB",
+    "batch": "I-3898",
+    "expiry": "Feb-2028",
+    "mfr": "S Kins",
+    "qty": 10
+   },
+   "nsq_sno": 9
+  },
+  {
+   "id": "c21",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CLAVR-CV PLUS DRY SYRUP 30 ML 30 ML SYP",
+    "batch": "SPA252793",
+    "expiry": "Jun-2027",
+    "mfr": "Affy Parentals",
+    "qty": 10
+   },
+   "nsq_sno": 196
+  },
+  {
+   "id": "c22",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CETGO-M TAB",
+    "batch": "AV5050",
+    "expiry": "Feb-2028",
+    "mfr": "Unispeed Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 278
+  },
+  {
+   "id": "c23",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "ROLLED TAB",
+    "batch": "MFS-136",
+    "expiry": "Sep-2027",
+    "mfr": "Tulip Surgicals",
+    "qty": 10
+   },
+   "nsq_sno": 187
+  },
+  {
+   "id": "c24",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "GOREE TAB",
+    "batch": "TAS25011AL",
+    "expiry": "Jun-2028",
+    "mfr": "Goree Cosmetics",
+    "qty": 10
+   },
+   "nsq_sno": 31
+  },
+  {
+   "id": "c25",
+   "kind": "batch-collision",
+   "expect": "no-flag",
+   "stock": {
+    "product": "RABEZONE-DSR CAPSULES CAP",
+    "batch": "GTF3302A",
+    "expiry": "Jun-2027",
+    "mfr": "Logos Pharma",
+    "qty": 10
+   },
+   "nsq_sno": 163
+  },
+  {
+   "id": "c26",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "CAREMIDE TABLETS 40 MG TAB",
+    "batch": "1T01501",
+    "expiry": "Jun-2028",
+    "mfr": "Inducare Pharmaceutical",
+    "qty": 10
+   },
+   "nsq_sno": 294
+  },
+  {
+   "id": "c27",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "ACECLOFENAC TAB",
+    "batch": "T24K5S7C",
+    "expiry": "Oct-2026",
+    "mfr": "Bajaj Formulations",
+    "qty": 10
+   },
+   "nsq_sno": 148
+  },
+  {
+   "id": "c28",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "FOLIC 0.4 MG TAB",
+    "batch": "F01TE050",
+    "expiry": "Sep-2027",
+    "mfr": "Unicure India",
+    "qty": 10
+   },
+   "nsq_sno": 261
+  },
+  {
+   "id": "c29",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "FOLIC 0.4 MG TAB",
+    "batch": "FO1TE01O",
+    "expiry": "Sep-2027",
+    "mfr": "Unicure India",
+    "qty": 10
+   },
+   "nsq_sno": 260
+  },
+  {
+   "id": "c30",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "MOUNJARO 5MG TAB",
+    "batch": "D92B027",
+    "expiry": "",
+    "mfr": "Eli Lilly",
+    "qty": 10
+   },
+   "nsq_sno": 118
+  },
+  {
+   "id": "c31",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "ROLLED TAB",
+    "batch": "6B7",
+    "expiry": "Sep-2027",
+    "mfr": "Tulip Surgicals",
+    "qty": 10
+   },
+   "nsq_sno": 123
+  },
+  {
+   "id": "c32",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "COMPOUND INJ",
+    "batch": "CGF25O546",
+    "expiry": "Apr-2027",
+    "mfr": "Haseeb Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 170
+  },
+  {
+   "id": "c33",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "LORAZEPAM TABLETS IP 2 MG 2 MG TAB",
+    "batch": "466O",
+    "expiry": "Feb-2030",
+    "mfr": "Reliance Formulations",
+    "qty": 10
+   },
+   "nsq_sno": 73
+  },
+  {
+   "id": "c34",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "LACTULOSE 10 G TAB",
+    "batch": "GLS00942A",
+    "expiry": "Feb-2028",
+    "mfr": "Gnosis Pharmaceuticals",
+    "qty": 10
+   },
+   "nsq_sno": 188
+  },
+  {
+   "id": "c35",
+   "kind": "confusable-typo",
+   "expect": "review",
+   "stock": {
+    "product": "PARACETAMOL TAB",
+    "batch": "5KL260238",
+    "expiry": "Feb-2028",
+    "mfr": "S Kins",
+    "qty": 10
+   },
+   "nsq_sno": 215
+  },
+  {
+   "id": "c36",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "COMPOUND INJ",
+    "batch": "P2958529",
+    "expiry": "Feb-2028",
+    "mfr": "MKA Remedies",
+    "qty": 10
+   },
+   "nsq_sno": 241
+  },
+  {
+   "id": "c37",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "RISHABH TEXCO TAB",
+    "batch": "91993929",
+    "expiry": "Oct-2028",
+    "mfr": "Rishabh Texco",
+    "qty": 10
+   },
+   "nsq_sno": 108
+  },
+  {
+   "id": "c38",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "MOPPING PAD TAB",
+    "batch": "05939337",
+    "expiry": "May-2029",
+    "mfr": "Sri Sandana",
+    "qty": 10
+   },
+   "nsq_sno": 103
+  },
+  {
+   "id": "c39",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "DICLOVIS TABLETS TAB",
+    "batch": "PT941120",
+    "expiry": "Feb-2027",
+    "mfr": "Progressive Lifescience",
+    "qty": 10
+   },
+   "nsq_sno": 284
+  },
+  {
+   "id": "c40",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "PARPOL 650 650 MG TAB",
+    "batch": "CA937899",
+    "expiry": "Mar-2028",
+    "mfr": "Curetech Formulations",
+    "qty": 10
+   },
+   "nsq_sno": 252
+  },
+  {
+   "id": "c41",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "LANAMB-15 15MG TAB",
+    "batch": "AT947274",
+    "expiry": "Sep-2027",
+    "mfr": "Azot Life",
+    "qty": 10
+   },
+   "nsq_sno": 17
+  },
+  {
+   "id": "c42",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "OLANZAPINE 5 MG TAB",
+    "batch": "EO937763",
+    "expiry": "Jun-2027",
+    "mfr": "Unicure India",
+    "qty": 10
+   },
+   "nsq_sno": 274
+  },
+  {
+   "id": "c43",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "MCYPRO SYRUP SYP",
+    "batch": "DL915055",
+    "expiry": "Feb-2028",
+    "mfr": "Dexter Formulation",
+    "qty": 10
+   },
+   "nsq_sno": 28
+  },
+  {
+   "id": "c44",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "SURGICAL TAB",
+    "batch": "02946780",
+    "expiry": "Mar-2029",
+    "mfr": "Sri Sandana",
+    "qty": 10
+   },
+   "nsq_sno": 107
+  },
+  {
+   "id": "c45",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "ONDANSETRON TAB",
+    "batch": "SB933381",
+    "expiry": "Aug-2027",
+    "mfr": "Sarthak Biotech",
+    "qty": 10
+   },
+   "nsq_sno": 250
+  },
+  {
+   "id": "c46",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "MOUNJARO 2.5MG TAB",
+    "batch": "D9975707",
+    "expiry": "",
+    "mfr": "Eli Lilly",
+    "qty": 10
+   },
+   "nsq_sno": 116
+  },
+  {
+   "id": "c47",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "SODIUM INJ",
+    "batch": "M1978873",
+    "expiry": "Aug-2028",
+    "mfr": "Ultra Laboratories",
+    "qty": 10
+   },
+   "nsq_sno": 218
+  },
+  {
+   "id": "c48",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "TELMISEV ? 40 40 MG TAB",
+    "batch": "CH991327",
+    "expiry": "Jan-2028",
+    "mfr": "Cureza Healthcare",
+    "qty": 10
+   },
+   "nsq_sno": 48
+  },
+  {
+   "id": "c49",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "SYTOP-D TAB",
+    "batch": "SR927839",
+    "expiry": "Oct-2027",
+    "mfr": "SPAS Remedise",
+    "qty": 10
+   },
+   "nsq_sno": 221
+  },
+  {
+   "id": "c50",
+   "kind": "clean",
+   "expect": "no-flag",
+   "stock": {
+    "product": "CEFCURI-OZ TABLETS TAB",
+    "batch": "EB936876",
+    "expiry": "Mar-2028",
+    "mfr": "Ticoma Pharmacia",
+    "qty": 10
+   },
+   "nsq_sno": 75
+  }
+ ]
+}

@@ -8,20 +8,24 @@ import { normBatch, skelBatch } from '../core/normalize.js';
 
 const rowId = (...p) => createHash('sha1').update(p.join('|')).digest('hex').slice(0, 32);
 for (const file of process.argv.slice(2)) {
-  const rows = JSON.parse(readFileSync(file, 'utf8'));
-  const { period, source, source_url } = rows[0];
-  const alertId = rowId('alert', period, source);
-  await tables.upsertRow({ databaseId: DB, tableId: 'alerts', rowId: alertId, data: { period, source, source_url, rows_count: rows.length } });
-  for (let i = 0; i < rows.length; i += 100) {
-    await tables.upsertRows({
-      databaseId: DB, tableId: 'nsq_batches',
-      rows: rows.slice(i, i + 100).map((r) => ({
-        $id: rowId(period, source, r.sno, r.batch),
-        product: r.product, batch: r.batch, batch_norm: normBatch(r.batch), batch_skel: skelBatch(r.batch),
-        mfg: r.mfg || '', expiry: r.expiry || '', mfr: r.mfr || '', result: r.result || '', lab: r.lab || '',
-        period, source, alert_id: alertId,
-      })),
-    });
+  const all = JSON.parse(readFileSync(file, 'utf8'));
+  // One file can hold several lists (the portal export mixes central and state labs).
+  const groups = Map.groupBy(all, (r) => `${r.period}|${r.source}`);
+  for (const rows of groups.values()) {
+    const { period, source, source_url } = rows[0];
+    const alertId = rowId('alert', period, source);
+    await tables.upsertRow({ databaseId: DB, tableId: 'alerts', rowId: alertId, data: { period, source, source_url, rows_count: rows.length } });
+    for (let i = 0; i < rows.length; i += 100) {
+      await tables.upsertRows({
+        databaseId: DB, tableId: 'nsq_batches',
+        rows: rows.slice(i, i + 100).map((r) => ({
+          $id: rowId(period, source, r.sno, r.batch),
+          product: r.product, batch: r.batch, batch_norm: normBatch(r.batch), batch_skel: skelBatch(r.batch),
+          mfg: r.mfg || '', expiry: r.expiry || '', mfr: r.mfr || '', result: r.result || '', lab: r.lab || '',
+          period, source, alert_id: alertId,
+        })),
+      });
+    }
+    console.log(`imported ${rows.length} rows from ${file} (${period}, ${source})`);
   }
-  console.log(`imported ${rows.length} rows from ${file} (${period}, ${source})`);
 }

@@ -12,17 +12,25 @@ Public lookups ([blacklisted.co.in](https://blacklisted.co.in/medicines/check), 
 - **Formatting differs** between the regulator and billing software (`SP-240165`, `sp240165`, `SP 240165`).
 - **Look-alike characters** (0/O, 1/I, 5/S, 8/B) get mistyped or mis-scanned.
 
-## Results (`npm run eval`)
+## Results
 
-The 50 cases are **synthetic stock rows built from real CDSCO rows** (March 2025 central-lab list, 70 batches). Labels are known by construction: 15 formatting variants, 10 batch-code collisions, 10 look-alike typos and 15 clean rows. See [`eval/`](eval/).
+### Held-out: September 2026 list (`CASES=./cases-2026-09.json npm run eval`)
+
+The matching rules were frozen before this list was loaded. The 50 stock rows are **synthetic variants of real Sep 2026 CDSCO rows**: 15 formatting variants, 10 batch-code collisions, 10 look-alike typos and 15 clean rows. Labels are known by construction.
 
 | Method | Flag precision | Flag recall | False flags | Typos sent to a human |
 |---|---|---|---|---|
-| Exact batch lookup | 38% | 40% | 10 | 0/10 |
-| Batch-only, ignore spaces/hyphens | 60% | 100% | 10 | 0/10 |
-| Recall Join | 100% | 100% | 0 | 10/10 |
+| Exact batch lookup | 41% | 47% | 10 | 0/10 |
+| Batch-only, ignore spaces/hyphens (what public lookups do) | 60% | 100% | 10 | 0/10 |
+| **Recall Join** | **100%** | **100%** | **0** | **10/10** |
 
-> Caveats: the rules were developed on this month. The held-out check on the Sep 2026 list is still to do. These numbers measure the matching logic on constructed variants, not a field study.
+The development set (March 2025 central list, `npm run eval`) gives the same pattern. These numbers measure the matching logic on constructed variants, not a field study.
+
+### What the real Jul–Sep 2026 lists show (739 batches)
+
+- **53 batch codes (7%) are 4 characters or fewer**, e.g. `4063`, `A-1`, `0064`. Codes this short repeat across makers.
+- **3 batch codes appear for two different makers within three months**. In one case (`VBC0116`), the same product name is listed under two different manufacturers.
+- Data: the CDSCO NSQ portal export for Jul, Aug and Sep 2026. Central-lab counts match the press reports (40 / 29 / 42). The state-lab rows in the export (199 / 171 / 258) are fewer than the reported totals (240 / 191 / 288), so some state data is missing from the export.
 
 ## How Appwrite Databases do the work
 
@@ -61,7 +69,7 @@ The matching logic is explained step by step in [`core-logic-explained.md`](core
 npm install
 cp .env.example .env        # fill in endpoint, project ID, an API key with databases/teams/users scopes
 npm run setup               # tables, columns, indexes, demo teams and users
-npm run import:nsq -- data/nsq/*.json
+npm run import:nsq -- data/nsq/2026-07.json data/nsq/2026-08.json   # Sep 2026 is imported live in the demo
 npm run dev                 # web app on http://localhost:5173  (design preview without a backend: /?mock)
 ```
 
@@ -71,7 +79,7 @@ Deploy `functions/recall-join` as an Appwrite Function (Node 22, entry `src/main
 
 | Part | Status |
 |---|---|
-| CDSCO NSQ rows | **Real**, parsed from CDSCO's published monthly PDFs (`data/nsq/`) |
+| CDSCO NSQ rows | **Real**: Jul–Sep 2026 portal exports (`tools/csv_to_nsq.py`) and the Mar 2025 PDF (`tools/parse_nsq.py`), in `data/nsq/` |
 | Appwrite TablesDB, Realtime, Teams, Functions, Auth | **Real** |
 | Chemist stock (`web/public/data/demo-stock.csv`) | **Synthetic**: invented makers and distributors, seeded with 6 variants of real listed batches |
 | Eval stock rows | **Synthetic** variants of real rows (see above) |

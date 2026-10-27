@@ -12,7 +12,7 @@ const shuffle = (a) => a.map((x) => [rand(), x]).sort((p, q) => p[0] - q[0]).map
 // How a billing system tends to name the item: brand if there is one, else the
 // first generic word, plus strength and a form abbreviation.
 function shopName(product) {
-  const brand = product.match(/\(([^()]+)\)\s*$/)?.[1];
+  const brand = product.match(/\((?:Brand Name\s*:\s*)?([^()]+)\)\s*$/i)?.[1]?.replace(/^NA$/i, '') || null;
   const strength = product.match(/\d+(\.\d+)?\s*(mg|g|ml|IU)/i)?.[0] ?? '';
   const form = /inject/i.test(product) ? 'INJ' : /syrup/i.test(product) ? 'SYP' : /capsule/i.test(product) ? 'CAP' : 'TAB';
   const base = brand ?? product.split(/[\s,&]+/)[0];

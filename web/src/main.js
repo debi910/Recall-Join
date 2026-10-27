@@ -101,8 +101,7 @@ const actions = {
     const file = select.value;
     await act('Importing the CDSCO list', async () => {
       const data = await (await fetch(`/data/${file}`)).json();
-      const { period, source, source_url } = data[0];
-      state.last = await call('ingestAlert', { period, source, source_url, rows: data });
+      state.last = await call('ingestAlert', { rows: data });
     });
   },
   open(id) { state.open = id; render(); },

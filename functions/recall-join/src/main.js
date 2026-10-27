@@ -116,20 +116,23 @@ const ACTIONS = {
     return { uploaded: rows.length, join: await runJoin(db, shop, userId) };
   },
 
-  async ingestAlert({ db, isAdmin, userId }, { period, source, source_url = '', rows }) {
+  async ingestAlert({ db, isAdmin, userId }, { rows }) {
     if (!isAdmin) throw deny('Only an admin can ingest regulator lists');
-    const alertId = rowId('alert', period, source);
-    await db.upsertRow({ databaseId: DB, tableId: 'alerts', rowId: alertId, data: { period, source, source_url, rows_count: rows.length } });
-    for (const part of chunks(rows)) {
-      await db.upsertRows({
-        databaseId: DB, tableId: 'nsq_batches',
-        rows: part.map((r) => ({
-          $id: rowId(period, source, r.sno, r.batch),
-          product: r.product, batch: r.batch, batch_norm: normBatch(r.batch), batch_skel: skelBatch(r.batch),
-          mfg: r.mfg || '', expiry: r.expiry || '', mfr: r.mfr || '', result: r.result || '', lab: r.lab || '',
-          period, source, alert_id: alertId,
-        })),
-      });
+    for (const group of Map.groupBy(rows, (r) => `${r.period}|${r.source}`).values()) {
+      const { period, source, source_url = '' } = group[0];
+      const alertId = rowId('alert', period, source);
+      await db.upsertRow({ databaseId: DB, tableId: 'alerts', rowId: alertId, data: { period, source, source_url, rows_count: group.length } });
+      for (const part of chunks(group)) {
+        await db.upsertRows({
+          databaseId: DB, tableId: 'nsq_batches',
+          rows: part.map((r) => ({
+            $id: rowId(period, source, r.sno, r.batch),
+            product: r.product, batch: r.batch, batch_norm: normBatch(r.batch), batch_skel: skelBatch(r.batch),
+            mfg: r.mfg || '', expiry: r.expiry || '', mfr: r.mfr || '', result: r.result || '', lab: r.lab || '',
+            period, source, alert_id: alertId,
+          })),
+        });
+      }
     }
     // Re-run the join for every shop so new matches stream out over Realtime.
     const shops = [...new Set((await listAll(db, 'stock_items', [Query.select(['shop_id'])])).map((r) => r.shop_id))];

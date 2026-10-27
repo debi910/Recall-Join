@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { matchStock, TIER } from '../core/match.js';
 import { normBatch } from '../core/normalize.js';
 
-const { cases, source } = JSON.parse(readFileSync(new URL('./cases.json', import.meta.url)));
+const { cases, source } = JSON.parse(readFileSync(new URL(process.env.CASES || './cases.json', import.meta.url)));
 const nsq = JSON.parse(readFileSync(source, 'utf8'));
 
 const exact = (s) => nsq.some((n) => n.batch.trim().toUpperCase() === s.batch.trim().toUpperCase()) ? 'flag' : 'none';

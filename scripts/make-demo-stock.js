@@ -30,7 +30,7 @@ for (let i = 0; i < 300; i++) {
 }
 
 // Seeded rows from the live list (labels are for the README, not the CSV).
-const brand = (p) => (p.match(/\(([^()]+)\)\s*$/)?.[1] ?? p.split(/[\s,]+/).slice(0, 2).join(' ')).toUpperCase();
+const brand = (p) => ((p.match(/\((?:Brand Name\s*:\s*)?([^()]+)\)\s*$/i)?.[1]?.replace(/^NA$/i, '') || null) ?? p.split(/[\s,]+/).slice(0, 2).join(' ')).toUpperCase();
 const maker = (m) => m.replace(/^M\/s\.?\s*/i, '').split(/[,(]/)[0].trim();
 const mm = (e) => e.replace(/^(\d{2})\/\d{2}(\d{2})$/, '$1/$2');
 const real = live.filter((r) => r.batch && r.mfr && /\d/.test(r.batch));

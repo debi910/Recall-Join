@@ -6,3 +6,5 @@
 - 50-case eval built from real rows, compared against two baselines (`eval/`).
 - TablesDB schema + setup script, NSQ import script, Appwrite Function (upload, join, ingest, quarantine transaction with read-back verification, review, returns).
 - Web app (Vite): chemist view, match detail with character-level batch diff, review flow, distributor returns, audit trail, mock preview mode.
+- Loaded the real Jul–Sep 2026 NSQ exports (739 batches, `tools/csv_to_nsq.py`). Imports group rows by list (central/state).
+- Held-out eval on Sep 2026 with frozen rules. Demo stock re-seeded from the Sep 2026 list.
