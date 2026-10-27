@@ -12,7 +12,7 @@ const $app = document.getElementById('app');
 const state = {
   user: null, role: null, teams: [], shopName: '', isAdmin: false,
   matches: [], stock: new Map(), nsq: new Map(), notes: [], audit: [], alerts: [], stockCount: 0,
-  open: null, busy: '', firstPaint: true, arrived: new Set(), live: false,
+  open: null, busy: '', tab: 0, firstPaint: true, arrived: new Set(), live: false,
 };
 
 const TIER = {
@@ -53,8 +53,22 @@ async function load() {
     state.stockCount = (await db.listRows({ databaseId: DB, tableId: 'stock_items', queries: [Query.limit(1)] })).total;
     state.alerts = await rows('alerts', [Query.orderDesc('period'), Query.limit(24)]);
     state.audit = await rows('audit', [Query.orderDesc('$createdAt'), Query.limit(30)]);
+    state.reasons = await reasonStats();
   }
   state.notes = await rows('return_notes', [Query.orderDesc('$createdAt'), Query.limit(50)]);
+}
+
+// Failure reasons across every imported list, read straight from TablesDB.
+async function reasonStats() {
+  const counts = {};
+  let cursor;
+  for (;;) {
+    const page = await rows('nsq_batches', [Query.select(['$id', 'result']), Query.limit(500), ...(cursor ? [Query.cursorAfter(cursor)] : [])]);
+    for (const r of page) counts[reasonCategory(r.result)] = (counts[reasonCategory(r.result)] || 0) + 1;
+    if (page.length < 500) break;
+    cursor = page.at(-1).$id;
+  }
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
 }
 
 function subscribe() {
@@ -137,6 +151,7 @@ function paint() {
   litRender(state.user ? appView() : loginView(), $app);
   state.firstPaint = false;
   state.arrived = new Set();
+  syncHeight();
 }
 
 function loginView() {
@@ -205,45 +220,121 @@ function chemistView() {
   const months = [...new Set(state.alerts.map((a) => a.period))].sort().map(month);
   const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
-  return html`<div class="column">
+  const home = html`
     <section class=${classMap({ hero: true, alarm: flags.length > 0, calm: !flags.length })}>
-      <h1>${flags.length
-        ? html`<span class="count">${flags.length}</span> batch${flags.length > 1 ? 'es' : ''} on your shelf ${flags.length > 1 ? 'are' : 'is'} on the CDSCO list`
-        : !state.stockCount ? 'Upload your stock to check it'
-        : reviews.length ? `${plural(reviews.length, 'batch', 'batches')} to check by hand`
-        : 'No listed batch found on your shelf'}</h1>
-      <p class="sub">${flags.length ? `Pull ${units} units (${rupees(value)}) and return them to the supplier.${reviews.length ? ` ${plural(reviews.length, 'more batch', 'more batches')} to check below.` : ''}`
-        : !state.stockCount ? 'Your billing export is matched against every CDSCO list of failed batches.'
-        : reviews.length ? 'The batch code is close but not certain. Compare with the strip in hand.'
-        : 'Only listed batches are checked. This is not a safety certificate.'}</p>
-      ${flags.length ? holdButton({ label: `Hold to quarantine all ${flags.length}`, done: 'Quarantining…', onConfirm: () => A.quarantine(flags.map((m) => m.$id)) })
-        : !state.stockCount ? stockButtons() : nothing}
+      <div class="hero-copy">
+        <p class="eyebrow">Your shelf × ${months.length} month${months.length === 1 ? '' : 's'} of CDSCO lists · ${nsqTotal.toLocaleString('en-IN')} failed batches</p>
+        <h1>${flags.length
+          ? html`<span class="count">${flags.length}</span> batch${flags.length > 1 ? 'es' : ''} on your shelf ${flags.length > 1 ? 'are' : 'is'} on the CDSCO list`
+          : !state.stockCount ? 'Upload your stock to check it'
+          : reviews.length ? `${plural(reviews.length, 'batch', 'batches')} to check by hand`
+          : 'No listed batch found on your shelf'}</h1>
+        <p class="sub">${flags.length ? `Pull ${units} units (${rupees(value)}) and return them to the supplier.`
+          : !state.stockCount ? 'Your billing export is matched against every CDSCO list of failed batches.'
+          : 'Only listed batches are checked. This is not a safety certificate.'}</p>
+        <div class="row">
+          ${flags.length ? holdButton({ label: `Hold to quarantine all ${flags.length}`, done: 'Quarantining…', onConfirm: () => A.quarantine(flags.map((m) => m.$id)) })
+            : !state.stockCount ? stockButtons() : nothing}
+          ${live.length ? html`<button class="btn ghost" @click=${() => goTab(1)}>See all ${live.length} matches →</button>` : nothing}
+        </div>
+      </div>
+      <figure class="hero-graphic" aria-label="Join between the CDSCO lists and your shelf">
+        ${joinGraphic({
+          left: 16, right: 16, animate: state.firstPaint && !reduceMotion,
+          links: [...flags.map(() => 'red'), ...reviews.map(() => 'amber'), ...info.map(() => 'grey')].slice(0, 10).map((tone, i) => [(i * 5 + 2) % 16, (i * 7 + 3) % 16, tone]),
+          leftLabel: 'CDSCO lists', rightLabel: 'Your shelf',
+        })}
+      </figure>
     </section>
+    ${shelfStrip(flags.length, reviews.length, info.length)}`;
 
-    <section class="feed">
-      ${group('Pull from the shelf', flags)}
-      ${group('Check the strip', reviews)}
-      ${folded('Same brand, different batch', info, 'No action needed.')}
-      ${folded('Done', closed)}
-    </section>
+  const matches = html`
+    ${group('Pull from the shelf', flags)}
+    ${group('Check the strip', reviews)}
+    ${folded('Same brand, different batch', info, 'No action needed.')}
+    ${folded('Done', closed)}
+    ${!live.length && !closed.length ? html`<div class="empty">${emptyArt()}<p>${state.stockCount ? `Nothing found. ${plural(state.stockCount, 'stock row')} are checked against every new list.` : 'Upload your stock on Home to start.'}</p></div>` : nothing}`;
 
-    ${state.stockCount ? html`<p class="coverage">Checked ${plural(state.stockCount, 'stock row')} against ${nsqTotal.toLocaleString('en-IN')} failed batches from the ${months.join(', ')} CDSCO lists. Not finding a batch does not mean it is safe.</p>` : nothing}
+  const listsTab = html`
+    ${listsChart()}
+    ${reasonsChart()}
+    <p class="coverage">${state.stockCount ? `Your ${plural(state.stockCount, 'stock row')} are checked against ${nsqTotal.toLocaleString('en-IN')} failed batches from the ${months.join(', ')} CDSCO lists. ` : ''}Not finding a batch does not mean it is safe.</p>`;
 
-    <details class="panel tools">
-      <summary>Stock, lists and audit trail</summary>
+  const activity = html`
+    <div class="panel">
       <h3>Stock</h3>
       <p class="muted">${plural(state.stockCount, 'batch row')} on file. Upload a billing-software export (Item, Batch, Expiry, Company, Qty, MRP, Party).</p>
       ${stockButtons()}
-      ${state.isAdmin ? html`<h3>Import a CDSCO list (demo)</h3>
-        <p class="muted">The check re-runs for every shop and new matches arrive live.</p>
-        <div class="row">
-          <select id="ingest"><option value="2026-09">Sep 2026 · 300 batches</option><option value="2026-08">Aug 2026 · 200 batches</option><option value="2026-07">Jul 2026 · 239 batches</option></select>
-          <button class="btn ghost" @click=${A.ingest}>Import</button>
-        </div>` : nothing}
-      <h3>Audit trail</h3>
-      ${auditTimeline()}
-    </details>
-  </div>`;
+    </div>
+    ${state.isAdmin ? html`<div class="panel demo">
+      <h3>Import a CDSCO list (demo)</h3>
+      <p class="muted">The check re-runs for every shop and new matches arrive live.</p>
+      <div class="row">
+        <select id="ingest"><option value="2026-09">Sep 2026 · 300 batches</option><option value="2026-08">Aug 2026 · 200 batches</option><option value="2026-07">Jul 2026 · 239 batches</option></select>
+        <button class="btn ghost" @click=${A.ingest}>Import</button>
+      </div>
+    </div>` : nothing}
+    <div class="panel"><h3>Audit trail</h3>${auditTimeline()}</div>`;
+
+  return slides([['Home', 0, home], ['Matches', live.length, matches], ['Lists', 0, listsTab], ['Activity', 0, activity]]);
+}
+
+// Tabs over a horizontal scroll-snap track: swipe, trackpad or tap all move it,
+// and the tab underline follows the scroll position continuously.
+function slides(panels) {
+  return html`<nav class="tabs" role="tablist" style="--n:${panels.length}">
+      ${panels.map(([label, count], i) => html`<button role="tab" aria-selected=${String(state.tab === i)} @click=${() => goTab(i)}>${label}${count ? html`<span class="pill">${count}</span>` : nothing}</button>`)}
+      <i class="tab-ink" aria-hidden="true"></i>
+    </nav>
+    <div class="slides" @scroll=${onSlide} @toggle=${{ handleEvent: syncHeight, capture: true }}>${panels.map(([label, , body]) => html`<section class="slide" role="tabpanel" aria-label=${label}>${body}</section>`)}</div>`;
+}
+
+function goTab(i) {
+  const track = document.querySelector('.slides');
+  if (!track) return;
+  track.scrollTo({ left: i * track.clientWidth, behavior: reduceMotion ? 'auto' : 'smooth' });
+  // Coming from further down a long tab: bring the new tab's top into view.
+  const top = document.querySelector('.tabs').offsetTop - 60;
+  if (scrollY > top) scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+
+// The track takes the active slide's height, so a short tab doesn't leave the
+// tallest tab's empty space below it.
+function syncHeight() {
+  const track = document.querySelector('.slides');
+  const slide = track?.children[state.tab];
+  if (slide) track.style.height = `${slide.offsetHeight}px`;
+}
+
+let slideFrame;
+function onSlide(e) {
+  const track = e.currentTarget;
+  cancelAnimationFrame(slideFrame);
+  slideFrame = requestAnimationFrame(() => {
+    const pos = track.scrollLeft / track.clientWidth;
+    document.querySelector('.tabs')?.style.setProperty('--t', pos);
+    const i = Math.round(pos);
+    if (i !== state.tab) { state.tab = i; paint(); }
+  });
+}
+
+// One tick per stock row (capped): the whole shelf at a glance.
+function shelfStrip(f, r, i) {
+  const total = Math.max(state.stockCount, f + r + i);
+  if (!total) return nothing;
+  const ticks = Math.min(total, 160);
+  const scale = ticks / total;
+  const cut = [Math.max(f ? 1 : 0, Math.round(f * scale)), Math.max(r ? 1 : 0, Math.round(r * scale)), Math.max(i ? 1 : 0, Math.round(i * scale))];
+  const toneAt = (k) => (k < cut[0] ? 'red' : k < cut[0] + cut[1] ? 'amber' : k < cut[0] + cut[1] + cut[2] ? 'grey' : 'clear');
+  // Scatter the coloured ticks so the strip reads like a shelf scan, not a bar chart.
+  const slot = Array.from({ length: ticks }, (_, k) => (k * 37) % ticks);
+  return html`<section class="strip" aria-label="Shelf scan">
+    <div class="strip-ticks">${slot.map((pos, k) => html`<i class=${toneAt(slot.indexOf(k))} style="--d:${(k % 40) * 8}ms"></i>`)}</div>
+    <div class="strip-legend">
+      <span><b class="red"></b>${f} on the list</span><span><b class="amber"></b>${r} to check</span><span><b class="grey"></b>${i} brand flagged</span>
+      <span><b class="clear"></b>${Math.max(total - f - r - i, 0)} not on any imported list</span>
+    </div>
+  </section>`;
 }
 
 function stockButtons() {
@@ -276,6 +367,33 @@ function card(m, i) {
     <span class="meta">${m.tier !== 'flag' || m.decision !== 'pending' ? html`<em>${t.label}</em> · ` : nothing}${s.qty ?? 0} units · ${reasonCategory(n.result)}</span>
     <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
   </li>`;
+}
+
+function listsChart() {
+  const lists = [...Map.groupBy(state.alerts, (a) => a.period)].sort((a, b) => a[0].localeCompare(b[0])).slice(-6);
+  if (!lists.length) return html`<div class="panel"><h3>Lists checked</h3><p class="muted">None imported yet.</p></div>`;
+  const max = Math.max(...lists.map(([, l]) => l.reduce((a, x) => a + x.rows_count, 0)));
+  return html`<div class="panel">
+    <h3>Lists checked</h3>
+    <div class="bars" role="img" aria-label="Failed batches per month">
+      ${lists.map(([p, l], i) => {
+        const c = l.find((x) => x.source === 'central')?.rows_count || 0, st = l.find((x) => x.source === 'state')?.rows_count || 0;
+        return html`<div class="bar" style="--i:${i}"><b>${c + st}</b><div class="bar-stack" style="--h:${((c + st) / max) * 100}%">
+          <span class="seg state" style="flex:${st}" title="${st} from state labs"></span><span class="seg central" style="flex:${c}" title="${c} from CDSCO labs"></span>
+        </div><small>${month(p)}</small></div>`;
+      })}
+    </div>
+    <p class="legend"><span><b class="central"></b>CDSCO labs</span><span><b class="state"></b>State labs</span></p>
+  </div>`;
+}
+
+function reasonsChart() {
+  if (!state.reasons?.length) return nothing;
+  const max = state.reasons[0][1];
+  return html`<div class="panel">
+    <h3>Why batches failed</h3>
+    <ul class="hbars">${state.reasons.slice(0, 6).map(([k, v], i) => html`<li style="--w:${(v / max) * 100}%;--i:${i}"><span>${k}</span><b>${v}</b><i></i></li>`)}</ul>
+  </div>`;
 }
 
 function auditTimeline() {
