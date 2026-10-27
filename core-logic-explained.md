@@ -49,7 +49,7 @@ No candidate at all, but the same maker + product is listed   → INFO: "brand f
 
 **The rule to remember:** *a FLAG always needs the batch plus one more independent agreement.* That second agreement is what removes the false alarms that batch-only lookups raise.
 
-*A bug the eval caught:* an early version flagged when the batch **and expiry** matched even though the maker differed. One eval case (a Pantoprazole batch code that also appears on an Itraconazole batch from another maker, with the same expiry month by coincidence) proved that wrong. Now a differing maker can never produce a FLAG; at most it goes to review.
+*A bug the eval caught:* an early version flagged when the batch **and expiry** matched even though the maker differed. One eval case proved that wrong: a synthetic Pantoprazole stock row carrying the batch code of a listed Itraconazole batch from another maker, with the same expiry month by coincidence. Now a differing maker can never produce a FLAG; at most it goes to review.
 
 ## Step 5: Only humans escalate reviews
 
