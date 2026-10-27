@@ -1,0 +1,1494 @@
+{
+ "note": "Regulator rows (real) paired with the retail listing of the same brand (real). Batch copied from the regulator row. Maker relationship labelled by hand in retail-labels.json.",
+ "source": "A-Z Medicine Dataset of India (Kaggle: shudhanshusingh/az-medicine-dataset-of-india), mirrored at github.com/junioralive/Indian-Medicine-Dataset",
+ "cases": [
+  {
+   "id": "r001",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 6,
+    "product": "Montelukast and Levocetirizine Tablet (Dumont-L )",
+    "batch": "DML 062",
+    "expiry": "11/2027",
+    "mfr": "M/s.Hygeia Pharmaceuticals Mfg (P) Ltd., 608, Dwarir Road, Dhamaitala, P.O.- Dakshin Jagaddal, Dist-24 Pgs(S), Pin-700151, W.B."
+   },
+   "retail": {
+    "catalogue_id": 59788,
+    "product": "Dumont L 5mg/10mg Tablet",
+    "mfr": "Hygeia Pharmaceuticals"
+   }
+  },
+  {
+   "id": "r002",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 7,
+    "product": "Nitrazepam Tablets I.P. 10 mg. (Nitravet-10)",
+    "batch": "AXI23003P",
+    "expiry": "02/2028",
+    "mfr": "M/s. Anglo-French Drugs & Industries Limited, Plot No-4, Phase-II, Peenya Industrial Area, Peenya, Bengaluru-560 058"
+   },
+   "retail": {
+    "catalogue_id": 150314,
+    "product": "Nitravet 10 Tablet",
+    "mfr": "Anglo-French Drugs & Industries Ltd"
+   }
+  },
+  {
+   "id": "r003",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 12,
+    "product": "Ceftriaxone & Sulbactam for Injection IP (Cefamed-S)",
+    "batch": "B4CT05E",
+    "expiry": "09/2026",
+    "mfr": "M/s. Lenus Lifecare Pvt. Ltd., Plot No. 1, Industrial Area, Chambaghat, Solan (H.P.)-173 213(India)"
+   },
+   "retail": {
+    "catalogue_id": 46565,
+    "product": "Cefamed S 1000mg/500mg Injection",
+    "mfr": "Meridian Medicare Ltd"
+   }
+  },
+  {
+   "id": "r004",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 13,
+    "product": "Pantoprazole Gastro- Resistant and Domperidone Prolonged-release Capsules IP (Pantoryl- DSR )",
+    "batch": "MC-24229",
+    "expiry": "03/2026",
+    "mfr": "M/s. Matins Healthcare Pvt. Ltd., Plot No.-10, Sector-5, I.I.E., SIDCUL, HARIDWAR- 249403 (U.K.)"
+   },
+   "retail": {
+    "catalogue_id": 182303,
+    "product": "Pantoryl-DSR Capsule",
+    "mfr": "Ryland Healthcare"
+   }
+  },
+  {
+   "id": "r005",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 16,
+    "product": "Itraconazole Capsules BP 100 mg (Fungis-100)",
+    "batch": "C4050",
+    "expiry": "05/2026",
+    "mfr": "M/s. Merril Pharma Pvt. Ltd., Unit- II Plot No.24,25,31,32 Somnath Industrial Park, Kerala GIDC, Near Bavla, Ahmedabad -382220, Gujarat, India"
+   },
+   "retail": {
+    "catalogue_id": 87328,
+    "product": "Fungis 100mg Capsule",
+    "mfr": "Stallion Laboratories Pvt Ltd"
+   }
+  },
+  {
+   "id": "r006",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 34,
+    "product": "Aceclofenac & Paracetamol Tablets (ALDIGESIC P )",
+    "batch": "BHT23229M B",
+    "expiry": "08/2025",
+    "mfr": "M/s. Sri Ram Healthcare Pvt. Ltd., Plot No.-81-C/2, EPIP, Phase-1, Jharmajri, Baddi, Dist-Solan (H.P.)-174103"
+   },
+   "retail": {
+    "catalogue_id": 37,
+    "product": "Aldigesic P 100mg/325mg Tablet",
+    "mfr": "Alkem Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r007",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 46,
+    "product": "Gentamicin Sulphate Injection I.P. 30 ml (Gentalab )",
+    "batch": "OGNI-037",
+    "expiry": "06/2026",
+    "mfr": "M/s. Laborate Pharmaceuticals India Ltd., #31, Rajban Road, Nariwala Paonta Sahib, (H.P.)"
+   },
+   "retail": {
+    "catalogue_id": 95134,
+    "product": "GENTALAB 40 MG INJECTION",
+    "mfr": "Laborate Pharmaceuticals India Ltd"
+   }
+  },
+  {
+   "id": "r008",
+   "nsq": {
+    "file": "2025-03-central.json",
+    "sno": 61,
+    "product": "Atorvastatin Tablets IP (GATOVAS- 20)",
+    "batch": "CT24250423",
+    "expiry": "05/2026",
+    "mfr": "M/s.CMG Biotech Pvt. Ltd., (Unit-II), Plot No.58, Phase-III, Industrial Area, Sansarpur Terrace, HP- 176501. Mkt By : Same as manufacturer"
+   },
+   "retail": {
+    "catalogue_id": 95738,
+    "product": "Gatovas 20mg Tablet",
+    "mfr": "Cmg Biotech Pvt Ltd"
+   }
+  },
+  {
+   "id": "r009",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 1,
+    "product": "Pantoprazole Tablets IP (Brand Name : Pepcare® 40)",
+    "batch": "PEP5001",
+    "expiry": "Jan-2027",
+    "mfr": "Finecure Pharmaceuticals Ltd. PF-5 & 6, Sanand Industrial Estate-II, GIDC, Sanand, District: Ahmedbad"
+   },
+   "retail": {
+    "catalogue_id": 176689,
+    "product": "Pepcare 40mg Tablet",
+    "mfr": "Finecure Pharmaceuticals Ltd."
+   }
+  },
+  {
+   "id": "r010",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 28,
+    "product": "Drotaverine Hydrochloride & Diclofenac Potassium Tablets (Brand Name : Superspas)",
+    "batch": "KFCR6023",
+    "expiry": "Feb-2028",
+    "mfr": "Cris Pharma (India) Ltd. E-11, UPSIDC, Industrial Area, Selaqui, Dehradun-248011 (U.K.)"
+   },
+   "retail": {
+    "catalogue_id": 199623,
+    "product": "Superspas Tablet",
+    "mfr": "Seagull Pharmaceutical Pvt Ltd"
+   }
+  },
+  {
+   "id": "r011",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 29,
+    "product": "Dexamethasone Tablets IP 0.5 mg (Brand Name : Demisone)",
+    "batch": "KJKBH25134",
+    "expiry": "Oct-2028",
+    "mfr": "Cadila Pharmaceuticals Ltd. Industrial Growth Center, Sidco, Samba 184121, State J & K"
+   },
+   "retail": {
+    "catalogue_id": 58526,
+    "product": "Demisone Tablet",
+    "mfr": "Cadila Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r012",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 89,
+    "product": "Mefenamic Acid & Paracetamol Tablets (Brand Name : MEFRIL-MF)",
+    "batch": "T-252174",
+    "expiry": "Feb-2027",
+    "mfr": "Merril Pharma Pvt.Ltd, Plot No. 212, Raipur, Bhagwanpur, Roorkee-247667(UK)"
+   },
+   "retail": {
+    "catalogue_id": 135567,
+    "product": "Mefril MF 250mg/325mg Tablet",
+    "mfr": "Merril Pharma Pvt Ltd"
+   }
+  },
+  {
+   "id": "r013",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 102,
+    "product": "Paracetamol Tablets IP 650 mg (Brand Name : Joymol-650)",
+    "batch": "UT-3765",
+    "expiry": "Dec-2026",
+    "mfr": "Yacca Pharmaceutical Pvt. Ltd. 11 th Km, stone, Dehradun Road, Roorkee-247667(U.K.)"
+   },
+   "retail": {
+    "catalogue_id": 113933,
+    "product": "Joymol 650 Tablet",
+    "mfr": "Smart Laboratories Pvt Ltd"
+   }
+  },
+  {
+   "id": "r014",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 112,
+    "product": "Glimepiride Tablets IP 2mg (Brand Name : Glimpse-2 Tablets)",
+    "batch": "CHPLT1027",
+    "expiry": "Nov-2027",
+    "mfr": "Cureza Healthcare Pvt. Ltd., 63/1, 67/1, Dharampuri, -Sol. Sindha, Ujjain Road,-Indore, 453 551"
+   },
+   "retail": {
+    "catalogue_id": 95363,
+    "product": "Glimpse 2mg Tablet",
+    "mfr": "Grefith Life Sciences Pvt Ltd"
+   }
+  },
+  {
+   "id": "r015",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 117,
+    "product": "Amoxycillin Capsules IP 500mg (Brand Name : Alcimox-500 Capsules)",
+    "batch": "BC12250010",
+    "expiry": "Apr-2027",
+    "mfr": "Alencure Biotech Pvt.Ltd. Village: Nagal, Suketi Road, P.O Moginand, Kala Amb, Distt. Sirmour-173030, (HP) India."
+   },
+   "retail": {
+    "catalogue_id": 21094,
+    "product": "Alcimox 500 Capsule",
+    "mfr": "Alicia Healthcare"
+   }
+  },
+  {
+   "id": "r016",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 122,
+    "product": "Terbinafine Hydrochloride Tablets IP 250mg (Brand Name : Torabest Tablets)",
+    "batch": "AT25110990A",
+    "expiry": "Oct-2027",
+    "mfr": "Accura Care Pharmaceuticals Pvt.Ltd, Vill.Moginand, Nahan Road, Kala Amb, Distt.Sirmour (H.P), 173030"
+   },
+   "retail": {
+    "catalogue_id": 223378,
+    "product": "Torabest IT 100mg/250mg Tablet",
+    "mfr": "Biochemix Health Care Pvt. Ltd."
+   }
+  },
+  {
+   "id": "r017",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 125,
+    "product": "Clobetasol Propionate, Neomycin, Miconazole Nitrate & Chlorhexidine Cream (Brand Name : Dermiford Cream)",
+    "batch": "DLPS5111",
+    "expiry": "Oct-2027",
+    "mfr": "Leeford Healthcare Ltd., At:Plot No. 77, 78, 79-A, 79-B & 116, Epip, Phase-II, Village-Thana, Tehsil-Baddi, Distt. Solan (HP), India, 173205."
+   },
+   "retail": {
+    "catalogue_id": 58274,
+    "product": "Dermiford Cream",
+    "mfr": "Leeford Healthcare Ltd"
+   }
+  },
+  {
+   "id": "r018",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 127,
+    "product": "Ambroxol Hydrochloride, Terbutaline Sulphate, Guaiphenesin & Menthol Syrup (Brand Name : Mucorant)",
+    "batch": "BGL250945",
+    "expiry": "Aug-2027",
+    "mfr": "Bestcare Formulation Pvt, Ltd., Plot No. B-15 & 16, Pipdic Electronic Park, Thirubhuvanai, Puducherry-605 107"
+   },
+   "retail": {
+    "catalogue_id": 138597,
+    "product": "Mucorant Expectorant",
+    "mfr": "Micro Labs Ltd"
+   }
+  },
+  {
+   "id": "r019",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 129,
+    "product": "Aceclofenac & Paracetamol Tablets IP (Brand Name : Aciz Plus)",
+    "batch": "MT250239",
+    "expiry": "May-2028",
+    "mfr": "Oxford Pharma, Puhana Chowk, Roorkee, Distt. Haridwar-247667 (U.K)"
+   },
+   "retail": {
+    "catalogue_id": 5908,
+    "product": "Aciz Plus 100 mg/650 mg Tablet",
+    "mfr": "Ritz Pharma"
+   }
+  },
+  {
+   "id": "r020",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 157,
+    "product": "Cinnarizine Tablets IP (Brand Name : Vertigon)",
+    "batch": "MV115027",
+    "expiry": "Nov-2028",
+    "mfr": "Geno Pharmaceuticals Pvt. Ltd, Karaswada, Mapusa, Goa 403528 At C/12-13, M.I.D.C. Bhosari Pune"
+   },
+   "retail": {
+    "catalogue_id": 233232,
+    "product": "Vertigon Tablet",
+    "mfr": "Geno Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r021",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 158,
+    "product": "Aceclofenac 100 mg, Serratiopeptidase 15 mg & Paracetamol 325 mg Tablets (Brand Name : Zerodol-SP)",
+    "batch": "FND0825055AK",
+    "expiry": "May-2028",
+    "mfr": "Ipca Laboratories Ltd. Unit-II, 393/ Melli Horethang Road, Gom Block, Bharikhola, South District, Sikkim 737121"
+   },
+   "retail": {
+    "catalogue_id": 246379,
+    "product": "Zerodol-SP Tablet",
+    "mfr": "Ipca Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r022",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 160,
+    "product": "Amoxycillin & Potassium Clavulanate Tablets IP (Brand Name : Augmentin 625)",
+    "batch": "826D074",
+    "expiry": "Aug-2027",
+    "mfr": "Medreich Ltd., Survey No. 14 &v 15, Gundarahalli Village, Sulibele Hobli, Hoskote Taluk Bengaluru Rural District-562114"
+   },
+   "retail": {
+    "catalogue_id": 1,
+    "product": "Augmentin 625 Duo Tablet",
+    "mfr": "Glaxo SmithKline Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r023",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 161,
+    "product": "Pantoprazole Gastro-resistant Tablets IP 40 mg (Brand Name : Pantop 40)",
+    "batch": "SPK251470",
+    "expiry": "Mar-2028",
+    "mfr": "Aristo Pharmaceuticals Pvt. Ltd. Plot Nos.: 2040-46, N.H. 10 Baghey Khola, P.O. Majhitar, East Sikkim-737136"
+   },
+   "retail": {
+    "catalogue_id": 173581,
+    "product": "Pantop 40 Tablet",
+    "mfr": "Aristo Pharmaceuticals Pvt Ltd"
+   }
+  },
+  {
+   "id": "r024",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 166,
+    "product": "Aceclofenac, Paracetamol and Serratiopeptidase Tablets (Brand Name : Flozen AA)",
+    "batch": "F9AHY065",
+    "expiry": "Sep-2027",
+    "mfr": "Pharma Force Lab 53-55, Ind. Area, Gondpur, Paonta Sahib (HP)-173025"
+   },
+   "retail": {
+    "catalogue_id": 84075,
+    "product": "Flozen-AA Tablet",
+    "mfr": "Mankind Pharma Ltd"
+   }
+  },
+  {
+   "id": "r025",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 169,
+    "product": "Levofloxacin Tablets IP 500 mg (Brand Name : L-Cin 500)",
+    "batch": "JC00116",
+    "expiry": "Dec-2027",
+    "mfr": "Lupin Ltd. EPIP, Sidco Industrial Complex Kartholi, Bari Brahmana, Jammu J& K-181133 India"
+   },
+   "retail": {
+    "catalogue_id": 120826,
+    "product": "L-Cin 500 Tablet",
+    "mfr": "Lupin Ltd"
+   }
+  },
+  {
+   "id": "r026",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 170,
+    "product": "Ondansetron Orally Disintegration Tablets IP (Brand Name : Acctron-4 Tablets)",
+    "batch": "ST-34645",
+    "expiry": "Sep-2026",
+    "mfr": "Samay Pharma India Pvt. Ltd Plot No.- 34-35, Industrial Area, Trilokpur Road, Kala Amb, District Sirmour, Himanchal Pradesh-173030"
+   },
+   "retail": {
+    "catalogue_id": 16503,
+    "product": "Acctron 4 Tablet",
+    "mfr": "Accott Healthcare"
+   }
+  },
+  {
+   "id": "r027",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 171,
+    "product": "Omeprazole & Domperidone Capsules (Brand Name : Pridom-O)",
+    "batch": "AC25/211",
+    "expiry": "Dec-2027",
+    "mfr": "Accuwell Medics Private Ltd. Suvery No.-414, Ashwamegh Ind. Estate, Changodar, Ahmedabad-382213 (Guj) India"
+   },
+   "retail": {
+    "catalogue_id": 180943,
+    "product": "Pridom O 10mg/20mg Capsule",
+    "mfr": "Prisma Healthcare"
+   }
+  },
+  {
+   "id": "r028",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 172,
+    "product": "Triamcinolone Acetonide Injection IP (40mg/ml) (1ml) (Brand Name : Kenacort)",
+    "batch": "NPK0260",
+    "expiry": "Nov-2027",
+    "mfr": "Nitin Life Sciences Ltd. Rampur Road, Paonta Sahib, Distt. Sirmour-173025 (H.P.) India"
+   },
+   "retail": {
+    "catalogue_id": 115637,
+    "product": "Kenacort 40mg Injection",
+    "mfr": "Abbott"
+   }
+  },
+  {
+   "id": "r029",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 175,
+    "product": "Cefixime Tablets IP (Brand Name : Taxim-O 200)",
+    "batch": "25460922",
+    "expiry": "Apr-2027",
+    "mfr": "Alkem Health Sciences A Unit of Alkem Laboratories Ltd. Unit-3, Samardung, Kaerk Block, P.O. Namthang, District-Namchi, Sikkim-737137"
+   },
+   "retail": {
+    "catalogue_id": 214767,
+    "product": "Taxim-O 200 Tablet",
+    "mfr": "Alkem Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r030",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 176,
+    "product": "Pantoprazole Gastro-resistant Tablets IP 40 mg (Brand Name : Pan 40)",
+    "batch": "25444650",
+    "expiry": "May-2028",
+    "mfr": "Alkem Health Science, A unit of Alkem Laboratories Ltd., Unit-2, Samardung Karek Block, P.O. Namthang, District-Namchi, Sikkim-737137"
+   },
+   "retail": {
+    "catalogue_id": 173578,
+    "product": "PAN 40 Tablet",
+    "mfr": "Alkem Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r031",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 177,
+    "product": "Amoxycillin & Potassium Clavulanate Tablets IP (Brand Name : Amoxyclav 625)",
+    "batch": "MFL0122",
+    "expiry": "Feb-2027",
+    "mfr": "Medicef Pharma, Plot No.-28, 29 & 48, Phase-I, EPIP, Jharmajri, Baddi, Distt. Solan-173205 (H.P.), India"
+   },
+   "retail": {
+    "catalogue_id": 7,
+    "product": "Amoxyclav 625 Tablet",
+    "mfr": "Abbott"
+   }
+  },
+  {
+   "id": "r032",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 178,
+    "product": "Diclofenac Sodium and Paracetamol Tablets IP (Brand Name : Oxalgin-DP)",
+    "batch": "I501103",
+    "expiry": "Jan-2027",
+    "mfr": "Zydus Healthcare Ltd., (Unit II), 967 (P), 968 (P), 970 (P), Duga Circle, Kamarey Bhasmay, Kumek, Sikkim-737132"
+   },
+   "retail": {
+    "catalogue_id": 161663,
+    "product": "Oxalgin-DP Tablet",
+    "mfr": "Zydus Cadila"
+   }
+  },
+  {
+   "id": "r033",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 190,
+    "product": "Ondansetron Tablets IP 4 mg (Brand Name : Ondocos-4)",
+    "batch": "TG252335",
+    "expiry": "Oct-2027",
+    "mfr": "Symbiosis Pharmaceuticals Pvt. Ltd. - (Plant-I) Symbiosis House, Suketi Road, Kala Amb-173030 (H.P.)"
+   },
+   "retail": {
+    "catalogue_id": 168358,
+    "product": "Ondocos 4mg Tablet",
+    "mfr": "Corona Remedies Pvt Ltd"
+   }
+  },
+  {
+   "id": "r034",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 192,
+    "product": "Aceclofenac & Paracetamol Tablets IP (Brand Name : Vriace-P)",
+    "batch": "T-2504296",
+    "expiry": "Mar-2028",
+    "mfr": "Gopal Lifesciences, - (Unit-II), Hill Top, Ind. Estate, Near Export Zone, Jharmajri, Baddi-173205"
+   },
+   "retail": {
+    "catalogue_id": 233754,
+    "product": "Vriace P 100mg/325mg Tablet",
+    "mfr": "Gopal Lifesciences"
+   }
+  },
+  {
+   "id": "r035",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 193,
+    "product": "Cefpodoxime Proxetil IP 200 mg Tablets (Brand Name : Cefpod-200)",
+    "batch": "SRTC-2403",
+    "expiry": "Jul-2027",
+    "mfr": "Velnex Medicare India Pvt. Ltd., - Plot No. 278, HSIDC Saha (133104) HR"
+   },
+   "retail": {
+    "catalogue_id": 35247,
+    "product": "Cefpod 200mg Tablet",
+    "mfr": "Zenobio Life Science"
+   }
+  },
+  {
+   "id": "r036",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 194,
+    "product": "Cefpodoxime & Ofloxacin Tablets (Brand Name : Gudcef Plus)",
+    "batch": "C9AKX031",
+    "expiry": "Nov-2026",
+    "mfr": "Relax Pharmaceuticals Pvt. Ltd. - (Unit-II) 49-A-B, Gondpur, Industrial Area, Paonta Sahib, Distt. Sirmour (H.P.)-173025"
+   },
+   "retail": {
+    "catalogue_id": 94207,
+    "product": "Gudcef Plus Tablet",
+    "mfr": "Mankind Pharma Ltd"
+   }
+  },
+  {
+   "id": "r037",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 208,
+    "product": "Amoxycillin &Potassium Clavulanate Tablets (Brand Name : Sunclav-625)",
+    "batch": "Not Mentioned",
+    "expiry": "",
+    "mfr": "Astam Healthcare Pvt. Ltd., Vill. Thada, Teh. Nalagarh, Distt. Solan- 174101 (H.P.)."
+   },
+   "retail": {
+    "catalogue_id": 202333,
+    "product": "Sunclav 625 Tablet",
+    "mfr": "Sunfine Healthcare"
+   }
+  },
+  {
+   "id": "r038",
+   "nsq": {
+    "file": "2026-07.json",
+    "sno": 213,
+    "product": "BETAMETHASONE VALERATE AND NEOMYCIN SKIN CREAM (Brand Name : BETNOVATE - N)",
+    "batch": "YW6K",
+    "expiry": "Jul-2027",
+    "mfr": "GlaxoSmithKline Pharmaceuticals Ltd., A-10, M.I.D.C., Ambad-Pathardi Block, Nashik 422 010 Regd. Office: Dr. Annie Besant Road, Worli, Mumbai 400 030"
+   },
+   "retail": {
+    "catalogue_id": 25734,
+    "product": "Betnovate-N  Cream",
+    "mfr": "Glaxo SmithKline Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r039",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 6,
+    "product": "Cefuroxime Axetil IP (Brand Name : Amytum-250)",
+    "batch": "CT503513C",
+    "expiry": "Feb-2027",
+    "mfr": "Nikvin Healthcare (I) Pvt. Ltd., Baddi-Barotiwala Road Govt. Timber Depot, Vill. Katha, Baddi (H.P)-173205"
+   },
+   "retail": {
+    "catalogue_id": 9071,
+    "product": "Amytum 250 Tablet",
+    "mfr": "Care Formulation Labs Pvt Ltd"
+   }
+  },
+  {
+   "id": "r040",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 9,
+    "product": "Paracetamol and Tramadol Hydrochloride Tablets I.P (Brand Name : ULTRAMUST-P TABLETS)",
+    "batch": "COS03AHA",
+    "expiry": "May-2027",
+    "mfr": "Pure and Cure Healthcare Pvt. Ltd., Plot No. 26A, 27-30, Sector-8A, I.I.E., SIDCUL, Ranipur, Haridwar, Uttarakhand"
+   },
+   "retail": {
+    "catalogue_id": 231230,
+    "product": "Ultramust-P 37.5mg/325mg Tablet",
+    "mfr": "Tas Med India Pvt Ltd"
+   }
+  },
+  {
+   "id": "r041",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 10,
+    "product": "Disodium Hydrogen Citrate Solution (Brand Name : Alkasol)",
+    "batch": "KBI26068C",
+    "expiry": "Jan-2029",
+    "mfr": "Stadmed Pvt. Ltd. C-18, Sarojni Nagar Industrial Estate Lucknow-226008."
+   },
+   "retail": {
+    "catalogue_id": 36,
+    "product": "Alkasol Oral Solution",
+    "mfr": "Stadmed Pvt Ltd"
+   }
+  },
+  {
+   "id": "r042",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 14,
+    "product": "Dextromethorphan Hydrobromide and Chlorpheniramine Maleate Cough Syrup (Brand Name : Rexcof-DX Syrup)",
+    "batch": "CPL60022",
+    "expiry": "Dec-2027",
+    "mfr": "HSN Biotech, Plot No 40, Sector 6A, Sidcul, Haridwar-249403 (U.K.)."
+   },
+   "retail": {
+    "catalogue_id": 184170,
+    "product": "Rexcof DX Syrup",
+    "mfr": "Cipla Ltd"
+   }
+  },
+  {
+   "id": "r043",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 15,
+    "product": "Oxytocin Injection I.P. (Brand Name : Evatocin)",
+    "batch": "91707",
+    "expiry": "May-2028",
+    "mfr": "Neon Laboratories Ltd., Biosar Road Palghar -401404 M.S."
+   },
+   "retail": {
+    "catalogue_id": 72957,
+    "product": "Evatocin 5IU Injection",
+    "mfr": "Neon Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r044",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 30,
+    "product": "Trypsin-Chymotrypsin Tablets (Brand Name : Chymokem Forte)",
+    "batch": "CFT26002ES",
+    "expiry": "Jan-2028",
+    "mfr": "East African (India) Overseas - 1 Pharmacity, Selaqui Dehradun, U.K. 248011"
+   },
+   "retail": {
+    "catalogue_id": 35180,
+    "product": "Chymokem Forte Tablet",
+    "mfr": "Alkem Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r045",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 35,
+    "product": "Levetiracetam Tablets IP 500 mg (Brand Name : Levera-500)",
+    "batch": "N2601077",
+    "expiry": "Mar-2029",
+    "mfr": "Intas Pharmaceuticals Ltd. - Samardung Road, Kabrey Block, Namthang Elaka, Sikkim-737132 India"
+   },
+   "retail": {
+    "catalogue_id": 120810,
+    "product": "Levera 500 Tablet",
+    "mfr": "Intas Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r046",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 50,
+    "product": "Disodium Hydrogen Citrate Solution (Brand Name : Alkasol)",
+    "batch": "KBI26030C",
+    "expiry": "Jan-2029",
+    "mfr": "Stadmed Pvt. Ltd. C-18, Sarojni Nagar Industrial Estate Lucknow-226008."
+   },
+   "retail": {
+    "catalogue_id": 36,
+    "product": "Alkasol Oral Solution",
+    "mfr": "Stadmed Pvt Ltd"
+   }
+  },
+  {
+   "id": "r047",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 80,
+    "product": "Rabeprazole Gastro-resistant Tablets IP (Brand Name : Rabenova)",
+    "batch": "TG25-1583L",
+    "expiry": "Aug-2027",
+    "mfr": "Athens Life Sciences, Mauza Rampur, Jattan, Nahan Road, Kala Amb, Dist.- Sirmour H.P. -173030"
+   },
+   "retail": {
+    "catalogue_id": 186453,
+    "product": "Rabenova DSR 30mg/20mg Tablet",
+    "mfr": "Raphael Pharmaceuticals Pvt Ltd"
+   }
+  },
+  {
+   "id": "r048",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 88,
+    "product": "Metoclopramide Hydrochloride Tablets I.P. 10 mg (Brand Name : Perinorm)",
+    "batch": "GD1225008AS",
+    "expiry": "Jul-2028",
+    "mfr": "Ipca Laboratories Ltd., 393/394, Melli Jorethang Road, Gom Block Bharikola, South District, Sikkim"
+   },
+   "retail": {
+    "catalogue_id": 173587,
+    "product": "Perinorm Tablet",
+    "mfr": "Ipca Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r049",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 95,
+    "product": "Aceclofenac & Paracetamol Tablets (Brand Name : Ace-Plus)",
+    "batch": "T-22573",
+    "expiry": "Aug-2028",
+    "mfr": "Jakson Laboratories Pvt. Ltd., Plot No. 56 & 61, Industrial Area, Phase-III, Sansarpur Terrace, Dist. Kangra (H.P)-176501"
+   },
+   "retail": {
+    "catalogue_id": 904,
+    "product": "Ace Plus Tablet",
+    "mfr": "Maxis Healthcare"
+   }
+  },
+  {
+   "id": "r050",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 102,
+    "product": "Loperamide Hydrochloride Tablets IP 2 mg (Brand Name : LOPRA)",
+    "batch": "SBT3269",
+    "expiry": "Jun-2027",
+    "mfr": "Supercure Biotech Pvt.Ltd, Plot No.99/4/1, Friends Colony, G.T Road, Kundli, Haryana-131028"
+   },
+   "retail": {
+    "catalogue_id": 121644,
+    "product": "Lopra Tablet",
+    "mfr": "Sun Life Sciences Pvt Ltd"
+   }
+  },
+  {
+   "id": "r051",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 137,
+    "product": "Domperidone Tablets IP 10mg (Brand Name : DomiCare Tablets)",
+    "batch": "IT14501",
+    "expiry": "Aug-2028",
+    "mfr": "Inducare Pharmaceutical and Research Foundatiion, G-32, Jejuri MIDC, Tal-Purandar, Dist. Pune Maharashtra Jejuri-412303"
+   },
+   "retail": {
+    "catalogue_id": 60831,
+    "product": "Domicare Tablet",
+    "mfr": "Care Formulation Labs Pvt Ltd"
+   }
+  },
+  {
+   "id": "r052",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 138,
+    "product": "Itraconazole Capsule 200mg (Brand Name : Itromac-200 capsules)",
+    "batch": "B23225009",
+    "expiry": "Sep-2027",
+    "mfr": "Torque Pharmaceuticals Pvt. Ltd. 13B-14, EPIP-1, Jharmajri, HP Jharmajri, 173205"
+   },
+   "retail": {
+    "catalogue_id": 108377,
+    "product": "Itromac 200mg Capsule",
+    "mfr": "Torque Pharmaceuticals Pvt Ltd"
+   }
+  },
+  {
+   "id": "r053",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 161,
+    "product": "Sucralate & Oxetacaine suspension (Brand Name : Sucaine-O)",
+    "batch": "BGL250915",
+    "expiry": "Aug-2027",
+    "mfr": "Bestcare Formulation Pvt, Ltd.,Plot No. B-15 & 16, Pipdic Electronic Park, Thirubhuvanai, Puducherry- 605 107"
+   },
+   "retail": {
+    "catalogue_id": 202644,
+    "product": "Sucaine O Oral Suspension",
+    "mfr": "SBS Biosciences"
+   }
+  },
+  {
+   "id": "r054",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 172,
+    "product": "Dexamethasone Injection IP-2ml (Brand Name : DEXALAB)",
+    "batch": "TDDUI-005",
+    "expiry": "Sep-2027",
+    "mfr": "Laborate pharmaceuticals India Ltd, 51, Indl. Area, Paonta Sahib (H.P)"
+   },
+   "retail": {
+    "catalogue_id": 59128,
+    "product": "Dexalab Injection",
+    "mfr": "Laborate Pharmaceuticals India Ltd"
+   }
+  },
+  {
+   "id": "r055",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 179,
+    "product": "Dexamethasone Injection I.P -2ml (Brand Name : Dexalab)",
+    "batch": "CDDUI-008",
+    "expiry": "Nov-2027",
+    "mfr": "Laborate pharmaceuticals India Ltd, 51, Indl. Area, Paonta Sahib (H.P)"
+   },
+   "retail": {
+    "catalogue_id": 59128,
+    "product": "Dexalab Injection",
+    "mfr": "Laborate Pharmaceuticals India Ltd"
+   }
+  },
+  {
+   "id": "r056",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 185,
+    "product": "Telmisartan 40 mg tablets I.P. (Brand Name : Delmee-40 Tablets)",
+    "batch": "DEMT-250831B",
+    "expiry": "Mar-2027",
+    "mfr": "Dr.Edwin Medilabs Pvt. Ltd.plot no. B-29,industrial area, focal point chanalon, kurali, sas nagar - 140103(pb). Punjab."
+   },
+   "retail": {
+    "catalogue_id": 68322,
+    "product": "Delmee 40mg Tablet",
+    "mfr": "Dr. Edwin Lab"
+   }
+  },
+  {
+   "id": "r057",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 192,
+    "product": "Rabeprazole Sodium (EC) & Domperidone (SR) Capsules (Brand Name : Farib DSR)",
+    "batch": "PGC25-377E",
+    "expiry": "Oct-2027",
+    "mfr": "Plena Remedies, - Plot No.-17, Industrial Area, (Himuda) Bhatoli Kalan Baddi, Distt. Solan (HP)-173205"
+   },
+   "retail": {
+    "catalogue_id": 88580,
+    "product": "Farib DSR 30mg/20mg Capsule",
+    "mfr": "Human Care Remedies"
+   }
+  },
+  {
+   "id": "r058",
+   "nsq": {
+    "file": "2026-08.json",
+    "sno": 200,
+    "product": "Enoxaparin Sodium Injection IP (40mg/0.4 m) (Brand Name : LMWX 40)",
+    "batch": "DESDD0526",
+    "expiry": "Dec-2027",
+    "mfr": "BDR Pharmaceuticals International Pvt. Ltd. - At: Survey No. 46/1-4, Village Kadaiya, Nani Daman-96210, India"
+   },
+   "retail": {
+    "catalogue_id": 121034,
+    "product": "Lmwx 40 Injection",
+    "mfr": "Abbott"
+   }
+  },
+  {
+   "id": "r059",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 7,
+    "product": "Thyroxine Sodium Tablets IP (Brand Name : Thyrox 100)",
+    "batch": "16251875A",
+    "expiry": "Nov-2027",
+    "mfr": "Macleods Pharmaceuticals Ltd. , Plot No.-2209, GIDC, Sarigam, Dist. Valsad 396155"
+   },
+   "retail": {
+    "catalogue_id": 214943,
+    "product": "Thyrox 100 Tablet",
+    "mfr": "Macleods Pharmaceuticals Pvt Ltd"
+   }
+  },
+  {
+   "id": "r060",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 8,
+    "product": "Levetiracetam Tablets IP 500 mg (Brand Name : Levera-500)",
+    "batch": "N2601077",
+    "expiry": "Mar-2029",
+    "mfr": "Intas Pharmaceuticals Ltd. , Samardung Road, Kabrey Block, Namthang Elaka, Sikkim-737132 India"
+   },
+   "retail": {
+    "catalogue_id": 120810,
+    "product": "Levera 500 Tablet",
+    "mfr": "Intas Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r061",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 10,
+    "product": "Buprenorphine Injection IP 2 ml (Brand Name : Talgesic)",
+    "batch": "BUP324004",
+    "expiry": "Jan-2027",
+    "mfr": "Indus Pharma Pharma Pvt. Ltd. , A-181 RIICO Ghiloth Alwar, Rajasthan 301705"
+   },
+   "retail": {
+    "catalogue_id": 222980,
+    "product": "Talgesic 0.3mg Injection",
+    "mfr": "Indus Pharma Pvt Ltd"
+   }
+  },
+  {
+   "id": "r062",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 11,
+    "product": "Telmisartan And Metoprolol Succinate Extended Release Tablets (40 mg+50 mg) (Brand Name : Telma Beta 50)",
+    "batch": "GLB26001",
+    "expiry": "Jan-2028",
+    "mfr": "Glenmark Pharmaceuticals Ltd. , B/2, Mahalaxmi Desai Road, Mumbai-400026, Maharashtra."
+   },
+   "retail": {
+    "catalogue_id": 214972,
+    "product": "Telma-Beta 50 Tablet ER",
+    "mfr": "Glenmark Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r063",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 18,
+    "product": "Cetirizine Hydrocloride and Ambroxol Hydrochloride Syrup (Brand Name : AX Cold)",
+    "batch": "P0126002L",
+    "expiry": "Dec-2027",
+    "mfr": "Pharma Roots Healthcare, Khasra No, 411, Village Tipra, P.O, Barotiwala, Tehsil Baddi, Distt. Solan (HP), 174103"
+   },
+   "retail": {
+    "catalogue_id": 3468,
+    "product": "AX Cold Syrup",
+    "mfr": "Elixir Life Care Pvt Ltd"
+   }
+  },
+  {
+   "id": "r064",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 20,
+    "product": "Ketoconazole medicated soap (Brand Name : Ketolak)",
+    "batch": "9411",
+    "expiry": "Oct-2027",
+    "mfr": "Vimson Derma, 816/3, Kothari Estate, Santej-382721(Gujarat)"
+   },
+   "retail": {
+    "catalogue_id": 117601,
+    "product": "Ketolak Soap",
+    "mfr": "Lakssha Pharmaceuticals"
+   }
+  },
+  {
+   "id": "r065",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 43,
+    "product": "Aceclofenac, Paracetamol &Chlorozoxazone Tablets (Brand Name : FENELA-MR Tablets)",
+    "batch": "HT25871",
+    "expiry": "Nov-2027",
+    "mfr": "Habitare Pharma Pvt.Ltd, Plot No.43-44, Industrial Estate, HSIIDC, Alipur, Barwala, Distt- Panchkula (HR) - 134118 Himachal Pradesh."
+   },
+   "retail": {
+    "catalogue_id": 87202,
+    "product": "Fenela-MR Tablet",
+    "mfr": "Integral Lifesciences"
+   }
+  },
+  {
+   "id": "r066",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 44,
+    "product": "Paracetamol IP 500 mg Tablets (Brand Name : Paracet 500 Tablets)",
+    "batch": "APRCT-2501",
+    "expiry": "Apr-2027",
+    "mfr": "Konis Pharmaceuticals Pvt.Ltd, Jagriti Sadan, Subathu Road, Solan - 173 212. HP"
+   },
+   "retail": {
+    "catalogue_id": 175941,
+    "product": "Paracet 500mg Tablet",
+    "mfr": "Petrosolv India Ltd"
+   }
+  },
+  {
+   "id": "r067",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 56,
+    "product": "Ketoconazole, Zinc Pyrithione & Glycerine Soap (Brand Name : Ketovex Soap)",
+    "batch": "25120324",
+    "expiry": "Nov-2027",
+    "mfr": "Astonea Labs Ltd. , Vill. Haripur The, Raipur Rani, Distt. Panchkula Haryana, India-134204"
+   },
+   "retail": {
+    "catalogue_id": 117603,
+    "product": "Ketovex Soap",
+    "mfr": "Zenexa Healthcare"
+   }
+  },
+  {
+   "id": "r068",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 63,
+    "product": "Ursodeoxycholic Acid Tablets IP 300 mg (Brand Name : Udidoc 300)",
+    "batch": "DT605068",
+    "expiry": "Apr-2028",
+    "mfr": "Renowed Lifesciences , Plot No.-10, 11, Sector 6B, IIE Sidcul Haridwar-249403, Uttarakhand (India)"
+   },
+   "retail": {
+    "catalogue_id": 233008,
+    "product": "Udidoc 300mg Tablet",
+    "mfr": "Morepen Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r069",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 64,
+    "product": "Montelukast Sodium & Levocetirizine Hydrochloride Tablets IP (Brand Name : Cetgo-M)",
+    "batch": "T260356K",
+    "expiry": "Feb-2028",
+    "mfr": "Unispeed Pharmaceuticals Pvt. Ltd. , 445/2, Behind Wrigley's Village Katha, Baddi, Distt. Solan (H.P.)-173205"
+   },
+   "retail": {
+    "catalogue_id": 37899,
+    "product": "Cetgo-M Tablet",
+    "mfr": "Aingo Pharma Pvt Ltd"
+   }
+  },
+  {
+   "id": "r070",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 81,
+    "product": "Ceftriaxone for Injection IP (Brand Name : Onlycef)",
+    "batch": "ADH5045",
+    "expiry": "Jul-2027",
+    "mfr": "Actinova Pvt. Ltd. , At: 147, Mauza, Sansiwala, Post. Barotiwala, Tehsil-Kasauli, Distt. Solan-174103 (H.P.)"
+   },
+   "retail": {
+    "catalogue_id": 167044,
+    "product": "Onlycef SB 1.5gm Injection",
+    "mfr": "Skymax Life Science Pvt Ltd"
+   }
+  },
+  {
+   "id": "r071",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 85,
+    "product": "Artesunate Injection IP (Brand Name : Ausnate)",
+    "batch": "25GF23M",
+    "expiry": "May-2027",
+    "mfr": "MMG Helathcare , Trilokpur Road, Kala Amb, Distt. Sirmour-173030 (H.P.)"
+   },
+   "retail": {
+    "catalogue_id": 19758,
+    "product": "Ausnate Injection",
+    "mfr": "Care Formulation Labs Pvt Ltd"
+   }
+  },
+  {
+   "id": "r072",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 87,
+    "product": "Levetiracetam Tablets IP 500 mg (Brand Name : Levera-500)",
+    "batch": "N2600803",
+    "expiry": "Feb-2029",
+    "mfr": "Intas Pharmaceuticals Ltd. , Samardung Road, Kabrey Block, Namthang Elaka, Sikkim-737132 India"
+   },
+   "retail": {
+    "catalogue_id": 120810,
+    "product": "Levera 500 Tablet",
+    "mfr": "Intas Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r073",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 88,
+    "product": "Thyroxine Sodium Tablets IP (Brand Name : Thyrox 50)",
+    "batch": "H26MAB011",
+    "expiry": "Dec-2027",
+    "mfr": "Macleods Pharmaceuticals Ltd. , At: Plot No. 115, HPSIDC, Industrial Area, Village Davni, P.O. Gurumajra, Tehsil Nalagarh, District Solan, Himanchal Pradesh-174101"
+   },
+   "retail": {
+    "catalogue_id": 214823,
+    "product": "Thyrox 50 Tablet",
+    "mfr": "Macleods Pharmaceuticals Pvt Ltd"
+   }
+  },
+  {
+   "id": "r074",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 89,
+    "product": "Thyroxine Sodium Tablets IP (Brand Name : Thyrox 25)",
+    "batch": "16251692A",
+    "expiry": "Oct-2027",
+    "mfr": "Macleods Pharmaceuticals Ltd. , Plot No.-2209, GIDC, Sarigam, Dist. Valsad 396155"
+   },
+   "retail": {
+    "catalogue_id": 214846,
+    "product": "Thyrox 25 Tablet",
+    "mfr": "Macleods Pharmaceuticals Pvt Ltd"
+   }
+  },
+  {
+   "id": "r075",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 93,
+    "product": "Levetiracetam Tablets IP 500 mg (Brand Name : Levera-500)",
+    "batch": "N2601623",
+    "expiry": "Apr-2029",
+    "mfr": "Intas Pharmaceuticals Ltd. , Samardung Road, Kabrey Block, Namthang Elaka, Sikkim-737132 India"
+   },
+   "retail": {
+    "catalogue_id": 120810,
+    "product": "Levera 500 Tablet",
+    "mfr": "Intas Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r076",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 95,
+    "product": "Omeprazole Gastro-resistant Capsules IP 20 mg (Brand Name : Omee)",
+    "batch": "25281124",
+    "expiry": "May-2027",
+    "mfr": "Alkem Laboratories Ltd. , At: Village-Thana, Tehsil-Baddi, Distt. Solan, Himachal Pradesh-173205"
+   },
+   "retail": {
+    "catalogue_id": 161636,
+    "product": "Omee Capsule",
+    "mfr": "Alkem Laboratories Ltd"
+   }
+  },
+  {
+   "id": "r077",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 96,
+    "product": "Amoxycillin & Potassium Clavulanate Oral Suspension IP (Brand Name : Moxikind-CV)",
+    "batch": "B7AEY043",
+    "expiry": "Mar-2027",
+    "mfr": "Copmed Pharmaceuticals Pvt. Ltd. , Unit-II, Plot No. 50, Industrial Area, Gondpur, Paonta Sahib, Distt. Sirmour (H.P.)-173025"
+   },
+   "retail": {
+    "catalogue_id": 133460,
+    "product": "Moxikind-CV Dry Syrup",
+    "mfr": "Mankind Pharma Ltd"
+   }
+  },
+  {
+   "id": "r078",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 99,
+    "product": "Telmisartan 40 mg and Amlodipine 5 mg Tablets IP (Brand Name : Telma AM)",
+    "batch": "18250527",
+    "expiry": "Sep-2028",
+    "mfr": "Glenmark Pharmaceuticals Ltd. , Samlik Marchak, Industrial Growth Center Near Ranipool, District: Gangtok, Sikkim 737135"
+   },
+   "retail": {
+    "catalogue_id": 214774,
+    "product": "Telma-AM Tablet",
+    "mfr": "Glenmark Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r079",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 137,
+    "product": "Gabapentin Tablets IP 100 mg (Brand Name : Gabapin-100)",
+    "batch": "N2504093",
+    "expiry": "Nov-2027",
+    "mfr": "Intas Pharmaceutical Ltd.Samardung Road, Kabrey Block, Namthang Elaka, Sikkim 737132"
+   },
+   "retail": {
+    "catalogue_id": 94179,
+    "product": "Gabapin 100 Tablet",
+    "mfr": "Intas Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r080",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 142,
+    "product": "Tamsulosin Hydrochloride (Modified Release) + Dutasteride Tablets (Brand Name : Veltam Plus)",
+    "batch": "N2503564",
+    "expiry": "Oct-2028",
+    "mfr": "Intas Pharmaceutical Ltd.Samardung Road, Kabrey Block, Namthang Elaka, Sikkim 737132"
+   },
+   "retail": {
+    "catalogue_id": 233231,
+    "product": "Veltam Plus Tablet MR",
+    "mfr": "Intas Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r081",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 143,
+    "product": "Tamsulosin Hydrochloride Modified Release Tablets (Brand Name : Veltam 0.4)",
+    "batch": "N2600542",
+    "expiry": "Jan-2029",
+    "mfr": "Intas Pharmaceutical Ltd.Samardung Road, Kabrey Block, Namthang Elaka, Sikkim 737132"
+   },
+   "retail": {
+    "catalogue_id": 233227,
+    "product": "Veltam 0.4 Tablet MR",
+    "mfr": "Intas Pharmaceuticals Ltd"
+   }
+  },
+  {
+   "id": "r082",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 156,
+    "product": "Cefixime Dispersible Tablets I.P. (Brand Name : Tox-O 200)",
+    "batch": "PYITL003",
+    "expiry": "Apr-2027",
+    "mfr": "Laborate Pharmaceuticals India Ltd. (Unit-II) #31, Rajban Road, Nariwala, Paonta Sahib (H.P.)"
+   },
+   "retail": {
+    "catalogue_id": 215649,
+    "product": "Tox O 200mg Tablet",
+    "mfr": "Laborate Pharmaceuticals India Ltd"
+   }
+  },
+  {
+   "id": "r083",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 166,
+    "product": "Levocetirizine Hydrochloride, Ambroxol Hydrochlolride (Brand Name : capex c expectorant)",
+    "batch": "26LK024",
+    "expiry": "Jan-2028",
+    "mfr": "Kantil Pharmaceuticals Pvt. Ltd. VILL Sainimajra Tehsil Nalagarh, Distt Solan Himachal Pradesh 174101, India."
+   },
+   "retail": {
+    "catalogue_id": 35289,
+    "product": "Capex C Expectorant Sugar Free",
+    "mfr": "Seagull Laboratories (I) Pvt Ltd"
+   }
+  },
+  {
+   "id": "r084",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 203,
+    "product": "Rabeprazole Gastro Resistant Tablets IP (Brand Name : RABICHILL-20)",
+    "batch": "GFTB26191",
+    "expiry": "Mar-2028",
+    "mfr": "Genip Formulation Pvt Ltd K.No.93/45/1, Dharanji urf Dhoptan Shamti, Dist. Solan HP-173212"
+   },
+   "retail": {
+    "catalogue_id": 186149,
+    "product": "Rabichill 20mg Tablet",
+    "mfr": "Kainos Curatives Pvt Ltd"
+   }
+  },
+  {
+   "id": "r085",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 220,
+    "product": "Cefixime and Lactic Acid Bacillus Tablets (Brand Name : Nimcef)",
+    "batch": "MHPL-733",
+    "expiry": "Nov-2027",
+    "mfr": "Medinok Healthcare Pvt. Ltd, (A GMP & ISO 9001-2015 Certified company) R.S.No. 2/1, Plot No.: 87,88, 89 Vazhudhavur Main Road, Kurumbapet Puducherry-608009"
+   },
+   "retail": {
+    "catalogue_id": 153400,
+    "product": "Nimcef OL 200mg/200mg Tablet",
+    "mfr": "Nimbus Health Care Pvt Ltd"
+   }
+  },
+  {
+   "id": "r086",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 221,
+    "product": "Pantoprazole & Domperidone Tablets (Brand Name : Sytop-D)",
+    "batch": "SRGT-25971",
+    "expiry": "Oct-2027",
+    "mfr": "SPAS Remedise, Vill-Bersan, P.O-Lodhi Majra, Tehsil-Baddi Distt. Solan (H.P)-173205"
+   },
+   "retail": {
+    "catalogue_id": 203475,
+    "product": "Sytop-D Tablet",
+    "mfr": "Sycon Healthcare Pvt Ltd"
+   }
+  },
+  {
+   "id": "r087",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 224,
+    "product": "Pantoprazole Gastro Resistant Tablets IP 40 mg (Brand Name : Pantolet-40 Tablets)",
+    "batch": "PGR018",
+    "expiry": "Oct-2027",
+    "mfr": "RTN Pharma, Sy No 675/2, Plot No 15, 17, 18 & 19, Bharathiyar Nagar, Avalapalli Road, Hosur-635109 Tamilnadu"
+   },
+   "retail": {
+    "catalogue_id": 179131,
+    "product": "Pantolet 40mg Tablet",
+    "mfr": "Innovative Pharmaceuticals"
+   }
+  },
+  {
+   "id": "r088",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 229,
+    "product": "Liquid Paraffin, Magnesium Hydroxide, Sodium Picosulfate Suspension (Brand Name : Smuth Suspension)",
+    "batch": "MPL254485",
+    "expiry": "Oct-2027",
+    "mfr": "Aristo Pharmaceuticals Pvt. Ltd., Plot No.208, New Industrial Area No. 2, Mandideep-462046, Dist-Raisen (M.P)"
+   },
+   "retail": {
+    "catalogue_id": 199639,
+    "product": "Smuth Oral Suspension",
+    "mfr": "Aristo Pharmaceuticals Pvt Ltd"
+   }
+  },
+  {
+   "id": "r089",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 234,
+    "product": "Serratiopeptidase & Diclofenac Potassium Tablets (Brand Name : Syser-D)",
+    "batch": "ST-25874",
+    "expiry": "Nov-2026",
+    "mfr": "Sunvij Drugs Pvt. Ltd., 511, GIDC, Waghodia, Baroda-391760 (Gujarat)"
+   },
+   "retail": {
+    "catalogue_id": 202322,
+    "product": "Syser D 50 mg/10 mg Tablet",
+    "mfr": "Sysmed Laboratories Pvt Ltd"
+   }
+  },
+  {
+   "id": "r090",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 237,
+    "product": "Albendazole Tablets IP 400 mg (Brand Name : ALBAN Tablets)",
+    "batch": "UT-1821",
+    "expiry": "Jan-2027",
+    "mfr": "Clevus Lifesciences, Near Apple Terminal Market, Sector-6, Parwanoo-173220 (H.P)"
+   },
+   "retail": {
+    "catalogue_id": 9672,
+    "product": "Alban 400mg Tablet",
+    "mfr": "Caudex Lifecare"
+   }
+  },
+  {
+   "id": "r091",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 252,
+    "product": "Paracetamol Tablets IP 650 mg, (Brand Name : Parpol 650)",
+    "batch": "CAAL25019",
+    "expiry": "Mar-2028",
+    "mfr": "Curetech Formulations (P) Ltd., Vill. Juddi Kalan, Baddi-173205, Distt. Solan (HP)"
+   },
+   "retail": {
+    "catalogue_id": 177903,
+    "product": "Parpol 650mg Tablet",
+    "mfr": "Astra Labs"
+   }
+  },
+  {
+   "id": "r092",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 272,
+    "product": "Loperamide Hydrochloride Tablets IP 2 mg- (Brand Name : Lopra)",
+    "batch": "SBT-3269",
+    "expiry": "Jun-2027",
+    "mfr": "Supercure Biotech Pvt.Ltd., Plot No. 99/4/1, Friends Coloney, G.T. Road, Kundli, Haryana-131028"
+   },
+   "retail": {
+    "catalogue_id": 121644,
+    "product": "Lopra Tablet",
+    "mfr": "Sun Life Sciences Pvt Ltd"
+   }
+  },
+  {
+   "id": "r093",
+   "nsq": {
+    "file": "2026-09.json",
+    "sno": 296,
+    "product": "Clopidogrel and Aspirin Capsules (Brand Name : Clopilet A 75 Capsules)",
+    "batch": "SIH0304A",
+    "expiry": "Nov-2027",
+    "mfr": "Sun Pharma Laboratories Ltd., Plot No. 107-108, Namli Block, P.O. Ranipool, Gangtok, Sikkim-737135, Ranipool 737135"
+   },
+   "retail": {
+    "catalogue_id": 34087,
+    "product": "Clopilet A 75 Capsule",
+    "mfr": "Sun Pharmaceutical Industries Ltd"
+   }
+  }
+ ]
+}

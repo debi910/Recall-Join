@@ -67,7 +67,7 @@ Quarantine is **one TablesDB transaction**: mark the stock quarantined, close th
 
 ## Likely judge questions
 
-1. **"Why not just exact-match?"** Real lists contain short codes like `0081` that other makers reuse, so exact matching raises false alarms. Formatting differences also make exact matching miss real hits. See the eval table.
-2. **"Isn't 100% on your own eval suspicious?"** The cases are built to test known failure modes. We froze the rules on the March 2025 list, then ran them unchanged on the September 2026 list: 100% precision, against 60% for batch-only lookup. The honest limit: the stock rows are synthetic variants, not a real shop's data.
+1. **"Why not just exact-match?"** On real CDSCO rows, two labs wrote the same batch as `SBT3269` and `SBT-3269`, so exact matching misses real hits. Codes also get reused: `MWDC-5421G` is two unrelated antibiotics from two makers. See part A of `npm run eval:real`.
+2. **"Isn't 100% on your own eval suspicious?"** Yes, and we no longer lead with it. The synthetic cases were written by the same person as the rules, and the baseline's 60% just reflects the case mix. On real data (`npm run eval:real`) Recall Join gets 92% flag precision vs 81% for batch-only lookup on real cross-lab records, makes one real false flag (code `05`, one maker, two products), and without an expiry column it misses 6 of 93 real retail-name rows that batch-only lookup would catch, because shops name the brand owner (GlaxoSmithKline) while CDSCO names the factory (Medreich).
 3. **"Why TablesDB rather than VectorsDB?"** The decision must be deterministic and explainable, because this is a safety call. A plain index join on a well-designed key does the job, and transactions plus row permissions do the rest.
 4. **"What if CDSCO changes the PDF format?"** The parser maps columns by keyword, not position, and glues page-split rows back together. It was tested on a real 9-page list (70 of 70 rows).
