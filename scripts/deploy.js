@@ -5,12 +5,13 @@ import { execSync } from 'node:child_process';
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { Functions, Sites, Runtime, Framework, BuildRuntime } from 'node-appwrite';
+import { Functions, Sites, Proxy, Runtime, Framework, BuildRuntime } from 'node-appwrite';
 import { InputFile } from 'node-appwrite/file';
 import { client } from './client.js';
 
 const FN = process.env.VITE_APPWRITE_FUNCTION_ID || 'recall-join';
 const SITE = process.env.APPWRITE_SITE_ID || 'recall-join-web';
+const DOMAIN = process.env.APPWRITE_SITE_DOMAIN || 'recall-join.appwrite.network';
 const what = process.argv[2] || 'all';
 const functions = new Functions(client);
 const sites = new Sites(client);
@@ -70,7 +71,9 @@ async function deploySite() {
   const d = await sites.createDeployment({ siteId: SITE, code: InputFile.fromPath(tar, 'site.tar.gz'), outputDirectory: './', activate: true });
   console.log('site deployment', d.$id);
   await waitReady(() => sites.getDeployment({ siteId: SITE, deploymentId: d.$id }));
-  console.log(`\nSite: https://${SITE}.appwrite.network (check the Domains tab in the console if it differs)`);
+  // A Site created through the API gets only a per-deployment domain; add a stable one.
+  await ensure(`domain ${DOMAIN}`, () => new Proxy(client).createSiteRule({ domain: DOMAIN, siteId: SITE }));
+  console.log(`\nSite: https://${DOMAIN}`);
 }
 
 if (what === 'all' || what === 'function') await deployFunction();

@@ -4,6 +4,8 @@
 
 Built solo for the [Appwrite Databases Hackathon](https://hackathon.appwrite.io/) (19–31 Oct 2026) on **Appwrite TablesDB**.
 
+**Live demo:** https://recall-join.appwrite.network (sign in as the demo chemist or distributor from the login screen).
+
 ## Why existing tools aren't enough
 
 Public lookups ([blacklisted.co.in](https://blacklisted.co.in/medicines/check), [drugquality.in](https://drugquality.in/), the CDSCO page itself) answer one question at a time for one consumer: *"is this batch listed?"* Nobody checks a shop's **whole stock** against **every** list and then follows the return through to the distributor. Matching is also harder than an exact lookup:
