@@ -7,10 +7,20 @@ const exists = (err) => err?.code === 409;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function ensure(label, fn) {
-  try { await fn(); console.log('created', label); } catch (err) { if (exists(err)) console.log('exists ', label); else throw err; }
+  for (let tries = 0; ; tries++) {
+    try { await fn(); return console.log('created', label); } catch (err) {
+      if (exists(err)) return console.log('exists ', label);
+      // Columns are built asynchronously; an index on a column still being built fails until it is ready.
+      if (err?.type === 'column_not_available' && tries < 20) { await wait(3000); continue; }
+      throw err;
+    }
+  }
 }
 
-await ensure(`database ${DB}`, () => tables.create({ databaseId: DB, name: 'Recall Join' }));
+// Free plans refuse a create over the database limit before checking for a duplicate, so look first.
+const haveDb = await tables.get({ databaseId: DB }).then(() => true, () => false);
+if (haveDb) console.log('exists ', `database ${DB}`);
+else await ensure(`database ${DB}`, () => tables.create({ databaseId: DB, name: 'Recall Join' }));
 
 for (const tb of TABLES) {
   // Regulator data is readable by any signed-in user; everything else is per-row.
