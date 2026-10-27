@@ -1,6 +1,7 @@
 // Recall Join Appwrite Function: every write goes through here so the rules,
 // permissions and audit trail are enforced server-side.
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { Client, TablesDB, Users, Query, Permission, Role, ID } from 'node-appwrite';
 import { normBatch, skelBatch } from './core/normalize.js';
 import { matchStock, TIER } from './core/match.js';
@@ -116,8 +117,14 @@ const ACTIONS = {
     return { uploaded: rows.length, join: await runJoin(db, shop, userId) };
   },
 
-  async ingestAlert({ db, isAdmin, userId }, { rows }) {
+  // Only lists bundled with the function can be ingested, so a demo login
+  // can't inject made-up regulator rows.
+  async ingestAlert({ db, isAdmin, userId }, { period }) {
     if (!isAdmin) throw deny('Only an admin can ingest regulator lists');
+    if (!/^\d{4}-\d{2}$/.test(period || '')) throw Object.assign(new Error('period must be YYYY-MM'), { status: 400 });
+    let rows;
+    try { rows = JSON.parse(readFileSync(new URL(`./data/${period}.json`, import.meta.url), 'utf8')); }
+    catch { throw Object.assign(new Error(`No bundled CDSCO list for ${period}`), { status: 404 }); }
     for (const group of Map.groupBy(rows, (r) => `${r.period}|${r.source}`).values()) {
       const { period, source, source_url = '' } = group[0];
       const alertId = rowId('alert', period, source);
