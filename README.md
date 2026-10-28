@@ -6,7 +6,16 @@
 
 Built solo for the [Appwrite Databases Hackathon](https://hackathon.appwrite.io/) (19–31 Oct 2026) on **Appwrite TablesDB**.
 
-**Live demo:** https://recall-join.appwrite.network (sign in as the demo chemist or distributor from the login screen).
+## Try it live
+
+**https://recall-join.appwrite.network**
+
+| Role | Email | Password |
+|---|---|---|
+| Chemist shop | `chemist@recalljoin.demo` | `RecallDemo-e908c4` |
+| Distributor | `distributor@recalljoin.demo` | `RecallDemo-e908c4` |
+
+These are demo-only accounts on a demo backend. The regulator lists are real; the shop's stock is synthetic. The login screen's "Chemist shop" and "Distributor" buttons fill in the email.
 
 ## Why existing tools aren't enough
 
