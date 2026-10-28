@@ -7,6 +7,8 @@
     "test": "node --test test/*.test.js",
     "eval": "node eval/run-eval.js",
     "eval:real": "node eval/real-eval.js",
+    "eval:import": "node eval/import-eval.js",
+    "samples:import": "node scripts/make-import-samples.js",
     "build:function": "rm -rf functions/recall-join/src/core && cp -r core functions/recall-join/src/core && cp web/public/data/demo-stock.csv functions/recall-join/src/data/",
     "setup": "node scripts/setup.js",
     "import:nsq": "node scripts/import-nsq.js",
@@ -22,6 +24,7 @@
   "dependencies": {
     "appwrite": "^29.1.0",
     "dotenv": "^18.0.9",
+    "fflate": "^0.8.2",
     "lit-html": "^3.2.1",
     "node-appwrite": "^31.0.0"
   },
