@@ -98,3 +98,11 @@ test('no expiry column: an unknown maker with a shared product word is asked abo
   assert.equal(classifyPair({ ...shelf, expiry: '' }, augmentin, {}).tier, TIER.REVIEW_COLLISION);
   assert.equal(classifyPair({ product: 'PANTOP 40 TAB', batch: 'MR25031', expiry: '', mfr: 'Aristo' }, augmentin, {}), null);
 });
+
+// Found by the demo video thread on a Tally-style export with no maker column.
+test('no maker: product and expiry must both agree to flag', () => {
+  const cotton = { product: 'Absorbent Cotton wool IP (Brand Name : NA)', batch: '2121', expiry: 'Nov-2029', mfr: 'Jind Surgicals, Jind, Haryana' };
+  assert.equal(classifyPair({ product: 'ABSORBENT TAB', batch: '2121', expiry: '03/2028', mfr: '' }, cotton).tier, TIER.REVIEW_COLLISION);
+  assert.equal(classifyPair({ product: 'ABSORBENT COTTON WOOL', batch: '2121', expiry: '11/2029', mfr: '' }, cotton).tier, TIER.FLAG);
+  assert.equal(classifyPair({ product: 'ABSORBENT COTTON WOOL', batch: '2121', expiry: '', mfr: '' }, cotton).tier, TIER.REVIEW_COLLISION);
+});

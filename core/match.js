@@ -44,7 +44,9 @@ export function classifyPair(stock, nsq, owners = BRAND_OWNERS) {
     // so the batch alone is not proof. A FLAG needs a second, independent agreement.
     const productOrExpiry = prod >= PRODUCT_SAME || exp === true;
     if (mfr === true && productOrExpiry) return { tier: TIER.FLAG, reasons };
-    if (mfr === null && productOrExpiry) return { tier: TIER.FLAG, reasons };
+    // No maker to compare (the export has no maker column): the product name and the
+    // expiry month must both agree. One of the two only earns a review.
+    if (mfr === null) return prod >= PRODUCT_SAME && exp === true ? { tier: TIER.FLAG, reasons } : productOrExpiry ? { tier: TIER.REVIEW_COLLISION, reasons } : null;
     // Brand owner instead of the plant: the brand, batch and expiry month must all agree.
     if (owner) return { tier: exp === true ? TIER.FLAG : TIER.REVIEW_COLLISION, reasons };
     if (mfr === false && prod < PRODUCT_SAME && exp !== true) {

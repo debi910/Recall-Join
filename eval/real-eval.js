@@ -53,22 +53,31 @@ for (const x of rowsA) groupsA[x.key ? labels[x.key].label : 'unique'].push(x);
 console.log(`| Method | Same batch, other lab (n=${groupsA.same.length}) | Different product, same code (n=${groupsA.different.length}) | Ambiguous (n=${groupsA.ambiguous.length}) | Code seen once (n=${groupsA.unique.length}) | Flag precision | Flag recall |`);
 console.log('|---|---|---|---|---|---|---|');
 const missesA = {};
-for (const [name, fn] of Object.entries(methods)) {
-  const t = {};
-  missesA[name] = [];
-  for (const [g, xs] of Object.entries(groupsA)) {
-    const outs = xs.map(({ r }) => {
-      const stock = { product: r.product, batch: r.batch, expiry: r.expiry, mfr: r.mfr };
-      const o = fn(stock, nsq.filter((n) => n !== r));
-      const bad = (g === 'same' && o !== 'flag') || (g === 'different' && o === 'flag') || (g === 'ambiguous' && o !== 'review') || (g === 'unique' && o !== 'none');
-      if (bad) missesA[name].push(`${g.padEnd(9)} ${o.padEnd(6)} ${r.batch} | ${r.product.slice(0, 60)} | ${r.mfr.slice(0, 40)}`);
-      return o;
-    });
-    t[g] = tally(outs);
+// Second pass: the same rows with the maker blanked, as from an export with no maker column.
+for (const noMaker of [false, true]) {
+  if (noMaker) {
+    console.log('\nSame rows, stock side without a maker (an export with no maker column):\n');
+    console.log('| Method | Same batch, other lab | Different product, same code | Ambiguous | Code seen once | Flag precision | Flag recall |');
+    console.log('|---|---|---|---|---|---|---|');
   }
-  // Ambiguous groups count as neither right nor wrong for precision/recall.
-  const tp = t.same.flag, fp = t.different.flag + t.unique.flag;
-  console.log(`| ${name} | ${cell(t.same)} | ${cell(t.different)} | ${cell(t.ambiguous)} | ${cell(t.unique)} | ${pct(tp, tp + fp)} | ${pct(tp, groupsA.same.length)} |`);
+  for (const [name, fn] of Object.entries(methods)) {
+    const t = {};
+    const key = `${name}${noMaker ? ' (no maker)' : ''}`;
+    missesA[key] = [];
+    for (const [g, xs] of Object.entries(groupsA)) {
+      const outs = xs.map(({ r }) => {
+        const stock = { product: r.product, batch: r.batch, expiry: r.expiry, mfr: noMaker ? '' : r.mfr };
+        const o = fn(stock, nsq.filter((n) => n !== r));
+        const bad = (g === 'same' && o !== 'flag') || (g === 'different' && o === 'flag') || (g === 'ambiguous' && o !== 'review') || (g === 'unique' && o !== 'none');
+        if (bad) missesA[key].push(`${g.padEnd(9)} ${o.padEnd(6)} ${r.batch} | ${r.product.slice(0, 60)} | ${r.mfr.slice(0, 40)}`);
+        return o;
+      });
+      t[g] = tally(outs);
+    }
+    // Ambiguous groups count as neither right nor wrong for precision/recall.
+    const tp = t.same.flag, fp = t.different.flag + t.unique.flag;
+    console.log(`| ${name} | ${cell(t.same)} | ${cell(t.different)} | ${cell(t.ambiguous)} | ${cell(t.unique)} | ${pct(tp, tp + fp)} | ${pct(tp, groupsA.same.length)} |`);
+  }
 }
 
 // ---------- B. Retail names ----------

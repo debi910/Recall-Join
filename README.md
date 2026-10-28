@@ -43,6 +43,7 @@ What went wrong, honestly:
 - **False flag (real):** code `05` is used by one maker for two different products (a laparotomy sponge and a dressing pad) with the same expiry. Same maker + same expiry is enough for a FLAG, so Recall Join flags it.
 - **Sent to a human instead of flagged:** `BKBP02601` vs `BKBP O2601` (one lab typed the letter O for zero) and `ACG25007` (one lab wrote the brand *Nicardia Retard*, the other the generic *Nifedipine SR*). Nothing was missed, but these needed a human.
 - **Collisions are rarer than our synthetic eval assumed:** 4 of 809 real rows reuse another product's code. The precision gap is real but smaller than the synthetic eval suggested.
+- **Exports with no maker column (found 28 Oct while filming):** a Tally-style export without a maker flagged `ABSORBENT TAB`, batch `2121`, against *Absorbent Cotton wool* by another maker, even though the expiry disagreed. With no maker, one fuzzy product match was enough. **Fix:** with no maker, the product **and** the expiry month must both agree to flag; one of the two only earns a review. Rerunning part A with the maker blanked on the stock side: flag precision before **87%** (26 / 30), after **100%** (26 / 26), recall unchanged (26 of 28). On the 93 real retail names with the maker blanked, 9 rows move from flag to review and none are missed. This fix also came after seeing the case, so these are not held-out numbers.
 
 ### 2. Real retail names (`npm run eval:real`, part B)
 
@@ -122,7 +123,7 @@ stock export ─(browser: core/import.js)─▶ uploadStock ──▶ stock_item
 ## Where it stops
 
 - It **never says a batch is safe**. "No match" means "not on the lists we imported", and the UI lists which months those are.
-- A **FLAG needs the batch plus independent agreement**: the same normalized batch, plus the same maker and (product or expiry), or product/expiry when the maker is unknown, or the brand's retail owner plus the same brand and expiry month. Product-name similarity alone never flags anything.
+- A **FLAG needs the batch plus independent agreement**: the same normalized batch, plus the same maker and (product or expiry), or both product and expiry month when the maker is unknown, or the brand's retail owner plus the same brand and expiry month. Product-name similarity alone never flags anything.
 - **Collisions and look-alike typos go to the pharmacist** ("check the strip"). They can be quarantined only after a human confirms.
 - Quarantine is **one transaction**. Afterwards the function **reads the rows back** and only then marks the audit entry verified.
 - It gives no medical advice and contacts no patients.
