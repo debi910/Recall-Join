@@ -30,15 +30,6 @@
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #111613; --paper-2: #171d1a; --card: #1a201d; --ink: #ede8de; --ink-2: #a8b0ab; --ink-3: #78817c;
-    --rule: #2a322e; --rule-2: #36403b; --green: #49c294; --green-2: #16302566; --red: #ff7a6b; --red-2: #3b1d1a;
-    --amber: #f3b65c; --amber-2: #3a2b14; --red-solid: #b8382d; --amber-solid: #9a5a08; --grey-2: #252c28; --shadow: 0 1px 0 rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.6);
-    color-scheme: dark;
-  }
-}
-
 * { box-sizing: border-box; }
 html { -webkit-font-smoothing: antialiased; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 var(--sans); }
