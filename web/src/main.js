@@ -36,6 +36,12 @@ async function boot() {
     state.shopName = shop?.name || state.teams[0]?.name || '';
     state.isAdmin = state.teams.some((t) => t.$id === 'admins');
     await load();
+    // A demo shop with no stock (fresh or reset backend) opens with the demo stock loaded.
+    if (state.role === 'chemist' && !state.stockCount) {
+      await call('uploadStock', { csv: await (await fetch('/data/demo-stock.csv')).text() }).catch(() => {});
+      await load();
+    }
+    if (state.role === 'chemist') state.notice = !seenNotice();
     subscribe();
   } catch {
     state.user = null;
@@ -98,6 +104,10 @@ function subscribe() {
   state.live = true;
 }
 
+// The demo notice shows once per browser tab session. Storage can be blocked, so fail open.
+const seenNotice = () => { try { return sessionStorage.getItem('rj-demo-notice') === '1'; } catch { return false; } };
+const markNotice = () => { try { sessionStorage.setItem('rj-demo-notice', '1'); } catch {} };
+
 // ---------------------------------------------------------------- actions
 async function act(label, fn, done) {
   state.busy = label;
@@ -132,11 +142,13 @@ const A = {
     f.password.value = DEMO_PASSWORD;
     f.requestSubmit();
   },
+  closeNotice() { state.notice = false; markNotice(); paint(); },
   async logout() { await account.deleteSession({ sessionId: 'current' }).catch(() => {}); location.reload(); },
   demoStock: () => act('Uploading stock and running the join', async () => call('uploadStock', { csv: await (await fetch('/data/demo-stock.csv')).text() }),
     (o) => `${o.uploaded} rows uploaded · ${o.join.counts.flag} on the list`),
   async upload(e) {
     const file = e.target.files[0];
+    if (state.notice) A.closeNotice();
     if (file) await act('Uploading stock and running the join', async () => call('uploadStock', { csv: await file.text() }), (o) => `${o.uploaded} rows uploaded · ${o.join.counts.flag} on the list`);
   },
   ingest: () => act('Importing the CDSCO list and re-running the join', () => call('ingestAlert', { period: document.getElementById('ingest').value }),
@@ -217,8 +229,24 @@ function appView() {
     </header>
     <main class=${state.role}>${state.role === 'chemist' ? chemistView() : distributorView()}</main>
     ${state.open ? drawer(state.matches.find((m) => m.$id === state.open)) : nothing}
+    ${state.notice ? demoNotice() : nothing}
     ${state.busy ? html`<div class="busy" role="status"><span class="spinner"></span>${state.busy}…</div>` : nothing}
     ${toaster()}`;
+}
+
+function demoNotice() {
+  return html`
+    <div class="scrim" @click=${A.closeNotice}></div>
+    <section class="notice" role="dialog" aria-modal="true" aria-labelledby="notice-title">
+      <p class="eyebrow">Demo shop</p>
+      <h2 id="notice-title">This shop's stock is demo data</h2>
+      <p>The 306 stock rows are synthetic, seeded with 6 batches from the real September 2026 CDSCO list, so you can see real matches straight away. The CDSCO lists themselves are real.</p>
+      <p>To test with your own stock, upload a billing-software CSV with the columns Item, Batch, Expiry, Company, Qty, MRP and Party. It replaces the demo stock on this demo account; "Use demo stock" on the Activity tab puts it back.</p>
+      <div class="row">
+        <button class="btn primary" @click=${A.closeNotice}>Show me the matches</button>
+        <label class="btn ghost file">Upload my own CSV<input type="file" accept=".csv" @change=${A.upload} /></label>
+      </div>
+    </section>`;
 }
 
 function chemistView() {

@@ -15,7 +15,7 @@ Built solo for the [Appwrite Databases Hackathon](https://hackathon.appwrite.io/
 | Chemist shop | `chemist@recalljoin.demo` | `RecallDemo-e908c4` |
 | Distributor | `distributor@recalljoin.demo` | `RecallDemo-e908c4` |
 
-These are demo-only accounts on a demo backend. The regulator lists are real; the shop's stock is synthetic. The login screen shows these too, and its "Chemist shop" and "Distributor" buttons sign you in with one tap.
+These are demo-only accounts on a demo backend. The chemist account opens with demo stock already loaded and matched against the real Jul–Sep 2026 CDSCO lists (3 batches to pull, 2 to check by hand), and a notice explains that the stock is synthetic. To test your own stock, upload a billing CSV (Item, Batch, Expiry, Company, Qty, MRP, Party); "Use demo stock" on the Activity tab puts the demo stock back. The login screen shows these too, and its "Chemist shop" and "Distributor" buttons sign you in with one tap.
 
 ## Why existing tools aren't enough
 
@@ -113,7 +113,7 @@ The matching logic is explained step by step in [`core-logic-explained.md`](core
 npm install
 cp .env.example .env        # fill in endpoint, project ID, an API key with databases/teams/users scopes
 npm run setup               # tables, columns, indexes, demo teams and users
-npm run import:nsq -- data/nsq/2026-07.json data/nsq/2026-08.json   # Sep 2026 is imported live in the demo
+npm run import:nsq -- data/nsq/2026-07.json data/nsq/2026-08.json data/nsq/2026-09.json
 npm run dev                 # web app on http://localhost:5173  (design preview without a backend: /?mock)
 ```
 
