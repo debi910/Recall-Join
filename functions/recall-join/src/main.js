@@ -1,7 +1,7 @@
 // Recall Join Appwrite Function: every write goes through here so the rules,
 // permissions and audit trail are enforced server-side.
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { Client, TablesDB, Users, Query, Permission, Role, ID } from 'node-appwrite';
 import { normBatch, skelBatch } from './core/normalize.js';
 import { matchStock, TIER } from './core/match.js';
@@ -11,6 +11,8 @@ const DB = process.env.APPWRITE_DB_ID || 'recall';
 const SHOP_PREFIX = 'shop-';
 const DIST_TEAM = process.env.DEMO_DIST_TEAM || 'dist-demo';
 const ADMIN_TEAM = process.env.ADMIN_TEAM || 'admins';
+const DEMO_SHOP = process.env.DEMO_SHOP_TEAM || 'shop-demo';
+const DEMO_IDLE_MS = Number(process.env.DEMO_IDLE_MINUTES ?? 20) * 60 * 1000;
 const CHUNK = 100;
 
 const rowId = (...parts) => createHash('sha1').update(parts.join('|')).digest('hex').slice(0, 32);
@@ -23,6 +25,17 @@ export default async ({ req, res, log, error }) => {
     .setKey(req.headers['x-appwrite-key']);
   const db = new TablesDB(client);
   const users = new Users(client);
+  // Hourly schedule: put the shared demo shop back to its opening state for the next judge.
+  if (req.headers['x-appwrite-trigger'] === 'schedule') {
+    try {
+      const out = await resetDemo(db);
+      log(JSON.stringify(out));
+      return res.json({ ok: true, ...out });
+    } catch (err) {
+      error(err.stack || String(err));
+      return res.json({ ok: false, error: err.message }, 500);
+    }
+  }
   const userId = req.headers['x-appwrite-user-id'];
   if (!userId) return res.json({ ok: false, error: 'Sign in first' }, 401);
 
@@ -97,6 +110,33 @@ async function runJoin(db, shop, actor) {
   const counts = Object.fromEntries(Object.values(TIER).map((t) => [t, results.filter((r) => r.tier === t).length]));
   await audit(db, shop, 'join', { stock: stock.length, candidates: byId.size, counts, newMatches: created }, actor, true);
   return { stock: stock.length, counts, newMatches: created };
+}
+
+// Every judge shares one demo shop. Once someone has quarantined, dismissed or
+// uploaded their own stock, and nobody has touched it for 20 minutes, wipe the shop's
+// rows and load the demo stock again. Every bundled CDSCO list is (re)loaded first,
+// so the demo stock always meets the September list it was seeded from.
+async function resetDemo(db) {
+  const shop = DEMO_SHOP;
+  const [last] = (await db.listRows({ databaseId: DB, tableId: 'audit', queries: [Query.equal('shop_id', shop), Query.orderDesc('$createdAt'), Query.limit(1)] })).rows;
+  if (last && Date.now() - new Date(last.$createdAt).getTime() < DEMO_IDLE_MS) return { reset: false, why: 'in use' };
+
+  const demoCsv = readFileSync(new URL('./data/demo-stock.csv', import.meta.url), 'utf8');
+  const loaded = new Set((await listAll(db, 'alerts')).map((a) => a.period));
+  const bundled = readdirSync(new URL('./data/', import.meta.url)).filter((f) => /^\d{4}-\d{2}\.json$/.test(f)).map((f) => f.slice(0, 7));
+  const missing = bundled.filter((p) => !loaded.has(p));
+  const touched = (await db.listRows({ databaseId: DB, tableId: 'matches', queries: [Query.equal('shop_id', shop), Query.notEqual('decision', 'pending'), Query.limit(1)] })).total
+    + (await db.listRows({ databaseId: DB, tableId: 'return_notes', queries: [Query.equal('shop_id', shop), Query.limit(1)] })).total;
+  const stockRows = (await db.listRows({ databaseId: DB, tableId: 'stock_items', queries: [Query.equal('shop_id', shop), Query.limit(1)] })).total;
+  if (!missing.length && !touched && stockRows === stockFromCsv(demoCsv).length) return { reset: false, why: 'already in demo state' };
+
+  for (const tableId of ['matches', 'return_notes', 'stock_items', 'audit']) {
+    await db.deleteRows({ databaseId: DB, tableId, queries: [Query.equal('shop_id', shop)] });
+  }
+  for (const period of missing) await ACTIONS.ingestAlert({ db, isAdmin: true, userId: 'schedule' }, { period });
+  const up = await ACTIONS.uploadStock({ db, shop, userId: 'schedule' }, { csv: demoCsv });
+  await audit(db, shop, 'demo_reset', { lists: missing, stock: up.uploaded }, 'schedule', true);
+  return { reset: true, listsLoaded: missing, ...up };
 }
 
 const ACTIONS = {
