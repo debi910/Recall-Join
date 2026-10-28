@@ -143,7 +143,11 @@ const ACTIONS = {
   async uploadStock({ db, shop, userId }, { csv }) {
     if (!shop) throw deny('Only a shop can upload stock');
     const rows = stockFromCsv(csv);
-    await db.deleteRows({ databaseId: DB, tableId: 'stock_items', queries: [Query.equal('shop_id', shop)] });
+    // New stock replaces the old, so the old stock's matches go too; left behind they
+    // point at deleted rows and every re-upload would add another copy of each alert.
+    for (const tableId of ['matches', 'stock_items']) {
+      await db.deleteRows({ databaseId: DB, tableId, queries: [Query.equal('shop_id', shop)] });
+    }
     for (const part of chunks(rows)) {
       await db.createRows({
         databaseId: DB, tableId: 'stock_items',
