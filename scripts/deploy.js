@@ -33,13 +33,21 @@ async function waitReady(get) {
   }
 }
 
+// Runs every 60 minutes to reset the shared demo shop (resetDemo in the function).
+// The free plan has no cron schedules, only intervals.
+const FN_CONFIG = {
+  entrypoint: 'src/main.js', commands: 'npm install', timeout: 120, interval: 60,
+  scopes: ['databases.read', 'databases.write', 'tables.read', 'tables.write', 'rows.read', 'rows.write', 'users.read'],
+};
+
 async function deployFunction() {
   sh('npm run build:function');
   await ensure(`function ${FN}`, () => functions.create({
     functionId: FN, name: 'Recall Join', runtime: Runtime.Node22, execute: ['users'],
-    entrypoint: 'src/main.js', commands: 'npm install', timeout: 60,
-    scopes: ['databases.read', 'databases.write', 'tables.read', 'tables.write', 'rows.read', 'rows.write', 'users.read'],
+    ...FN_CONFIG,
   }));
+  // Keeps schedule, timeout and scopes current on an existing function too.
+  await functions.update({ functionId: FN, name: 'Recall Join', runtime: Runtime.Node22, execute: ['users'], ...FN_CONFIG });
   const vars = {
     APPWRITE_DB_ID: process.env.APPWRITE_DB_ID || 'recall',
     DEMO_DIST_TEAM: process.env.DEMO_DIST_TEAM || 'dist-demo',

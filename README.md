@@ -15,7 +15,7 @@ Built solo for the [Appwrite Databases Hackathon](https://hackathon.appwrite.io/
 | Chemist shop | `chemist@recalljoin.demo` | `RecallDemo-e908c4` |
 | Distributor | `distributor@recalljoin.demo` | `RecallDemo-e908c4` |
 
-These are demo-only accounts on a demo backend. The chemist account opens with demo stock already loaded and matched against the real Jul–Sep 2026 CDSCO lists (3 batches to pull, 2 to check by hand), and a notice explains that the stock is synthetic. To test your own stock, upload a billing CSV (Item, Batch, Expiry, Company, Qty, MRP, Party); "Use demo stock" on the Activity tab puts the demo stock back. The login screen shows these too, and its "Chemist shop" and "Distributor" buttons sign you in with one tap.
+These are demo-only accounts on a demo backend. The chemist account opens with demo stock already loaded and matched against the real Jul–Sep 2026 CDSCO lists (3 batches to pull, 2 to check by hand), and a notice explains that the stock is synthetic. To test your own stock, upload a billing CSV (Item, Batch, Expiry, Company, Qty, MRP, Party); "Use demo stock" on the Activity tab puts the demo stock back. The demo shop is shared by everyone, so the Function resets it to this opening state every hour once nobody has used it for 20 minutes. The login screen shows these too, and its "Chemist shop" and "Distributor" buttons sign you in with one tap.
 
 ## Why existing tools aren't enough
 

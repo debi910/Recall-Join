@@ -7,7 +7,7 @@
     "test": "node --test test/*.test.js",
     "eval": "node eval/run-eval.js",
     "eval:real": "node eval/real-eval.js",
-    "build:function": "rm -rf functions/recall-join/src/core && cp -r core functions/recall-join/src/core",
+    "build:function": "rm -rf functions/recall-join/src/core && cp -r core functions/recall-join/src/core && cp web/public/data/demo-stock.csv functions/recall-join/src/data/",
     "setup": "node scripts/setup.js",
     "import:nsq": "node scripts/import-nsq.js",
     "parse:nsq": "python3 -I tools/parse_nsq.py",

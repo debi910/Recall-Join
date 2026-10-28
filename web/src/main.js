@@ -446,6 +446,7 @@ function auditTimeline() {
       const d = JSON.parse(a.detail || '{}');
       const text = {
         stock_upload: `Stock uploaded: ${d.rows} rows`,
+        demo_reset: 'Demo shop reset to its opening state',
         join: `Join ran: ${d.stock} rows → ${d.counts?.flag ?? 0} flagged, ${(d.counts?.collision ?? 0) + (d.counts?.near ?? 0)} to check`,
         quarantine: `Quarantine committed: ${d.matches?.length} batch${d.matches?.length === 1 ? '' : 'es'}, ${d.notes?.length} return note${d.notes?.length === 1 ? '' : 's'}`,
         verify_quarantine: d.verified ? 'Read-back check passed' : 'Read-back check FAILED',
