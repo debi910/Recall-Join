@@ -15,7 +15,7 @@ Built solo for the [Appwrite Databases Hackathon](https://hackathon.appwrite.io/
 | Chemist shop | `chemist@recalljoin.demo` | `RecallDemo-e908c4` |
 | Distributor | `distributor@recalljoin.demo` | `RecallDemo-e908c4` |
 
-These are demo-only accounts on a demo backend. The chemist account opens with demo stock already loaded and matched against the real Jul–Sep 2026 CDSCO lists (3 batches to pull, 2 to check by hand), and a notice explains that the stock is synthetic. To test your own stock, upload a billing CSV (Item, Batch, Expiry, Company, Qty, MRP, Party); "Use demo stock" on the Activity tab puts the demo stock back. The demo shop is shared by everyone, so the Function resets it to this opening state every hour once nobody has used it for 20 minutes. The login screen shows these too, and its "Chemist shop" and "Distributor" buttons sign you in with one tap.
+These are demo-only accounts on a demo backend. The chemist account opens with demo stock already loaded and matched against the real Jul–Sep 2026 CDSCO lists (3 batches to pull, 2 to check by hand), and a notice explains that the stock is synthetic. To test your own stock, upload the stock export from any billing software (CSV, TSV, .xlsx or .xls) and check the columns it found before importing; the Activity tab also has three sample exports to try (Marg-style CSV, Tally-style Excel, BUSY-style .xls). "Use demo stock" puts the demo stock back. The demo shop is shared by everyone, so the Function resets it to this opening state every hour once nobody has used it for 20 minutes. The login screen shows these too, and its "Chemist shop" and "Distributor" buttons sign you in with one tap.
 
 ## Why existing tools aren't enough
 
@@ -66,7 +66,29 @@ How far to trust the "after" rows:
 - The "two different firms" column has **no ground truth**. With expiry, 38 of 39 now auto-flag because the brand, batch code and expiry month all agree. That is strong evidence of the same product, but some may be a different firm's same-named brand. Only the strip can tell.
 - Part A is unchanged by the fixes (92% vs 81%), including the real false flag on code `05`. The synthetic eval and the demo shop's matches are also unchanged.
 
-### 3. Synthetic stress test (`npm run eval`, `CASES=./cases-2026-09.json npm run eval`)
+### 3. Reading any billing software's stock export (`npm run eval:import`)
+
+Chemists run Marg, Tally, BUSY, GoFrugal, RetailGraph or a hand-made Excel sheet, and each writes a stock export differently. The importer (`core/import.js`, `core/sheets.js`) reads the file in the browser and:
+
+- opens **CSV, TSV, semicolon-separated text, .xlsx, legacy .xls** (BIFF8, read directly) and HTML tables saved as .xls;
+- finds the **header row below title rows** (shop name, report name, date range) and skips grand-total lines;
+- maps columns by name (`Item Name`, `Particulars`, `Batch No.`, `Exp.Dt`, `M.R.P.`, `Cl.Qty`, …), keeps a manufacturing date out of the expiry and maker fields, and **guesses from the values** when there is no header;
+- carries the item name down to batch rows in **grouped reports** (item row, then its batches);
+- reads **17 expiry formats**, including `Aug-27`, `31/08/2027`, `31-Aug-27`, `0827`, month-first `08/31/2027` and Excel date cells.
+
+Then it shows **"Check the columns"**: each field's column with an example value, a tag saying whether it came from the header, was guessed, or is a weak guess (a `Rate` column read as MRP), a 5-row preview, and what will be skipped. The user can change any column or the header row. Only the mapped columns are sent to the server, in Recall Join's own CSV format.
+
+Results (full table: [`eval/import-results.md`](eval/import-results.md)). Baseline: the importer this app shipped with until now (fixed header names on row 1, CSV only).
+
+| Test | Old importer | New importer |
+|---|---|---|
+| 9 export layouts × 809 real CDSCO rows: files read with every field right, no user edits | 2 of 9, and only after re-saving them as CSV (it opened .csv files only); the other 7 were rejected or got 0% right | 9 of 9, 100% of rows |
+| 45 column names from an independent open-source Marg/eVitalRx/Vyapar parser (held out) | 32 (71%) | 45 (100%) after one fix; 43 (96%) on the first run |
+| 800 real expiry months written in 17 formats | 14 of 17 formats | 17 of 17 formats |
+
+**Limits, read these with the table.** No real stock export from any of these vendors was available: they don't publish samples, and we have no chemist's files. The 9 layouts are **reconstructed** from vendor help pages and import guides (LOGIC ERP documents its batch-wise closing stock columns; Tally and BUSY document the fields of their batch reports, not the file), and they were written in the same session as the importer, so the 100% mainly shows that structure (title rows, grouping, file types, dates) is handled. The held-out column names are the fairer test, and its first run found 2 misses (`gst rate`, `tax rate` read as MRP), now fixed. Not handled automatically: Tally reports that indent batch names in the same column as the item. Product, batch and maker strings are real; qty, MRP and supplier are generated.
+
+### 4. Synthetic stress test (`npm run eval`, `CASES=./cases-2026-09.json npm run eval`)
 
 50 synthetic stock rows built from real rows: 15 formatting variants, 10 constructed collisions, 10 look-alike typos, 15 clean rows. The matching rules were frozen before the Sep 2026 list was loaded. Recall Join: 100% precision and recall, all 10 typos sent to a human; batch-only lookup: 60% precision. **This checks that each designed rule works; it is not evidence of real-world accuracy.** The case mix decides the baseline's score, and the same author wrote the rules and the cases.
 
@@ -90,7 +112,7 @@ How far to trust the "after" rows:
 ```
 CDSCO PDF ──parse_nsq.py──▶ nsq_batches ──┐
                                            ├─ index join on batch_skel ─▶ classify (core/match.js) ─▶ matches ──Realtime──▶ chemist UI
-billing CSV ──uploadStock──▶ stock_items ──┘                                                            │
+stock export ─(browser: core/import.js)─▶ uploadStock ──▶ stock_items ──┘                                                            │
                                                                quarantine (one transaction) ◀────────────┘
                                                                ├─ stock_items.status = quarantined
                                                                ├─ return_notes (visible to distributor team)
@@ -127,11 +149,12 @@ Then `npm run deploy` creates and deploys the Function (Node 22, entry `src/main
 | Appwrite TablesDB, Realtime, Teams, Functions, Auth | **Real** |
 | Chemist stock (`web/public/data/demo-stock.csv`) | **Synthetic**: invented makers and distributors, seeded with 6 variants of real listed batches |
 | Synthetic eval (`eval/cases*.json`) | **Synthetic** variants of real rows |
+| Stock export layouts (`eval/import-layouts.js`, `web/public/data/samples/`) | **Reconstructed** from vendor docs, not real vendor files; the samples hold the synthetic demo stock |
 | Real-data eval (`eval/real/`) | **Real** regulator rows and real retail listings; hand labels; batch copied in part B |
 
 ## Tech stack and libraries
 
-Appwrite Cloud (TablesDB, Functions, Realtime, Teams, Auth, Sites) · `node-appwrite` · `appwrite` (web SDK) · Vite · `pdfplumber` (Python, PDF table extraction) · `dotenv` · fonts: Fraunces, IBM Plex Sans/Mono (Google Fonts). All code was written during the hackathon window; see [`CHANGELOG.md`](CHANGELOG.md).
+Appwrite Cloud (TablesDB, Functions, Realtime, Teams, Auth, Sites) · `node-appwrite` · `appwrite` (web SDK) · Vite · `fflate` (unzips .xlsx in the browser) · `pdfplumber` (Python, PDF table extraction) · `dotenv` · fonts: Fraunces, IBM Plex Sans/Mono (Google Fonts). All code was written during the hackathon window; see [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Sources
 

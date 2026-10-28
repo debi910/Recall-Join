@@ -337,3 +337,28 @@ dd { margin: 0; overflow-wrap: anywhere; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-property: opacity, background-color, color !important; }
   .btn.hold[data-state='holding'] .hold-fill { transition: clip-path var(--hold) linear !important; }
 }
+
+/* ---------- stock import ---------- */
+.notice.import { width: min(760px, calc(100vw - 32px)); }
+.notice.import h2 { margin-bottom: 8px; }
+select { font: inherit; font-size: 14px; color: var(--ink); background: var(--card); border: 1px solid var(--rule-2); border-radius: 8px; padding: 6px 8px; max-width: 100%; }
+select.inline { padding: 2px 6px; margin: 0 2px; max-width: 260px; }
+.mapping { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px 14px; margin: 14px 0; }
+.mapping label { display: grid; gap: 4px; min-width: 0; font-size: 13px; color: var(--ink-2); }
+.mapping select { width: 100%; min-width: 0; text-overflow: ellipsis; }
+.mapping label > span { font-weight: 600; color: var(--ink); }
+.mapping label b { color: var(--red); margin-left: 2px; }
+.mapping label em { font-style: normal; font-size: 11px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); }
+.mapping label.header em, .mapping label.you em { color: var(--green); }
+.mapping label.values em, .mapping label.weak em { color: var(--amber); }
+.mapping label.values select, .mapping label.weak select { border-color: var(--amber); background: var(--amber-2); }
+.preview-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; }
+.preview { border-collapse: collapse; width: 100%; font-size: 12.5px; white-space: nowrap; }
+.preview th { text-align: left; font-weight: 600; color: var(--ink-2); background: var(--paper-2); padding: 6px 10px; }
+.preview td { padding: 6px 10px; border-top: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+.import-facts { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 4px; font-size: 14px; color: var(--ink-2); }
+.import-facts li::before { content: '·'; margin-right: 8px; color: var(--ink-3); }
+.import-facts li.ok { color: var(--green); font-weight: 600; }
+.import-facts li.warn { color: var(--amber); }
+.samples { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 4px; margin: 10px 0 0; font-size: 13px; color: var(--ink-3); }
+.samples span { margin-right: 4px; }

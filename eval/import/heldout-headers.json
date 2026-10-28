@@ -1,0 +1,12 @@
+{
+  "note": "Header aliases written by someone else, for their own parser of Marg ERP / eVitalRx / Vyapar stock CSVs. Not used to build core/import.js. Expected field per alias; hsn and gst columns must map to nothing.",
+  "source": "https://github.com/NesayoHQ/marg-csv-import (README, column aliases), fetched 2026-10-28",
+  "aliases": {
+    "product": ["item name", "product", "product name", "medicine name", "medicine", "item", "drug name", "description", "item description"],
+    "batch": ["batch", "batch no", "batch number", "batchno", "batch code"],
+    "expiry": ["exp", "expiry", "exp date", "expiry date", "exp dt", "expdate"],
+    "mrp": ["mrp", "rate", "price", "sale rate", "mrp rate", "sale price"],
+    "qty": ["qty", "quantity", "stock", "stock qty", "current stock", "closing stock", "balance qty"],
+    "none": ["hsn", "hsn code", "hsn/sac", "hsn no", "gst", "tax", "gst %", "gst rate", "tax rate", "tax %", "igst", "gst slab"]
+  }
+}

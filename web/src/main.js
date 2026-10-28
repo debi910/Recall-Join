@@ -4,6 +4,7 @@ import { classMap } from 'lit-html/directives/class-map.js';
 import { account, teams, db, call, rows, realtime, Channel, Query, DB } from './appwrite.js';
 import { normBatch } from '../../core/normalize.js';
 import { reasonCategory } from '../../core/reasons.js';
+import { analyze, buildStock, toCanonicalCsv, FIELDS } from '../../core/import.js';
 import { toast, toaster } from './toast.js';
 import { holdButton } from './hold.js';
 import { joinGraphic } from './join-graphic.js';
@@ -23,6 +24,7 @@ const TIER = {
 };
 const rupees = (n) => `₹${Math.round(n || 0).toLocaleString('en-IN')}`;
 const month = (p) => (p ? new Date(`${p}-01T00:00:00`).toLocaleString('en-IN', { month: 'short', year: 'numeric' }) : '');
+const plural = (n, one, many = `${one}s`) => `${Number(n).toLocaleString('en-IN')} ${n === 1 ? one : many}`;
 const short = (s, n) => (s && s.length > n ? `${s.slice(0, n - 1)}…` : s ?? '');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -146,10 +148,45 @@ const A = {
   async logout() { await account.deleteSession({ sessionId: 'current' }).catch(() => {}); location.reload(); },
   demoStock: () => act('Uploading stock and running the join', async () => call('uploadStock', { csv: await (await fetch('/data/demo-stock.csv')).text() }),
     (o) => `${o.uploaded} rows uploaded · ${o.join.counts.flag} on the list`),
+  // Any billing export is read in the browser first; the user checks the columns,
+  // then only the mapped columns go to the server as Recall Join's own CSV.
   async upload(e) {
     const file = e.target.files[0];
+    e.target.value = '';
     if (state.notice) A.closeNotice();
-    if (file) await act('Uploading stock and running the join', async () => call('uploadStock', { csv: await file.text() }), (o) => `${o.uploaded} rows uploaded · ${o.join.counts.flag} on the list`);
+    if (file) await A.readExport(file.name, await file.arrayBuffer());
+  },
+  async sample(name) {
+    if (state.notice) A.closeNotice();
+    await A.readExport(name, await (await fetch(`/data/samples/${name}`)).arrayBuffer());
+  },
+  async readExport(name, bytes) {
+    try {
+      const { readSheet } = await import('../../core/sheets.js');
+      const cells = readSheet(new Uint8Array(bytes), name);
+      if (!cells.length) throw new Error(`${name} has no rows`);
+      state.imp = { name, cells, ...analyze(cells) };
+    } catch (err) {
+      toast(`Could not read ${name}: ${err.message}`, 'error');
+    }
+    paint();
+  },
+  setColumn(field, col) {
+    const imp = state.imp;
+    imp.mapping = { ...imp.mapping, [field]: Number(col) };
+    imp.how = { ...imp.how, [field]: Number(col) < 0 ? 'missing' : 'you' };
+    Object.assign(imp, buildStock(imp.body, imp.mapping));
+    paint();
+  },
+  setHeaderRow(n) {
+    state.imp = { name: state.imp.name, cells: state.imp.cells, ...analyze(state.imp.cells, Number(n)) };
+    paint();
+  },
+  cancelImport() { state.imp = null; paint(); },
+  confirmImport() {
+    const csv = toCanonicalCsv(state.imp.stock);
+    state.imp = null;
+    return act('Uploading stock and running the join', () => call('uploadStock', { csv }), (o) => `${o.uploaded} rows uploaded · ${o.join.counts.flag} on the list`);
   },
   ingest: () => act('Importing the CDSCO list and re-running the join', () => call('ingestAlert', { period: document.getElementById('ingest').value }),
     (o) => `Join re-ran for ${o.shops} shop${o.shops === 1 ? '' : 's'}`),
@@ -163,7 +200,7 @@ const A = {
   dismiss: (id) => act('Recording your review', async () => { await call('dismiss', { matchId: id, reason: 'Pharmacist checked the strip: not the listed batch' }); state.open = null; }, 'Marked as not the listed batch'),
   collected: (id) => act('Marking collected', () => call('markCollected', { noteId: id }), 'Return marked collected'),
 };
-addEventListener('keydown', (e) => { if (e.key === 'Escape' && state.open) A.close(); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && state.imp) A.cancelImport(); else if (e.key === 'Escape' && state.open) A.close(); });
 
 // ---------------------------------------------------------------- views
 function paint() {
@@ -230,8 +267,60 @@ function appView() {
     <main class=${state.role}>${state.role === 'chemist' ? chemistView() : distributorView()}</main>
     ${state.open ? drawer(state.matches.find((m) => m.$id === state.open)) : nothing}
     ${state.notice ? demoNotice() : nothing}
+    ${state.imp ? importView(state.imp) : nothing}
     ${state.busy ? html`<div class="busy" role="status"><span class="spinner"></span>${state.busy}…</div>` : nothing}
     ${toaster()}`;
+}
+
+const ACCEPT = '.csv,.tsv,.txt,.xlsx,.xls,.htm,.html';
+// Reconstructed layouts with the demo stock in them (scripts/make-import-samples.js).
+const SAMPLES = [['marg-style.csv', 'Marg-style CSV'], ['tally-style.xlsx', 'Tally-style Excel'], ['busy-style.xls', 'BUSY-style .xls']];
+const FIELD_LABEL = { product: 'Item name', batch: 'Batch', expiry: 'Expiry', mfr: 'Maker', qty: 'Qty', mrp: 'MRP', supplier: 'Supplier' };
+const HOW = { header: 'from header', weak: 'a guess: check it', values: 'guessed from values', you: 'your choice', missing: 'not in file' };
+
+function importView(imp) {
+  const width = Math.max(imp.header.length, ...imp.body.slice(0, 50).map((r) => r.length));
+  const example = (c) => imp.body.map((r) => r[c]).find((v) => String(v ?? '').trim()) ?? '';
+  const colName = (c) => imp.header[c] || `Column ${c + 1}`;
+  const ready = imp.mapping.product >= 0 && imp.mapping.batch >= 0 && imp.stock.length > 0;
+  const skipped = imp.skipped.noBatch + imp.skipped.total;
+  return html`
+    <div class="scrim" @click=${A.cancelImport}></div>
+    <section class="notice import" role="dialog" aria-modal="true" aria-labelledby="import-title">
+      <p class="eyebrow">Import stock · ${imp.name}</p>
+      <h2 id="import-title">Check the columns</h2>
+      <p>${imp.headerRow >= 0 ? html`Found the header on row` : html`No header row found, so columns were guessed from their values. Header row:`}
+        <select class="inline" aria-label="Header row" @change=${(e) => A.setHeaderRow(e.target.value)}>
+          <option value="-1" ?selected=${imp.headerRow < 0}>none</option>
+          ${imp.cells.slice(0, 15).map((r, i) => html`<option value=${i} ?selected=${i === imp.headerRow}>${i + 1}: ${short(r.filter((x) => String(x).trim()).join(' · '), 40)}</option>`)}
+        </select>. Change any column that is wrong.</p>
+      <div class="mapping">
+        ${FIELDS.map((f) => html`<label class=${imp.how[f]}>
+          <span>${FIELD_LABEL[f]}${f === 'product' || f === 'batch' ? html`<b aria-label="required">*</b>` : nothing}</span>
+          <select @change=${(e) => A.setColumn(f, e.target.value)}>
+            <option value="-1" ?selected=${imp.mapping[f] < 0}>Not in file</option>
+            ${Array.from({ length: width }, (_, c) => html`<option value=${c} ?selected=${imp.mapping[f] === c}>${short(colName(c), 22)}${example(c) !== '' ? ` (e.g. ${short(String(example(c)), 18)})` : ''}</option>`)}
+          </select>
+          <em>${HOW[imp.how[f]]}</em>
+        </label>`)}
+      </div>
+      <div class="preview-wrap"><table class="preview">
+        <thead><tr>${FIELDS.map((f) => html`<th>${FIELD_LABEL[f]}</th>`)}</tr></thead>
+        <tbody>${imp.stock.slice(0, 5).map((s) => html`<tr>${FIELDS.map((f) => html`<td>${f === 'mrp' && s.mrp ? s.mrp.toFixed(2) : f === 'qty' && imp.mapping.qty < 0 ? '' : short(String(s[f] ?? ''), 28)}</td>`)}</tr>`)}</tbody>
+      </table></div>
+      <ul class="import-facts">
+        <li class="ok">${plural(imp.stock.length, 'batch row')} ready${imp.carriedName ? `, ${imp.carriedName} with the item name carried down from its item row` : ''}.</li>
+        ${skipped ? html`<li>${plural(skipped, 'row')} skipped (${[imp.skipped.noBatch && `${imp.skipped.noBatch} without a batch`, imp.skipped.total && `${imp.skipped.total} total line${imp.skipped.total === 1 ? '' : 's'}`].filter(Boolean).join(', ')}).</li>` : nothing}
+        ${imp.badExpiry ? html`<li class="warn">${plural(imp.badExpiry, 'expiry date')} not understood. They are kept as written, and those batches are checked on batch and maker only.</li>` : nothing}
+        ${imp.mapping.expiry < 0 ? html`<li class="warn">No expiry column. Matches will lean on batch and maker, and more of them will ask you to check the strip.</li>` : nothing}
+        ${!ready ? html`<li class="warn">Choose the item name and batch columns to continue.</li>` : nothing}
+      </ul>
+      <div class="row">
+        <button class="btn primary" ?disabled=${!ready} @click=${A.confirmImport}>Import ${plural(imp.stock.length, 'row')}</button>
+        <button class="btn ghost" @click=${A.cancelImport}>Cancel</button>
+      </div>
+      <p class="fine">The file is read in your browser. Importing replaces this shop's stock.</p>
+    </section>`;
 }
 
 function demoNotice() {
@@ -241,10 +330,10 @@ function demoNotice() {
       <p class="eyebrow">Demo shop</p>
       <h2 id="notice-title">This shop's stock is demo data</h2>
       <p>The 306 stock rows are synthetic, seeded with 6 batches from the real September 2026 CDSCO list, so you can see real matches straight away. The CDSCO lists themselves are real.</p>
-      <p>To test with your own stock, upload a billing-software CSV with the columns Item, Batch, Expiry, Company, Qty, MRP and Party. It replaces the demo stock on this demo account; "Use demo stock" on the Activity tab puts it back.</p>
+      <p>To test your own stock, upload the stock export from your billing software (Marg, Tally, BUSY, GoFrugal or any Excel sheet) as CSV, .xlsx or .xls. You check the columns before anything is saved. It replaces the demo stock on this demo account; "Use demo stock" on the Activity tab puts it back.</p>
       <div class="row">
         <button class="btn primary" @click=${A.closeNotice}>Show me the matches</button>
-        <label class="btn ghost file">Upload my own CSV<input type="file" accept=".csv" @change=${A.upload} /></label>
+        <label class="btn ghost file">Upload my stock export<input type="file" accept=${ACCEPT} @change=${A.upload} /></label>
       </div>
     </section>`;
 }
@@ -258,7 +347,6 @@ function chemistView() {
   const units = flags.reduce((a, m) => a + (state.stock.get(m.stock_id)?.qty || 0), 0);
   const nsqTotal = state.alerts.reduce((a, l) => a + (l.rows_count || 0), 0);
   const months = [...new Set(state.alerts.map((a) => a.period))].sort().map(month);
-  const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
   const home = html`
     <section class=${classMap({ hero: true, alarm: flags.length > 0, calm: !flags.length })}>
@@ -303,8 +391,9 @@ function chemistView() {
   const activity = html`
     <div class="panel">
       <h3>Stock</h3>
-      <p class="muted">${plural(state.stockCount, 'batch row')} on file. Upload a billing-software export (Item, Batch, Expiry, Company, Qty, MRP, Party).</p>
+      <p class="muted">${plural(state.stockCount, 'batch row')} on file. Upload the stock export from any billing software (CSV, .xlsx or .xls); you check the columns before it is saved.</p>
       ${stockButtons()}
+      <p class="samples"><span>Or try a sample export:</span>${SAMPLES.map(([f, label]) => html`<button class="btn link" @click=${() => A.sample(f)}>${label}</button>`)}</p>
     </div>
     ${state.isAdmin ? html`<div class="panel demo">
       <h3>Import a CDSCO list (demo)</h3>
@@ -383,7 +472,7 @@ function shelfStrip(f, r, i) {
 
 function stockButtons() {
   return html`<div class="row">
-    <label class="btn ghost file">Upload CSV<input type="file" accept=".csv" @change=${A.upload} /></label>
+    <label class="btn ghost file">Upload stock export<input type="file" accept=${ACCEPT} @change=${A.upload} /></label>
     <button class="btn ghost" @click=${A.demoStock}>Use demo stock</button>
   </div>`;
 }
