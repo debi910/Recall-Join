@@ -15,7 +15,7 @@ Built solo for the [Appwrite Databases Hackathon](https://hackathon.appwrite.io/
 | Chemist shop | `chemist@recalljoin.demo` | `RecallDemo-e908c4` |
 | Distributor | `distributor@recalljoin.demo` | `RecallDemo-e908c4` |
 
-These are demo-only accounts on a demo backend. The regulator lists are real; the shop's stock is synthetic. The login screen's "Chemist shop" and "Distributor" buttons fill in the email.
+These are demo-only accounts on a demo backend. The regulator lists are real; the shop's stock is synthetic. The login screen shows these too, and its "Chemist shop" and "Distributor" buttons sign you in with one tap.
 
 ## Why existing tools aren't enough
 
