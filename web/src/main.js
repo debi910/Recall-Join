@@ -12,7 +12,7 @@ const $app = document.getElementById('app');
 const state = {
   user: null, role: null, teams: [], shopName: '', isAdmin: false,
   matches: [], stock: new Map(), nsq: new Map(), notes: [], audit: [], alerts: [], stockCount: 0,
-  open: null, busy: '', firstPaint: true, arrived: new Set(), live: false,
+  open: null, busy: '', tab: 0, firstPaint: true, arrived: new Set(), live: false,
 };
 
 const TIER = {
@@ -80,6 +80,8 @@ function subscribe() {
       const [[s], [n]] = await Promise.all([rows('stock_items', [Query.equal('$id', r.stock_id)]), rows('nsq_batches', [Query.equal('$id', r.nsq_id)])]);
       if (s) state.stock.set(s.$id, s);
       if (n) state.nsq.set(n.$id, n);
+      // A match from a newly imported month: refresh the list counts too.
+      if (!state.alerts.some((a) => a.period === r.period)) state.alerts = await rows('alerts', [Query.orderDesc('period'), Query.limit(24)]);
       state.matches = [r, ...state.matches.filter((m) => m.$id !== r.$id)];
       state.arrived.add(r.$id);
       if (r.tier === 'flag') toast(`New: ${short(s?.product, 28)} is on the ${month(r.period)} list`, 'red');
@@ -151,6 +153,7 @@ function paint() {
   litRender(state.user ? appView() : loginView(), $app);
   state.firstPaint = false;
   state.arrived = new Set();
+  syncHeight();
 }
 
 function loginView() {
@@ -212,22 +215,30 @@ function chemistView() {
   const live = state.matches.filter((m) => m.decision === 'pending');
   const by = (t) => live.filter((m) => m.tier === t);
   const flags = by('flag'), reviews = [...by('collision'), ...by('near')], info = by('info');
+  const closed = state.matches.filter((m) => m.decision !== 'pending');
   const value = flags.reduce((a, m) => a + (m.value || 0), 0);
   const units = flags.reduce((a, m) => a + (state.stock.get(m.stock_id)?.qty || 0), 0);
   const nsqTotal = state.alerts.reduce((a, l) => a + (l.rows_count || 0), 0);
-  const periods = new Set(state.alerts.map((a) => a.period)).size;
+  const months = [...new Set(state.alerts.map((a) => a.period))].sort().map(month);
+  const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
-  return html`
+  const home = html`
     <section class=${classMap({ hero: true, alarm: flags.length > 0, calm: !flags.length })}>
       <div class="hero-copy">
-        <p class="eyebrow">Your shelf × ${periods} month${periods === 1 ? '' : 's'} of CDSCO lists · ${nsqTotal.toLocaleString('en-IN')} failed batches</p>
+        <p class="eyebrow">Your shelf × ${months.length} month${months.length === 1 ? '' : 's'} of CDSCO lists · ${nsqTotal.toLocaleString('en-IN')} failed batches</p>
         <h1>${flags.length
           ? html`<span class="count">${flags.length}</span> batch${flags.length > 1 ? 'es' : ''} on your shelf ${flags.length > 1 ? 'are' : 'is'} on the CDSCO list`
-          : state.stockCount ? 'No listed batch found on your shelf' : 'Upload your stock to run the join'}</h1>
-        <p class="sub">${flags.length
-          ? `${units} units · ${rupees(value)} at MRP · ${reviews.length} more to check`
+          : !state.stockCount ? 'Upload your stock to check it'
+          : reviews.length ? `${plural(reviews.length, 'batch', 'batches')} to check by hand`
+          : 'No listed batch found on your shelf'}</h1>
+        <p class="sub">${flags.length ? `Pull ${units} units (${rupees(value)}) and return them to the supplier.`
+          : !state.stockCount ? 'Your billing export is matched against every CDSCO list of failed batches.'
           : 'Only listed batches are checked. This is not a safety certificate.'}</p>
-        ${flags.length ? holdButton({ label: `Hold to quarantine all ${flags.length}`, done: 'Quarantining…', onConfirm: () => A.quarantine(flags.map((m) => m.$id)) }) : nothing}
+        <div class="row">
+          ${flags.length ? holdButton({ label: `Hold to quarantine all ${flags.length}`, done: 'Quarantining…', onConfirm: () => A.quarantine(flags.map((m) => m.$id)) })
+            : !state.stockCount ? stockButtons() : nothing}
+          ${live.length ? html`<button class="btn ghost" @click=${() => goTab(1)}>See all ${live.length} matches →</button>` : nothing}
+        </div>
       </div>
       <figure class="hero-graphic" aria-label="Join between the CDSCO lists and your shelf">
         ${joinGraphic({
@@ -237,39 +248,80 @@ function chemistView() {
         })}
       </figure>
     </section>
+    ${shelfStrip(flags.length, reviews.length, info.length)}`;
 
-    ${shelfStrip(flags.length, reviews.length, info.length)}
+  const matches = html`
+    ${group('Pull from the shelf', flags)}
+    ${group('Check the strip', reviews)}
+    ${folded('Same brand, different batch', info, 'No action needed.')}
+    ${folded('Done', closed)}
+    ${!live.length && !closed.length ? html`<div class="empty">${emptyArt()}<p>${state.stockCount ? `Nothing found. ${plural(state.stockCount, 'stock row')} are checked against every new list.` : 'Upload your stock on Home to start.'}</p></div>` : nothing}`;
 
-    <div class="grid">
-      <section class="feed">
-        ${group('Act now', flags, 'Pull these from the shelf.')}
-        ${group('Check the strip', reviews, 'Likely matches that need a human look.')}
-        ${group('For your information', info)}
-        ${!live.length && state.stockCount ? html`<div class="empty">${emptyArt()}<p>Nothing pending. ${state.stockCount} stock rows are watched against every new list.</p></div>` : nothing}
-        ${handled()}
-      </section>
-      <aside>
-        ${listsChart()}
-        ${reasonsChart()}
-        <div class="panel">
-          <h3>Stock</h3>
-          <p class="muted">${state.stockCount} batch rows on file. Upload a billing-software export (Item, Batch, Expiry, Company, Qty, MRP, Party).</p>
-          <div class="row">
-            <label class="btn ghost file">Upload CSV<input type="file" accept=".csv" @change=${A.upload} /></label>
-            <button class="btn ghost" @click=${A.demoStock}>Use demo stock</button>
-          </div>
-        </div>
-        ${state.isAdmin ? html`<div class="panel demo">
-          <h3>Demo controls</h3>
-          <p class="muted">Import a real CDSCO list. The join re-runs for every shop and new matches arrive over Realtime.</p>
-          <div class="row">
-            <select id="ingest"><option value="2026-09">Sep 2026 · 300 batches</option><option value="2026-08">Aug 2026 · 200 batches</option><option value="2026-07">Jul 2026 · 239 batches</option></select>
-            <button class="btn ghost" @click=${A.ingest}>Import</button>
-          </div>
-        </div>` : nothing}
-        ${auditTimeline()}
-      </aside>
-    </div>`;
+  const listsTab = html`
+    ${listsChart()}
+    ${reasonsChart()}
+    <p class="coverage">${state.stockCount ? `Your ${plural(state.stockCount, 'stock row')} are checked against ${nsqTotal.toLocaleString('en-IN')} failed batches from the ${months.join(', ')} CDSCO lists. ` : ''}Not finding a batch does not mean it is safe.</p>`;
+
+  const activity = html`
+    <div class="panel">
+      <h3>Stock</h3>
+      <p class="muted">${plural(state.stockCount, 'batch row')} on file. Upload a billing-software export (Item, Batch, Expiry, Company, Qty, MRP, Party).</p>
+      ${stockButtons()}
+    </div>
+    ${state.isAdmin ? html`<div class="panel demo">
+      <h3>Import a CDSCO list (demo)</h3>
+      <p class="muted">The check re-runs for every shop and new matches arrive live.</p>
+      <div class="row">
+        <select id="ingest"><option value="2026-09">Sep 2026 · 300 batches</option><option value="2026-08">Aug 2026 · 200 batches</option><option value="2026-07">Jul 2026 · 239 batches</option></select>
+        <button class="btn ghost" @click=${A.ingest}>Import</button>
+      </div>
+    </div>` : nothing}
+    <div class="panel"><h3>Audit trail</h3>${auditTimeline()}</div>`;
+
+  return slides([['Home', 0, home], ['Matches', live.length, matches], ['Lists', 0, listsTab], ['Activity', 0, activity]]);
+}
+
+// Tabs over a horizontal scroll-snap track: swipe, trackpad or tap all move it,
+// and the tab underline follows the scroll position continuously.
+function slides(panels) {
+  return html`<nav class="tabs" role="tablist" style="--n:${panels.length}">
+      ${panels.map(([label, count], i) => html`<button role="tab" aria-selected=${String(state.tab === i)} @click=${() => goTab(i)}>${label}${count ? html`<span class="pill">${count}</span>` : nothing}</button>`)}
+      <i class="tab-ink" aria-hidden="true"></i>
+    </nav>
+    <div class="slides" @scroll=${onSlide}>${panels.map(([label, , body]) => html`<section class="slide" role="tabpanel" aria-label=${label}>${body}</section>`)}</div>`;
+}
+
+function goTab(i) {
+  const track = document.querySelector('.slides');
+  if (!track) return;
+  track.scrollTo({ left: i * track.clientWidth, behavior: reduceMotion ? 'auto' : 'smooth' });
+  // Coming from further down a long tab: bring the new tab's top into view.
+  const top = document.querySelector('.tabs').offsetTop - 60;
+  if (scrollY > top) scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+
+// The track takes the active slide's height, so a short tab doesn't leave the
+// tallest tab's empty space below it.
+// A ResizeObserver keeps it right when the slide grows later (Realtime rows, folds).
+const slideSize = new ResizeObserver(() => syncHeight());
+function syncHeight() {
+  const track = document.querySelector('.slides');
+  const slide = track?.children[state.tab];
+  if (!slide) return;
+  track.style.height = `${slide.offsetHeight}px`;
+  if (slideSize.watching !== slide) { slideSize.disconnect(); slideSize.observe(slide); slideSize.watching = slide; }
+}
+
+let slideFrame;
+function onSlide(e) {
+  const track = e.currentTarget;
+  cancelAnimationFrame(slideFrame);
+  slideFrame = requestAnimationFrame(() => {
+    const pos = track.scrollLeft / track.clientWidth;
+    document.querySelector('.tabs')?.style.setProperty('--t', pos);
+    const i = Math.round(pos);
+    if (i !== state.tab) { state.tab = i; paint(); }
+  });
 }
 
 // One tick per stock row (capped): the whole shelf at a glance.
@@ -291,33 +343,36 @@ function shelfStrip(f, r, i) {
   </section>`;
 }
 
-function group(title, list, hint) {
+function stockButtons() {
+  return html`<div class="row">
+    <label class="btn ghost file">Upload CSV<input type="file" accept=".csv" @change=${A.upload} /></label>
+    <button class="btn ghost" @click=${A.demoStock}>Use demo stock</button>
+  </div>`;
+}
+
+function group(title, list) {
   if (!list.length) return nothing;
-  return html`<h2 class="group">${title}<span class="pill">${list.length}</span>${hint ? html`<small>${hint}</small>` : nothing}</h2>
+  return html`<h2 class="group">${title}<span class="pill">${list.length}</span></h2>
     <ul class="cards">${repeat(list, (m) => m.$id, (m, i) => card(m, i))}</ul>`;
+}
+
+// Low-priority groups stay folded so the screen shows only what needs doing.
+function folded(title, list, hint) {
+  if (!list.length) return nothing;
+  return html`<details class="fold"><summary>${title}<span class="pill">${list.length}</span>${hint ? html`<small>${hint}</small>` : nothing}</summary>
+    <ul class="cards">${repeat(list, (m) => m.$id, (m, i) => card(m, i))}</ul></details>`;
 }
 
 function card(m, i) {
   const s = state.stock.get(m.stock_id) || {}, n = state.nsq.get(m.nsq_id) || {};
-  const t = TIER[m.tier];
+  const t = m.decision === 'pending' ? TIER[m.tier] : { tone: 'done', label: m.decision === 'quarantined' ? 'Quarantined' : 'Not the listed batch' };
   return html`<li class=${classMap({ card: true, [t.tone]: true, stagger: state.firstPaint, arrived: state.arrived.has(m.$id) })} style="--i:${i}">
     <button class="card-hit" @click=${() => A.open(m.$id)} aria-label="Open ${s.product}"></button>
-    <span class="stamp">${t.label}</span>
     <strong class="product">${s.product}</strong>
     <span class="batch">${s.batch}</span>
-    <span class="meta">${s.qty ?? 0} units · ${rupees(m.value)} · ${reasonCategory(n.result)} · ${month(n.period)}</span>
+    <span class="meta">${m.tier !== 'flag' || m.decision !== 'pending' ? html`<em>${t.label}</em> · ` : nothing}${s.qty ?? 0} units · ${reasonCategory(n.result)}</span>
     <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
   </li>`;
-}
-
-function handled() {
-  const closed = state.matches.filter((m) => m.decision !== 'pending');
-  if (!closed.length) return nothing;
-  return html`<h2 class="group">Handled<span class="pill">${closed.length}</span></h2>
-    <ul class="cards handled">${repeat(closed, (m) => m.$id, (m) => {
-      const s = state.stock.get(m.stock_id) || {};
-      return html`<li class="card done"><span class="stamp">${m.decision === 'quarantined' ? 'Quarantined' : 'Dismissed after review'}</span><strong class="product">${s.product}</strong><span class="batch">${s.batch}</span></li>`;
-    })}</ul>`;
 }
 
 function listsChart() {
@@ -348,9 +403,8 @@ function reasonsChart() {
 }
 
 function auditTimeline() {
-  return html`<div class="panel">
-    <h3>Audit trail</h3>
-    <ol class="timeline">${repeat(state.audit, (a) => a.$id, (a) => {
+  if (!state.audit.length) return html`<p class="muted">Nothing yet.</p>`;
+  return html`<ol class="timeline">${repeat(state.audit, (a) => a.$id, (a) => {
       const d = JSON.parse(a.detail || '{}');
       const text = {
         stock_upload: `Stock uploaded: ${d.rows} rows`,
@@ -361,8 +415,7 @@ function auditTimeline() {
         return_collected: 'Distributor collected a return',
       }[a.action] || a.action;
       return html`<li class=${a.verified ? 'ok' : ''}><time>${new Date(a.$createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</time><span>${text}</span>${a.verified ? html`<em>verified</em>` : nothing}</li>`;
-    })}</ol>
-  </div>`;
+    })}</ol>`;
 }
 
 // Each character is a tile; tiles that differ between the two batches light up.
@@ -381,7 +434,7 @@ function drawer(m) {
   const unsure = (v) => v === 'unknown' || v === 'confusable';
   const check = (label, v) => html`<li class=${ok(v) ? 'yes' : unsure(v) ? 'maybe' : 'no'}>
     <svg viewBox="0 0 16 16" aria-hidden="true">${ok(v) ? svg`<path d="M3.5 8.5l3 3 6-7" />` : unsure(v) ? svg`<path d="M8 4v5M8 11.5v.5" />` : svg`<path d="M4 4l8 8M12 4l-8 8" />`}</svg>
-    <span>${label}</span><b>${v}</b></li>`;
+    <span>${label}</span></li>`;
   return html`
     <div class="scrim" @click=${A.close}></div>
     <section class="drawer ${t.tone}" role="dialog" aria-modal="true" aria-label="Match detail">
@@ -398,22 +451,23 @@ function drawer(m) {
         <div><small>Your shelf</small>${batchTiles(s.batch, n.batch)}</div>
       </div>
 
-      <ul class="checks">
-        ${check('Batch', r.batch)}${r.mfr ? check('Maker', r.mfr) : nothing}${r.expiry ? check('Expiry', r.expiry) : nothing}
-        <li class="meter"><span>Name similarity</span><b>${Math.round((r.product || 0) * 100)}%</b><i style="--w:${(r.product || 0) * 100}%"></i></li>
-      </ul>
-      <p class="fine">A flag needs the batch plus the maker or expiry to agree. Name similarity is context only.</p>
+      <ul class="checks">${check('Batch', r.batch)}${r.mfr ? check('Maker', r.mfr) : nothing}${r.expiry ? check('Expiry', r.expiry) : nothing}</ul>
 
-      <div class="compare">
-        <div>
-          <h4>CDSCO · ${month(n.period)} · ${n.lab}</h4>
-          <dl><dt>Product</dt><dd>${n.product}</dd><dt>Maker</dt><dd>${short(n.mfr, 140)}</dd><dt>Expiry</dt><dd>${n.expiry}</dd><dt>Failed test</dt><dd class="fail">${n.result}</dd></dl>
+      <p class="failed"><small>Failed test · ${month(n.period)}</small>${n.result}</p>
+
+      <details class="fold compare-fold">
+        <summary>Full CDSCO record and your stock row</summary>
+        <div class="compare">
+          <div>
+            <h4>CDSCO · ${month(n.period)} · ${n.lab}</h4>
+            <dl><dt>Product</dt><dd>${n.product}</dd><dt>Maker</dt><dd>${short(n.mfr, 140)}</dd><dt>Expiry</dt><dd>${n.expiry}</dd></dl>
+          </div>
+          <div>
+            <h4>Your shelf</h4>
+            <dl><dt>Product</dt><dd>${s.product}</dd><dt>Maker</dt><dd>${s.mfr}</dd><dt>Expiry</dt><dd>${s.expiry}</dd><dt>Units</dt><dd>${s.qty} · ${rupees(m.value)}</dd><dt>Supplier</dt><dd>${s.supplier}</dd></dl>
+          </div>
         </div>
-        <div>
-          <h4>Your shelf</h4>
-          <dl><dt>Product</dt><dd>${s.product}</dd><dt>Maker</dt><dd>${s.mfr}</dd><dt>Expiry</dt><dd>${s.expiry}</dd><dt>Units</dt><dd>${s.qty} · ${rupees(m.value)}</dd><dt>Supplier</dt><dd>${s.supplier}</dd></dl>
-        </div>
-      </div>
+      </details>
 
       <footer class="actions">
         ${m.decision !== 'pending' ? html`<p>Already ${m.decision}.</p>`

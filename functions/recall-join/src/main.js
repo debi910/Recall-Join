@@ -142,7 +142,7 @@ const ACTIONS = {
       }
     }
     // Re-run the join for every shop so new matches stream out over Realtime.
-    const shops = [...new Set((await listAll(db, 'stock_items', [Query.select(['shop_id'])])).map((r) => r.shop_id))];
+    const shops = [...new Set((await listAll(db, 'stock_items', [Query.select(['$id', 'shop_id'])])).map((r) => r.shop_id))];
     const joins = {};
     for (const s of shops) joins[s] = await runJoin(db, s, userId);
     return { ingested: rows.length, shops: shops.length, joins };

@@ -4,6 +4,8 @@
 
 Built solo for the [Appwrite Databases Hackathon](https://hackathon.appwrite.io/) (19–31 Oct 2026) on **Appwrite TablesDB**.
 
+**Live demo:** https://recall-join.appwrite.network (sign in as the demo chemist or distributor from the login screen).
+
 ## Why existing tools aren't enough
 
 Public lookups ([blacklisted.co.in](https://blacklisted.co.in/medicines/check), [drugquality.in](https://drugquality.in/), the CDSCO page itself) answer one question at a time for one consumer: *"is this batch listed?"* Nobody checks a shop's **whole stock** against **every** list and then follows the return through to the distributor. Matching is also harder than an exact lookup:
@@ -73,7 +75,7 @@ npm run import:nsq -- data/nsq/2026-07.json data/nsq/2026-08.json   # Sep 2026 i
 npm run dev                 # web app on http://localhost:5173  (design preview without a backend: /?mock)
 ```
 
-Deploy `functions/recall-join` as an Appwrite Function (Node 22, entry `src/main.js`, execute access: users, scopes: `databases.*`, `users.read`). Run `npm run build:function` first so it carries the current `core/`. Deploy `web/` to Appwrite Sites (build `npm run build`, output `web/dist`).
+Then `npm run deploy` creates and deploys the Function (Node 22, entry `src/main.js`, execute access: users, scopes: databases/tables/rows read+write, `users.read`, with the current `core/` copied in) and builds `web/` and uploads it to Appwrite Sites as static files. The API key also needs `functions.write` and `sites.write` for this step.
 
 ## Real vs mocked
 

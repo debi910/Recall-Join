@@ -11,7 +11,9 @@
     "import:nsq": "node scripts/import-nsq.js",
     "parse:nsq": "python3 -I tools/parse_nsq.py",
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "deploy": "node scripts/deploy.js",
+    "reset:demo": "node scripts/reset-demo.js"
   },
   "keywords": [],
   "author": "",
