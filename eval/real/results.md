@@ -10,6 +10,14 @@ Each real row is matched as if it were a stock row against every other real row.
 | Batch-only, ignore spaces/hyphens | 26 / 0 / 2 | 6 / 0 / 0 | 4 / 0 / 0 | 0 / 0 / 771 | 81% | 93% |
 | Recall Join | 24 / 4 / 0 | 2 / 4 / 0 | 2 / 2 / 0 | 0 / 0 / 771 | 92% | 86% |
 
+Same rows, stock side without a maker (an export with no maker column):
+
+| Method | Same batch, other lab | Different product, same code | Ambiguous | Code seen once | Flag precision | Flag recall |
+|---|---|---|---|---|---|---|
+| Exact batch lookup | 24 / 0 / 4 | 6 / 0 / 0 | 4 / 0 / 0 | 0 / 0 / 771 | 80% | 86% |
+| Batch-only, ignore spaces/hyphens | 26 / 0 / 2 | 6 / 0 / 0 | 4 / 0 / 0 | 0 / 0 / 771 | 81% | 93% |
+| Recall Join | 26 / 2 / 0 | 0 / 4 / 2 | 4 / 0 / 0 | 0 / 0 / 771 | 100% | 93% |
+
 ## B. Real retail names (93 regulator rows paired with the real retail listing of the same brand)
 
 The shop row uses the retail product name and company; the batch is copied from the regulator row. Cells: flag / review / no alert.
@@ -72,6 +80,44 @@ A. Recall Join:
   different flag   05 | X-ray Detectble Labarotomy Sponges IS 10829 (Brand Name : Mo | Sri Sandana Magalingam Textiles, 5-A-1/1
   different flag   05 | Gauze and cotton Tissue BP 1988 (Brand Name : Dressing Pad) | Sri Sandana Magalingam Textiles, 5-A-1/1
   ambiguous flag   G 43 | Absorbent Gauze (Super Deluxe) IS 758 (NOT STERILIZED) (Bran | Muthu Surgicals, 551/15, Alangulam Road,
+  ambiguous flag   G 43 | Absorbent Gauze IS 758 (Brand Name : Superfine) | Muthu Surgicals, 551/15, Alangulam Road,
+
+A. Exact batch lookup (no maker):
+  same      none   BKBP02601 | Bupivacaine Hydrochloride In Dextrose Injection USP (Brand N | Themis Medicare Ltd. ,11/12, Udyog Nagar
+  same      none   SBT3269 | Loperamide Hydrochloride Tablets IP 2 mg (Brand Name : LOPRA | Supercure Biotech Pvt.Ltd, Plot No.99/4/
+  same      none   BKBP O2601 | BUPIVACAINE HYDROCHLORIDE IN DEXTROSE INJECTION USP (Bupicai | Themis Medicare Limited, At : Gat No.: 2
+  same      none   SBT-3269 | Loperamide Hydrochloride Tablets IP 2 mg- (Brand Name : Lopr | Supercure Biotech Pvt.Ltd., Plot No. 99/
+  different flag   MWDC-5421G | Cefixime & Azithromycin Tablets (Brand Name : Jikcf-AZ Table | Geenac Pharma, - Plot No.-582, Raipur, B
+  different flag   MWDC-5421G | Amoxycillin & Potassium Clavulanate, Lactic Acid Bacillus Ta | Sabi Pharmaceuticals Pvt. Ltd - . Shivna
+  different flag   Not Mentioned | Nimesulide & Paracetamol Tablets (Brand Name : Nimesulide-P) | Euphoria India Pharmaceuticals, Plot No.
+  different flag   Not Mentioned | Amoxycillin &Potassium Clavulanate Tablets (Brand Name : Sun | Astam Healthcare Pvt. Ltd., Vill. Thada,
+  different flag   05 | X-ray Detectble Labarotomy Sponges IS 10829 (Brand Name : Mo | Sri Sandana Magalingam Textiles, 5-A-1/1
+  different flag   05 | Gauze and cotton Tissue BP 1988 (Brand Name : Dressing Pad) | Sri Sandana Magalingam Textiles, 5-A-1/1
+  ambiguous flag   VBC-0116 | Mebendazole IP & Ivermectin IP Vet Oral Powder (Brand Name : | Vrindha Biotech Pvt. Ltd. - Khasra No. 1
+  ambiguous flag   G 43 | Absorbent Gauze (Super Deluxe) IS 758 (NOT STERILIZED) (Bran | Muthu Surgicals, 551/15, Alangulam Road,
+  ambiguous flag   VBC-0116 | Mebendazole IP & Ivermectin IP Vet Oral Powder (Brand Name : | Cure Quick Pharmaceuticals , 20-21/3, Se
+  ambiguous flag   G 43 | Absorbent Gauze IS 758 (Brand Name : Superfine) | Muthu Surgicals, 551/15, Alangulam Road,
+
+A. Batch-only, ignore spaces/hyphens (no maker):
+  same      none   BKBP02601 | Bupivacaine Hydrochloride In Dextrose Injection USP (Brand N | Themis Medicare Ltd. ,11/12, Udyog Nagar
+  same      none   BKBP O2601 | BUPIVACAINE HYDROCHLORIDE IN DEXTROSE INJECTION USP (Bupicai | Themis Medicare Limited, At : Gat No.: 2
+  different flag   MWDC-5421G | Cefixime & Azithromycin Tablets (Brand Name : Jikcf-AZ Table | Geenac Pharma, - Plot No.-582, Raipur, B
+  different flag   MWDC-5421G | Amoxycillin & Potassium Clavulanate, Lactic Acid Bacillus Ta | Sabi Pharmaceuticals Pvt. Ltd - . Shivna
+  different flag   Not Mentioned | Nimesulide & Paracetamol Tablets (Brand Name : Nimesulide-P) | Euphoria India Pharmaceuticals, Plot No.
+  different flag   Not Mentioned | Amoxycillin &Potassium Clavulanate Tablets (Brand Name : Sun | Astam Healthcare Pvt. Ltd., Vill. Thada,
+  different flag   05 | X-ray Detectble Labarotomy Sponges IS 10829 (Brand Name : Mo | Sri Sandana Magalingam Textiles, 5-A-1/1
+  different flag   05 | Gauze and cotton Tissue BP 1988 (Brand Name : Dressing Pad) | Sri Sandana Magalingam Textiles, 5-A-1/1
+  ambiguous flag   VBC-0116 | Mebendazole IP & Ivermectin IP Vet Oral Powder (Brand Name : | Vrindha Biotech Pvt. Ltd. - Khasra No. 1
+  ambiguous flag   G 43 | Absorbent Gauze (Super Deluxe) IS 758 (NOT STERILIZED) (Bran | Muthu Surgicals, 551/15, Alangulam Road,
+  ambiguous flag   VBC-0116 | Mebendazole IP & Ivermectin IP Vet Oral Powder (Brand Name : | Cure Quick Pharmaceuticals , 20-21/3, Se
+  ambiguous flag   G 43 | Absorbent Gauze IS 758 (Brand Name : Superfine) | Muthu Surgicals, 551/15, Alangulam Road,
+
+A. Recall Join (no maker):
+  same      review BKBP02601 | Bupivacaine Hydrochloride In Dextrose Injection USP (Brand N | Themis Medicare Ltd. ,11/12, Udyog Nagar
+  same      review BKBP O2601 | BUPIVACAINE HYDROCHLORIDE IN DEXTROSE INJECTION USP (Bupicai | Themis Medicare Limited, At : Gat No.: 2
+  ambiguous flag   VBC-0116 | Mebendazole IP & Ivermectin IP Vet Oral Powder (Brand Name : | Vrindha Biotech Pvt. Ltd. - Khasra No. 1
+  ambiguous flag   G 43 | Absorbent Gauze (Super Deluxe) IS 758 (NOT STERILIZED) (Bran | Muthu Surgicals, 551/15, Alangulam Road,
+  ambiguous flag   VBC-0116 | Mebendazole IP & Ivermectin IP Vet Oral Powder (Brand Name : | Cure Quick Pharmaceuticals , 20-21/3, Se
   ambiguous flag   G 43 | Absorbent Gauze IS 758 (Brand Name : Superfine) | Muthu Surgicals, 551/15, Alangulam Road,
 
 B. Exact batch lookup:
