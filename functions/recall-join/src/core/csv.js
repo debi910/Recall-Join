@@ -1,5 +1,5 @@
 // Minimal RFC-4180 CSV reader (quoted fields, embedded commas/newlines).
-export function parseCsv(text) {
+export function parseCsv(text, delim = ',') {
   const rows = [];
   let row = [], field = '', q = false;
   for (let i = 0; i < text.length; i++) {
@@ -9,7 +9,7 @@ export function parseCsv(text) {
       else if (c === '"') q = false;
       else field += c;
     } else if (c === '"') q = true;
-    else if (c === ',') { row.push(field); field = ''; }
+    else if (c === delim) { row.push(field); field = ''; }
     else if (c === '\n' || c === '\r') {
       if (c === '\r' && text[i + 1] === '\n') i++;
       row.push(field); rows.push(row); row = []; field = '';
