@@ -282,6 +282,9 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .login-card .btn.primary { justify-content: center; padding: 12px; margin-top: 4px; }
 .demo-accounts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); }
 .demo-accounts p { width: 100%; margin: 0 0 2px; font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+.demo-creds { width: 100%; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 8px 0 0; font: 12px var(--mono); }
+.demo-creds dt { color: var(--ink-3); }
+.demo-creds dd { margin: 0; color: var(--ink); user-select: all; overflow-wrap: anywhere; }
 
 /* ---------- tabs + slides ---------- */
 .tabs { position: sticky; top: 53px; z-index: 5; display: grid; grid-template-columns: repeat(var(--n), 1fr); margin: 0 0 18px; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }

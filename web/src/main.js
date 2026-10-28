@@ -113,6 +113,9 @@ async function act(label, fn, done) {
   paint();
 }
 
+// Public demo password (both demo accounts), shown on the login screen for judges.
+const DEMO_PASSWORD = 'RecallDemo-e908c4';
+
 const A = {
   async login(e) {
     e.preventDefault();
@@ -122,10 +125,12 @@ const A = {
       await boot();
     });
   },
+  // Demo accounts are public for judges: fill the form and sign straight in.
   demo(email) {
     const f = document.querySelector('.login form');
     f.email.value = email;
-    f.password.focus();
+    f.password.value = DEMO_PASSWORD;
+    f.requestSubmit();
   },
   async logout() { await account.deleteSession({ sessionId: 'current' }).catch(() => {}); location.reload(); },
   demoStock: () => act('Uploading stock and running the join', async () => call('uploadStock', { csv: await (await fetch('/data/demo-stock.csv')).text() }),
@@ -177,9 +182,14 @@ function loginView() {
         <button class="btn primary" ?disabled=${!!state.busy}>${state.busy ? 'Signing in…' : 'Sign in'}</button>
       </form>
       <div class="demo-accounts">
-        <p>Demo accounts</p>
-        <button class="btn ghost" @click=${() => A.demo('chemist@recalljoin.demo')}>Chemist shop</button>
-        <button class="btn ghost" @click=${() => A.demo('distributor@recalljoin.demo')}>Distributor</button>
+        <p>Demo accounts: one tap signs you in</p>
+        <button class="btn ghost" ?disabled=${!!state.busy} @click=${() => A.demo('chemist@recalljoin.demo')}>Chemist shop</button>
+        <button class="btn ghost" ?disabled=${!!state.busy} @click=${() => A.demo('distributor@recalljoin.demo')}>Distributor</button>
+        <dl class="demo-creds">
+          <dt>Chemist</dt><dd>chemist@recalljoin.demo</dd>
+          <dt>Distributor</dt><dd>distributor@recalljoin.demo</dd>
+          <dt>Password</dt><dd>${DEMO_PASSWORD}</dd>
+        </dl>
       </div>
       <p class="fine">Regulator lists are real (CDSCO, Jul–Sep 2026). Shop stock in the demo is synthetic.</p>
     </div>
