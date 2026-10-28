@@ -430,7 +430,7 @@ function drawer(m) {
   const s = state.stock.get(m.stock_id) || {}, n = state.nsq.get(m.nsq_id) || {};
   const r = JSON.parse(m.reasons || '{}');
   const t = TIER[m.tier];
-  const ok = (v) => v === 'exact' || v === 'match';
+  const ok = (v) => v === 'exact' || v === 'match' || v === 'brand-owner';
   const unsure = (v) => v === 'unknown' || v === 'confusable';
   const check = (label, v) => html`<li class=${ok(v) ? 'yes' : unsure(v) ? 'maybe' : 'no'}>
     <svg viewBox="0 0 16 16" aria-hidden="true">${ok(v) ? svg`<path d="M3.5 8.5l3 3 6-7" />` : unsure(v) ? svg`<path d="M8 4v5M8 11.5v.5" />` : svg`<path d="M4 4l8 8M12 4l-8 8" />`}</svg>
@@ -451,7 +451,7 @@ function drawer(m) {
         <div><small>Your shelf</small>${batchTiles(s.batch, n.batch)}</div>
       </div>
 
-      <ul class="checks">${check('Batch', r.batch)}${r.mfr ? check('Maker', r.mfr) : nothing}${r.expiry ? check('Expiry', r.expiry) : nothing}</ul>
+      <ul class="checks">${check('Batch', r.batch)}${r.mfr ? check(r.mfr === 'brand-owner' ? 'Maker (brand owner)' : 'Maker', r.mfr) : nothing}${r.expiry ? check('Expiry', r.expiry) : nothing}</ul>
 
       <p class="failed"><small>Failed test · ${month(n.period)}</small>${n.result}</p>
 

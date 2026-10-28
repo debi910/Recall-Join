@@ -20,7 +20,8 @@ The shop row uses the retail product name and company; the batch is copied from 
 |---|---|---|---|---|---|
 | Exact batch lookup | 42 / 0 / 0 | 12 / 0 / 0 | 39 / 0 / 0 | 100% | 0/93 |
 | Batch-only, ignore spaces/hyphens | 42 / 0 / 0 | 12 / 0 / 0 | 39 / 0 / 0 | 100% | 0/93 |
-| Recall Join | 41 / 1 / 0 | 0 / 12 / 0 | 7 / 32 / 0 | 98% | 0/93 |
+| Recall Join | 42 / 0 / 0 | 12 / 0 / 0 | 38 / 1 / 0 | 100% | 0/93 |
+| Recall Join, own listing left out of owner table | 42 / 0 / 0 | 3 / 9 / 0 | 6 / 33 / 0 | 100% | 0/93 |
 
 ### Export has no expiry column
 
@@ -28,7 +29,8 @@ The shop row uses the retail product name and company; the batch is copied from 
 |---|---|---|---|---|---|
 | Exact batch lookup | 42 / 0 / 0 | 12 / 0 / 0 | 39 / 0 / 0 | 100% | 0/93 |
 | Batch-only, ignore spaces/hyphens | 42 / 0 / 0 | 12 / 0 / 0 | 39 / 0 / 0 | 100% | 0/93 |
-| Recall Join | 39 / 3 / 0 | 0 / 11 / 1 | 7 / 27 / 5 | 93% | 6/93 |
+| Recall Join | 40 / 2 / 0 | 0 / 12 / 0 | 0 / 39 / 0 | 95% | 0/93 |
+| Recall Join, own listing left out of owner table | 40 / 2 / 0 | 0 / 12 / 0 | 0 / 39 / 0 | 95% | 0/93 |
 
 ## Every miss
 
@@ -79,7 +81,10 @@ B. Batch-only, ignore spaces/hyphens:
   none
 
 B. Recall Join:
-  same-company review r038 Betnovate-N  Cream | Glaxo SmithKline Pharmaceuticals Ltd vs GlaxoSmithKline Pharmaceuticals Ltd., A-
+  none
+
+B. Recall Join, own listing left out of owner table:
+  none
 
 B. Exact batch lookup (no expiry):
   none
@@ -89,12 +94,9 @@ B. Batch-only, ignore spaces/hyphens (no expiry):
 
 B. Recall Join (no expiry):
   same-company review r007 GENTALAB 40 MG INJECTION | Laborate Pharmaceuticals India Ltd vs M/s. Laborate Pharmaceuticals India Ltd.
-  same-company review r038 Betnovate-N  Cream | Glaxo SmithKline Pharmaceuticals Ltd vs GlaxoSmithKline Pharmaceuticals Ltd., A-
   same-company review r061 Talgesic 0.3mg Injection | Indus Pharma Pvt Ltd vs Indus Pharma Pharma Pvt. Ltd. , A-181 RI
-  brand-owner  none   r022 Augmentin 625 Duo Tablet | Glaxo SmithKline Pharmaceuticals Ltd vs Medreich Ltd., Survey No. 14 &v 15, Gund
-  unclear      none   r016 Torabest IT 100mg/250mg Tablet | Biochemix Health Care Pvt. Ltd. vs Accura Care Pharmaceuticals Pvt.Ltd, Vil
-  unclear      none   r018 Mucorant Expectorant | Micro Labs Ltd vs Bestcare Formulation Pvt, Ltd., Plot No.
-  unclear      none   r047 Rabenova DSR 30mg/20mg Tablet | Raphael Pharmaceuticals Pvt Ltd vs Athens Life Sciences, Mauza Rampur, Jatt
-  unclear      none   r070 Onlycef SB 1.5gm Injection | Skymax Life Science Pvt Ltd vs Actinova Pvt. Ltd. , At: 147, Mauza, San
-  unclear      none   r085 Nimcef OL 200mg/200mg Tablet | Nimbus Health Care Pvt Ltd vs Medinok Healthcare Pvt. Ltd, (A GMP & IS
+
+B. Recall Join, own listing left out of owner table (no expiry):
+  same-company review r007 GENTALAB 40 MG INJECTION | Laborate Pharmaceuticals India Ltd vs M/s. Laborate Pharmaceuticals India Ltd.
+  same-company review r061 Talgesic 0.3mg Injection | Indus Pharma Pvt Ltd vs Indus Pharma Pharma Pvt. Ltd. , A-181 RI
 

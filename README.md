@@ -1,6 +1,6 @@
 # Recall Join
 
-> **Limitations, read first.** We have no real chemist's stock. The demo shop's stock (`web/public/data/demo-stock.csv`) is synthetic, and so is the 50-case eval behind the "100% vs 60% precision" numbers in earlier versions of this page: its 60% baseline score comes straight from how many collision cases we chose to build (15 true hits and 10 collisions give 15/25). The real-data eval below uses only strings written by regulator labs and by a real retail medicine catalogue. On it, Recall Join is more precise than a batch-only lookup but **not perfect**, and in one setting it **misses hits the baseline catches**. Nothing here has been tested in a working pharmacy.
+> **Limitations, read first.** We have no real chemist's stock. The demo shop's stock (`web/public/data/demo-stock.csv`) is synthetic, and so is the 50-case eval behind the "100% vs 60% precision" numbers in earlier versions of this page: its 60% baseline score comes straight from how many collision cases we chose to build (15 true hits and 10 collisions give 15/25). The real-data eval below uses only strings written by regulator labs and by a real retail medicine catalogue. On it, Recall Join is more precise than a batch-only lookup but **not perfect**. Three matcher fixes were made **after** seeing the real-data failures, so the "after" numbers are not held-out; both are shown. Nothing here has been tested in a working pharmacy.
 
 **A drug recall is a database JOIN that nobody runs.** Every month India's drug regulator (CDSCO) publishes the batches that failed quality tests (330 samples in September 2026). Every chemist already has batch numbers in their billing software. Recall Join joins the two tables, tells the chemist which strips on their shelf are listed, and runs the quarantine and the return to the distributor in one transaction.
 
@@ -37,19 +37,25 @@ What went wrong, honestly:
 
 ### 2. Real retail names (`npm run eval:real`, part B)
 
-How does billing software name the item and its company? We paired real regulator rows with the real retail listing of the same brand from the public **A-Z Medicine Dataset of India** (253,973 listings; exact brand prefix plus the same first ingredient and dosage form; 93 pairs, [`eval/real/retail-cases.json`](eval/real/retail-cases.json)). The batch code is copied from the regulator row, so this part tests the maker, product and expiry checks, not batch matching. The maker relationship was labelled by hand ([`retail-labels.json`](eval/real/retail-labels.json)).
+How does billing software name the item and its company? We paired real regulator rows with the real retail listing of the same brand from the public **A-Z Medicine Dataset of India** (253,973 listings; exact brand prefix plus the same first ingredient and dosage form; 93 pairs, [`eval/real/retail-cases.json`](eval/real/retail-cases.json)). The batch code is copied from the regulator row, so this part tests the maker, product and expiry checks, not batch matching. The maker relationship was labelled by hand ([`retail-labels.json`](eval/real/retail-labels.json)). Both baselines flag all 93 because they ignore names, so they never miss here.
 
-| Recall Join | Same company named (42) | Brand owner named, regulator lists the factory (12) | Two different firms (39) | Silently missed |
+| Recall Join | Same company named (42) | Brand owner named, CDSCO lists the factory (12) | Two different firms (39) | Silently missed |
 |---|---|---|---|---|
-| Export has expiry | 41 / 1 / 0 | 0 / 12 / 0 | 7 / 32 / 0 | 0 / 93 |
-| Export has no expiry | 39 / 3 / 0 | 0 / 11 / 1 | 7 / 27 / 5 | **6 / 93** |
+| **Before fixes**, export has expiry | 41 / 1 / 0 | 0 / 12 / 0 | 7 / 32 / 0 | 0 / 93 |
+| **Before fixes**, no expiry column | 39 / 3 / 0 | 0 / 11 / 1 | 7 / 27 / 5 | **6 / 93** |
+| **After fixes**, export has expiry | 42 / 0 / 0 | 12 / 0 / 0 | 38 / 1 / 0 | 0 / 93 |
+| **After fixes**, no expiry column | 40 / 2 / 0 | 0 / 12 / 0 | 0 / 39 / 0 | **0 / 93** |
+| After fixes, the case's own listing left out of the owner table, with expiry | 42 / 0 / 0 | 3 / 9 / 0 | 6 / 33 / 0 | 0 / 93 |
 
-Both baselines flag all 93 (they ignore names), so they never miss here.
+What the real data exposed, and what changed ([`results-before.md`](eval/real/results-before.md) → [`results.md`](eval/real/results.md)):
+1. **Brand owner vs factory.** Shops see *Augmentin, Glaxo SmithKline*; CDSCO lists *Medreich Ltd.*, the plant that made it. Before, these never auto-flagged, and without an expiry *Augmentin* was missed entirely. **Fix:** a brand-owner table ([`core/brand-owners.js`](core/brand-owners.js), built by `tools/build-brand-owners.js` from the same retail catalogue) for every brand on the bundled lists. A brand owner counts as the maker only when the shelf item is that brand **and** the batch **and** the expiry month agree; without an expiry it goes to the pharmacist.
+2. **Maker-name bugs.** `Glaxo SmithKline` didn't match `GlaxoSmithKline`; makers named only with generic words (*Care Formulation Labs*, *Sun Life Sciences*) counted as "unknown", so product + expiry alone flagged them. **Fix:** glued word pairs are compared, and generic-only names are compared by their first word.
+3. **No expiry column.** An exact batch whose maker differs was dropped when the product score was low. **Fix:** with no expiry to rule it out, a shared product word sends it to the pharmacist. Silent misses went from 6 to 0.
 
-What went wrong, honestly:
-- **Brand owner vs factory.** Shops see *Augmentin, GlaxoSmithKline*; CDSCO lists *Medreich Ltd.*, the plant that made it. Recall Join never auto-flags these 12; it asks the pharmacist. Without an expiry column, *Augmentin* is **missed entirely**, and so are 5 rows where two different small firms are named. A batch-only lookup would have raised all 6.
-- **Maker-name bugs found on real strings:** `Glaxo SmithKline` vs `GlaxoSmithKline` does not match (word split). Makers whose names are only generic words (*Care Formulation Labs*, *Sun Life Sciences*) count as "unknown", so product + expiry alone flag them: that is the 7 flags under "two different firms".
-- Precision cannot be scored in part B without knowing which "two different firms" rows are the same physical product. Only the strip can tell.
+How far to trust the "after" rows:
+- The owner table comes from the same catalogue as the test names, so the 12/12 brand-owner flags are **by construction**. The leave-one-out row is the fairer number: when a brand's owner is known only from the listing under test, it falls back to "ask the pharmacist" (9 of 12).
+- The "two different firms" column has **no ground truth**. With expiry, 38 of 39 now auto-flag because the brand, batch code and expiry month all agree. That is strong evidence of the same product, but some may be a different firm's same-named brand. Only the strip can tell.
+- Part A is unchanged by the fixes (92% vs 81%), including the real false flag on code `05`. The synthetic eval and the demo shop's matches are also unchanged.
 
 ### 3. Synthetic stress test (`npm run eval`, `CASES=./cases-2026-09.json npm run eval`)
 
@@ -85,7 +91,7 @@ billing CSV ──uploadStock──▶ stock_items ──┘                    
 ## Where it stops
 
 - It **never says a batch is safe**. "No match" means "not on the lists we imported", and the UI lists which months those are.
-- A **FLAG needs two independent agreements**: the same normalized batch, plus the same maker, or the same expiry/product when the maker is unknown. Product-name similarity alone never flags anything.
+- A **FLAG needs the batch plus independent agreement**: the same normalized batch, plus the same maker and (product or expiry), or product/expiry when the maker is unknown, or the brand's retail owner plus the same brand and expiry month. Product-name similarity alone never flags anything.
 - **Collisions and look-alike typos go to the pharmacist** ("check the strip"). They can be quarantined only after a human confirms.
 - Quarantine is **one transaction**. Afterwards the function **reads the rows back** and only then marks the audit entry verified.
 - It gives no medical advice and contacts no patients.

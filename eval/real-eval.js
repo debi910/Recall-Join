@@ -7,9 +7,13 @@
 // B. Retail names. Real regulator rows paired with the real retail listing of the same
 //    brand (eval/real/retail-cases.json), i.e. how billing software names the item and
 //    its company. The batch is copied, so this tests the maker/product/expiry checks.
-//    Run with and without expiry, since not every export carries it.
+//    Run with and without expiry, since not every export carries it. The brand-owner
+//    table (core/brand-owners.js) comes from the same catalogue, so B is also run with
+//    each case's own listing removed from the table: the owner must be known from
+//    another listing of the brand.
 import { readFileSync, readdirSync } from 'node:fs';
 import { matchStock, TIER } from '../core/match.js';
+import { BRAND_OWNERS } from '../core/brand-owners.js';
 import { normBatch, skelBatch } from '../core/normalize.js';
 
 const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf8'));
@@ -20,8 +24,8 @@ const why = process.argv.includes('--why');
 const methods = {
   'Exact batch lookup': (s, list) => (list.some((n) => n.batch.trim().toUpperCase() === s.batch.trim().toUpperCase()) ? 'flag' : 'none'),
   'Batch-only, ignore spaces/hyphens': (s, list) => (list.some((n) => normBatch(n.batch) === normBatch(s.batch)) ? 'flag' : 'none'),
-  'Recall Join': (s, list) => {
-    const tiers = matchStock([s], list).map((m) => m.tier);
+  'Recall Join': (s, list, owners) => {
+    const tiers = matchStock([s], list, { owners }).map((m) => m.tier);
     if (tiers.includes(TIER.FLAG)) return 'flag';
     return tiers.includes(TIER.REVIEW_COLLISION) || tiers.includes(TIER.REVIEW_NEAR) ? 'review' : 'none';
   },
@@ -73,20 +77,24 @@ const { labels: rel } = read('./real/retail-labels.json');
 console.log(`\n## B. Real retail names (${cases.length} regulator rows paired with the real retail listing of the same brand)\n`);
 console.log('The shop row uses the retail product name and company; the batch is copied from the regulator row. Cells: flag / review / no alert.\n');
 const missesB = {};
+const withoutListing = (id) => Object.fromEntries(Object.entries(BRAND_OWNERS).map(([k, owners]) => [k,
+  Object.fromEntries(Object.entries(owners).map(([o, ids]) => [o, ids.filter((x) => x !== id)]).filter(([, ids]) => ids.length))]));
 for (const withExpiry of [true, false]) {
   console.log(`### ${withExpiry ? 'Export has expiry' : 'Export has no expiry column'}\n`);
   const groups = ['same-company', 'brand-owner', 'unclear'];
   const n = Object.fromEntries(groups.map((g) => [g, cases.filter((c) => rel[c.id].relation === g).length]));
   console.log(`| Method | Same company named (n=${n['same-company']}) | Brand owner named, regulator lists the plant (n=${n['brand-owner']}) | Two different firms (n=${n.unclear}) | Same-company auto-flag rate | Silently missed (no alert, any group) |`);
   console.log('|---|---|---|---|---|---|');
-  for (const [name, fn] of Object.entries(methods)) {
+  const variants = { ...methods, 'Recall Join, own listing left out of owner table': (s, list, owners) => methods['Recall Join'](s, list, owners) };
+  for (const [name, fn] of Object.entries(variants)) {
     const t = {};
     const key = `${name}${withExpiry ? '' : ' (no expiry)'}`;
+    const leaveOut = name.includes('left out');
     missesB[key] = [];
     for (const g of groups) {
       t[g] = tally(cases.filter((c) => rel[c.id].relation === g).map((c) => {
         const stock = { product: c.retail.product, batch: c.nsq.batch, expiry: withExpiry ? c.nsq.expiry : '', mfr: c.retail.mfr };
-        const o = fn(stock, nsq);
+        const o = fn(stock, nsq, leaveOut ? withoutListing(c.retail.catalogue_id) : BRAND_OWNERS);
         if ((g === 'same-company' && o !== 'flag') || o === 'none') missesB[key].push(`${g.padEnd(12)} ${o.padEnd(6)} ${c.id} ${c.retail.product} | ${c.retail.mfr} vs ${c.nsq.mfr.slice(0, 40)}`);
         return o;
       }));
