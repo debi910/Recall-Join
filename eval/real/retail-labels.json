@@ -1,0 +1,296 @@
+{
+ "note": "Hand labels: how the maker on the retail listing relates to the maker on the regulator row. same-company = recognisably the same firm (legal suffix, unit or group name differs). brand-owner = a well-known company that owns the brand while the regulator lists the plant that made it (loan licence / contract manufacturing), so the shop's software shows a different company for the same physical product. unclear = two different small firms; it could be a brand owner or an unrelated product with the same brand name, and only the strip can tell. Labelled by reading the names, before scoring.",
+ "labels": {
+  "r001": {
+   "relation": "same-company"
+  },
+  "r002": {
+   "relation": "same-company"
+  },
+  "r003": {
+   "relation": "unclear"
+  },
+  "r004": {
+   "relation": "unclear"
+  },
+  "r005": {
+   "relation": "unclear"
+  },
+  "r006": {
+   "relation": "brand-owner",
+   "why": "Aldigesic is an Alkem brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r007": {
+   "relation": "same-company"
+  },
+  "r008": {
+   "relation": "same-company"
+  },
+  "r009": {
+   "relation": "same-company"
+  },
+  "r010": {
+   "relation": "unclear"
+  },
+  "r011": {
+   "relation": "same-company"
+  },
+  "r012": {
+   "relation": "same-company"
+  },
+  "r013": {
+   "relation": "unclear"
+  },
+  "r014": {
+   "relation": "unclear"
+  },
+  "r015": {
+   "relation": "unclear"
+  },
+  "r016": {
+   "relation": "unclear"
+  },
+  "r017": {
+   "relation": "same-company"
+  },
+  "r018": {
+   "relation": "unclear"
+  },
+  "r019": {
+   "relation": "unclear"
+  },
+  "r020": {
+   "relation": "same-company"
+  },
+  "r021": {
+   "relation": "same-company"
+  },
+  "r022": {
+   "relation": "brand-owner",
+   "why": "Augmentin is a GSK brand; Medreich is a contract manufacturer that the retail listing names; the regulator names the plant that made it"
+  },
+  "r023": {
+   "relation": "same-company"
+  },
+  "r024": {
+   "relation": "brand-owner",
+   "why": "Flozen-AA is a Mankind brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r025": {
+   "relation": "same-company"
+  },
+  "r026": {
+   "relation": "unclear"
+  },
+  "r027": {
+   "relation": "unclear"
+  },
+  "r028": {
+   "relation": "brand-owner",
+   "why": "Kenacort is an Abbott brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r029": {
+   "relation": "same-company"
+  },
+  "r030": {
+   "relation": "same-company"
+  },
+  "r031": {
+   "relation": "brand-owner",
+   "why": "Amoxyclav is an Abbott brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r032": {
+   "relation": "same-company"
+  },
+  "r033": {
+   "relation": "brand-owner",
+   "why": "Ondocos is a Corona Remedies brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r034": {
+   "relation": "same-company"
+  },
+  "r035": {
+   "relation": "unclear"
+  },
+  "r036": {
+   "relation": "brand-owner",
+   "why": "Gudcef is a Mankind brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r037": {
+   "relation": "unclear"
+  },
+  "r038": {
+   "relation": "same-company"
+  },
+  "r039": {
+   "relation": "unclear"
+  },
+  "r040": {
+   "relation": "unclear"
+  },
+  "r041": {
+   "relation": "same-company"
+  },
+  "r042": {
+   "relation": "brand-owner",
+   "why": "Rexcof is a Cipla brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r043": {
+   "relation": "same-company"
+  },
+  "r044": {
+   "relation": "brand-owner",
+   "why": "Chymokem is an Alkem brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r045": {
+   "relation": "same-company"
+  },
+  "r046": {
+   "relation": "same-company"
+  },
+  "r047": {
+   "relation": "unclear"
+  },
+  "r048": {
+   "relation": "same-company"
+  },
+  "r049": {
+   "relation": "unclear"
+  },
+  "r050": {
+   "relation": "unclear"
+  },
+  "r051": {
+   "relation": "unclear"
+  },
+  "r052": {
+   "relation": "same-company"
+  },
+  "r053": {
+   "relation": "unclear"
+  },
+  "r054": {
+   "relation": "same-company"
+  },
+  "r055": {
+   "relation": "same-company"
+  },
+  "r056": {
+   "relation": "same-company"
+  },
+  "r057": {
+   "relation": "unclear"
+  },
+  "r058": {
+   "relation": "brand-owner",
+   "why": "LMWX is an Abbott brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r059": {
+   "relation": "same-company"
+  },
+  "r060": {
+   "relation": "same-company"
+  },
+  "r061": {
+   "relation": "same-company"
+  },
+  "r062": {
+   "relation": "same-company"
+  },
+  "r063": {
+   "relation": "unclear"
+  },
+  "r064": {
+   "relation": "unclear"
+  },
+  "r065": {
+   "relation": "unclear"
+  },
+  "r066": {
+   "relation": "unclear"
+  },
+  "r067": {
+   "relation": "unclear"
+  },
+  "r068": {
+   "relation": "brand-owner",
+   "why": "Udidoc is a Morepen brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r069": {
+   "relation": "unclear"
+  },
+  "r070": {
+   "relation": "unclear"
+  },
+  "r071": {
+   "relation": "unclear"
+  },
+  "r072": {
+   "relation": "same-company"
+  },
+  "r073": {
+   "relation": "same-company"
+  },
+  "r074": {
+   "relation": "same-company"
+  },
+  "r075": {
+   "relation": "same-company"
+  },
+  "r076": {
+   "relation": "same-company"
+  },
+  "r077": {
+   "relation": "brand-owner",
+   "why": "Moxikind is a Mankind brand that the retail listing names; the regulator names the plant that made it"
+  },
+  "r078": {
+   "relation": "same-company"
+  },
+  "r079": {
+   "relation": "same-company"
+  },
+  "r080": {
+   "relation": "same-company"
+  },
+  "r081": {
+   "relation": "same-company"
+  },
+  "r082": {
+   "relation": "same-company"
+  },
+  "r083": {
+   "relation": "unclear"
+  },
+  "r084": {
+   "relation": "unclear"
+  },
+  "r085": {
+   "relation": "unclear"
+  },
+  "r086": {
+   "relation": "unclear"
+  },
+  "r087": {
+   "relation": "unclear"
+  },
+  "r088": {
+   "relation": "same-company"
+  },
+  "r089": {
+   "relation": "unclear"
+  },
+  "r090": {
+   "relation": "unclear"
+  },
+  "r091": {
+   "relation": "unclear"
+  },
+  "r092": {
+   "relation": "unclear"
+  },
+  "r093": {
+   "relation": "same-company"
+  }
+ }
+}

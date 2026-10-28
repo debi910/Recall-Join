@@ -1,4 +1,6 @@
 import { normBatch, skelBatch, mfrMatch, normMonth, productSimilarity } from './normalize.js';
+import { brandKey, brandPrefix } from './brands.js';
+import { BRAND_OWNERS } from './brand-owners.js';
 
 // The four outcomes a pharmacist can see. Only FLAG offers quarantine.
 export const TIER = {
@@ -10,18 +12,29 @@ export const TIER = {
 
 const PRODUCT_SAME = 0.6;
 
+// The shop's software names the company that owns the brand, CDSCO names the plant
+// that made it (Augmentin: "Glaxo SmithKline" vs "Medreich Ltd."). True when the stock
+// row is this brand and its maker is a known retail owner of it.
+function brandOwner(stock, nsq, owners) {
+  const key = brandKey(nsq.product);
+  const known = key && owners[key];
+  if (!known || !brandPrefix(stock.product, key)) return false;
+  return Object.keys(known).some((name) => mfrMatch(stock.mfr, name) === true);
+}
+
 // Compare one stock row with one regulator row that shares its batch skeleton.
 // Returns null when the pair is unrelated.
-export function classifyPair(stock, nsq) {
+export function classifyPair(stock, nsq, owners = BRAND_OWNERS) {
   const exact = normBatch(stock.batch) === normBatch(nsq.batch);
   const mfr = mfrMatch(stock.mfr, nsq.mfr);           // true | false | null (unknown)
+  const owner = mfr !== true && brandOwner(stock, nsq, owners);
   const se = normMonth(stock.expiry), ne = normMonth(nsq.expiry);
   const exp = se && ne ? se === ne : null;
   const prod = productSimilarity(stock.product, nsq.product);
 
   const reasons = {
     batch: exact ? 'exact' : 'confusable',
-    mfr: mfr === null ? 'unknown' : mfr ? 'match' : 'differs',
+    mfr: owner ? 'brand-owner' : mfr === null ? 'unknown' : mfr ? 'match' : 'differs',
     expiry: exp === null ? 'unknown' : exp ? 'match' : 'differs',
     product: prod,
   };
@@ -32,17 +45,23 @@ export function classifyPair(stock, nsq) {
     const productOrExpiry = prod >= PRODUCT_SAME || exp === true;
     if (mfr === true && productOrExpiry) return { tier: TIER.FLAG, reasons };
     if (mfr === null && productOrExpiry) return { tier: TIER.FLAG, reasons };
-    if (mfr === false && prod < PRODUCT_SAME && exp !== true) return null; // unrelated product sharing a batch code
+    // Brand owner instead of the plant: the brand, batch and expiry month must all agree.
+    if (owner) return { tier: exp === true ? TIER.FLAG : TIER.REVIEW_COLLISION, reasons };
+    if (mfr === false && prod < PRODUCT_SAME && exp !== true) {
+      // Without an expiry we can't rule out a brand owner we don't know, so a shared
+      // product word is enough to ask. With an expiry that differs, it's unrelated.
+      return exp === null && prod > 0 ? { tier: TIER.REVIEW_COLLISION, reasons } : null;
+    }
     return { tier: TIER.REVIEW_COLLISION, reasons };
   }
   // Skeleton-only match: plausible typo or OCR slip, never auto-flagged.
-  if (prod >= PRODUCT_SAME && mfr !== false) return { tier: TIER.REVIEW_NEAR, reasons };
+  if (prod >= PRODUCT_SAME && (mfr !== false || owner)) return { tier: TIER.REVIEW_NEAR, reasons };
   return null;
 }
 
 // In-memory join used by the eval and as the fallback when server-side joins
 // are unavailable. Index regulator rows by batch skeleton, then probe.
-export function matchStock(stockRows, nsqRows) {
+export function matchStock(stockRows, nsqRows, { owners = BRAND_OWNERS } = {}) {
   const bySkel = new Map();
   for (const n of nsqRows) {
     const k = skelBatch(n.batch);
@@ -54,7 +73,7 @@ export function matchStock(stockRows, nsqRows) {
   for (const s of stockRows) {
     const hits = [];
     for (const n of bySkel.get(skelBatch(s.batch)) ?? []) {
-      const r = classifyPair(s, n);
+      const r = classifyPair(s, n, owners);
       if (r) hits.push({ stock: s, nsq: n, ...r });
     }
     if (hits.length) {

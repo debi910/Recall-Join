@@ -113,6 +113,9 @@ async function act(label, fn, done) {
   paint();
 }
 
+// Public demo password (both demo accounts), shown on the login screen for judges.
+const DEMO_PASSWORD = 'RecallDemo-e908c4';
+
 const A = {
   async login(e) {
     e.preventDefault();
@@ -122,10 +125,12 @@ const A = {
       await boot();
     });
   },
+  // Demo accounts are public for judges: fill the form and sign straight in.
   demo(email) {
     const f = document.querySelector('.login form');
     f.email.value = email;
-    f.password.focus();
+    f.password.value = DEMO_PASSWORD;
+    f.requestSubmit();
   },
   async logout() { await account.deleteSession({ sessionId: 'current' }).catch(() => {}); location.reload(); },
   demoStock: () => act('Uploading stock and running the join', async () => call('uploadStock', { csv: await (await fetch('/data/demo-stock.csv')).text() }),
@@ -177,9 +182,14 @@ function loginView() {
         <button class="btn primary" ?disabled=${!!state.busy}>${state.busy ? 'Signing in…' : 'Sign in'}</button>
       </form>
       <div class="demo-accounts">
-        <p>Demo accounts</p>
-        <button class="btn ghost" @click=${() => A.demo('chemist@recalljoin.demo')}>Chemist shop</button>
-        <button class="btn ghost" @click=${() => A.demo('distributor@recalljoin.demo')}>Distributor</button>
+        <p>Demo accounts: one tap signs you in</p>
+        <button class="btn ghost" ?disabled=${!!state.busy} @click=${() => A.demo('chemist@recalljoin.demo')}>Chemist shop</button>
+        <button class="btn ghost" ?disabled=${!!state.busy} @click=${() => A.demo('distributor@recalljoin.demo')}>Distributor</button>
+        <dl class="demo-creds">
+          <dt>Chemist</dt><dd>chemist@recalljoin.demo</dd>
+          <dt>Distributor</dt><dd>distributor@recalljoin.demo</dd>
+          <dt>Password</dt><dd>${DEMO_PASSWORD}</dd>
+        </dl>
       </div>
       <p class="fine">Regulator lists are real (CDSCO, Jul–Sep 2026). Shop stock in the demo is synthetic.</p>
     </div>
@@ -430,7 +440,7 @@ function drawer(m) {
   const s = state.stock.get(m.stock_id) || {}, n = state.nsq.get(m.nsq_id) || {};
   const r = JSON.parse(m.reasons || '{}');
   const t = TIER[m.tier];
-  const ok = (v) => v === 'exact' || v === 'match';
+  const ok = (v) => v === 'exact' || v === 'match' || v === 'brand-owner';
   const unsure = (v) => v === 'unknown' || v === 'confusable';
   const check = (label, v) => html`<li class=${ok(v) ? 'yes' : unsure(v) ? 'maybe' : 'no'}>
     <svg viewBox="0 0 16 16" aria-hidden="true">${ok(v) ? svg`<path d="M3.5 8.5l3 3 6-7" />` : unsure(v) ? svg`<path d="M8 4v5M8 11.5v.5" />` : svg`<path d="M4 4l8 8M12 4l-8 8" />`}</svg>
@@ -451,7 +461,7 @@ function drawer(m) {
         <div><small>Your shelf</small>${batchTiles(s.batch, n.batch)}</div>
       </div>
 
-      <ul class="checks">${check('Batch', r.batch)}${r.mfr ? check('Maker', r.mfr) : nothing}${r.expiry ? check('Expiry', r.expiry) : nothing}</ul>
+      <ul class="checks">${check('Batch', r.batch)}${r.mfr ? check(r.mfr === 'brand-owner' ? 'Maker (brand owner)' : 'Maker', r.mfr) : nothing}${r.expiry ? check('Expiry', r.expiry) : nothing}</ul>
 
       <p class="failed"><small>Failed test · ${month(n.period)}</small>${n.result}</p>
 

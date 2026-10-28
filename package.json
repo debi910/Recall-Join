@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node --test test/*.test.js",
     "eval": "node eval/run-eval.js",
+    "eval:real": "node eval/real-eval.js",
     "build:function": "rm -rf functions/recall-join/src/core && cp -r core functions/recall-join/src/core",
     "setup": "node scripts/setup.js",
     "import:nsq": "node scripts/import-nsq.js",

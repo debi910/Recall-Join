@@ -36,13 +36,28 @@ export function mfrTokens(raw) {
     .map((t) => t.replace(/(IES|S)$/, (m) => (m === 'IES' ? 'Y' : '')));
 }
 
+// Words of a maker name next to each other, glued: "GLAXO SMITHKLINE" -> "GLAXOSMITHKLINE".
+const glued = (ts) => ts.slice(1).map((t, i) => ts[i] + t);
+// First real word of the name, for makers whose names are only generic words
+// ("Care Formulation Labs", "Sun Life Sciences").
+const leadWord = (raw) => String(raw ?? '').toUpperCase().replace(/^\s*M\s*\/\s*S\.?/, ' ').match(/[A-Z0-9]+/g)?.find((t) => !['M', 'S', 'MS', 'THE'].includes(t)) ?? null;
+
 // Two manufacturer strings agree when a distinctive (4+ letter) word is shared,
-// e.g. "Hindustan Antibiotics" vs "M/s. Hindustan Antibiotics Ltd., Pimpri, Pune".
+// e.g. "Hindustan Antibiotics" vs "M/s. Hindustan Antibiotics Ltd., Pimpri, Pune",
+// or when one writes two words as one ("Glaxo SmithKline" vs "GlaxoSmithKline").
 export function mfrMatch(a, b) {
+  if (!String(a ?? '').trim() || !String(b ?? '').trim()) return null; // unknown, not "different"
   const A = mfrTokens(a).filter((t) => t.length >= 4);
   const B = new Set(mfrTokens(b));
-  if (!A.length || !B.size) return null; // unknown, not "different"
-  return A.some((t) => B.has(t));
+  if (A.length && B.size) {
+    if (A.some((t) => B.has(t))) return true;
+    const gA = glued(mfrTokens(a)), gB = glued(mfrTokens(b));
+    return gA.some((t) => B.has(t)) || gB.some((t) => new Set(mfrTokens(a)).has(t));
+  }
+  // Nothing distinctive left after dropping generic words: compare the first word,
+  // so "Care Formulation Labs" differs from "Nikvin Healthcare" instead of being unknown.
+  const la = leadWord(a), lb = leadWord(b);
+  return la && lb ? la === lb : null;
 }
 
 // Expiry dates arrive as "Jan-2027", "01/2027", "1/27", "2027-01", "JAN 27".

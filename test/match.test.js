@@ -67,3 +67,34 @@ test('shared industry words do not make two makers the same', () => {
   assert.equal(mfrMatch('Konark Lifesciences', 'M/s. Zenith Lifesciences Pvt. Ltd.'), false);
   assert.equal(mfrMatch('Daya Formulations', 'Apple Formulations Pvt. Ltd., Roorkee'), false);
 });
+
+// Cases found by the real-data eval (eval/real-eval.js).
+test('maker names written with and without a space agree', () => {
+  assert.equal(mfrMatch('Glaxo SmithKline Pharmaceuticals Ltd', 'GlaxoSmithKline Pharmaceuticals Ltd., Nashik'), true);
+  assert.equal(mfrMatch('Pure & Cure Healthcare', 'Supercure Biotech Pvt. Ltd.'), false);
+});
+
+test('makers named only with generic words are compared, not unknown', () => {
+  assert.equal(mfrMatch('Care Formulation Labs Pvt Ltd', 'Nikvin Healthcare (I) Pvt. Ltd., Baddi'), false);
+  assert.equal(mfrMatch('Sun Pharma Laboratories Ltd.', 'Sun Pharmaceutical Industries Ltd'), true);
+  assert.equal(mfrMatch('', 'Sun Pharmaceutical Industries Ltd'), null);
+});
+
+const augmentin = {
+  product: 'Amoxycillin and Potassium Clavulanate Tablets IP (Brand Name : Augmentin 625)',
+  batch: 'MR25031', expiry: 'Mar-2027', mfr: 'Medreich Ltd., Survey No. 14, Bengaluru',
+};
+const owners = { 'AUGMENTIN 625': { 'Glaxo SmithKline Pharmaceuticals Ltd': [1] } };
+const shelf = { product: 'Augmentin 625 Duo Tablet', batch: 'MR25031', mfr: 'Glaxo SmithKline Pharmaceuticals Ltd' };
+
+test('brand owner on the shelf, factory on the list: flag only when expiry agrees too', () => {
+  assert.equal(classifyPair({ ...shelf, expiry: '03/27' }, augmentin, owners).tier, TIER.FLAG);
+  assert.equal(classifyPair({ ...shelf, expiry: '03/27' }, augmentin, owners).reasons.mfr, 'brand-owner');
+  assert.equal(classifyPair({ ...shelf, expiry: '' }, augmentin, owners).tier, TIER.REVIEW_COLLISION);
+  assert.equal(classifyPair({ ...shelf, expiry: '07/27' }, augmentin, owners).tier, TIER.REVIEW_COLLISION);
+});
+
+test('no expiry column: an unknown maker with a shared product word is asked about, not dropped', () => {
+  assert.equal(classifyPair({ ...shelf, expiry: '' }, augmentin, {}).tier, TIER.REVIEW_COLLISION);
+  assert.equal(classifyPair({ product: 'PANTOP 40 TAB', batch: 'MR25031', expiry: '', mfr: 'Aristo' }, augmentin, {}), null);
+});
